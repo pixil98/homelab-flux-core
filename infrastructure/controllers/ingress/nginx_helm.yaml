@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+  namespace: ingress
+spec:
+  releaseName: ingress-nginx
+  chart:
+    spec:
+      chart: ingress-nginx
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+        namespace: flux-system
+      version: ">=4.0.0 <5.0.0"
+  interval: 1h0m0s
+  install:
+    remediation:
+      retries: 3
+  values:
+    controller:
+      kind: DaemonSet
+      service:
+        externalTrafficPolicy: Local
+        loadBalancerIP: ${infrastructure_ingress_ipAddress}
+        type: LoadBalancer
+      metrics:
+        enabled: false
+        annotations:
+          prometheus.io/scrape: true
+          prometheus.io/port: 10254
