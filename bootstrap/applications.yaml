@@ -15,7 +15,6 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
-        namespace: flux-system
   path: ./apps/production
   prune: true
   wait: true

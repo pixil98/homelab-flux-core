@@ -18,7 +18,6 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
-        namespace: flux-system
   prune: true
   wait: true
 ---
@@ -40,6 +39,5 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
-        namespace: flux-system
   path: ./infrastructure/configs
   prune: true
