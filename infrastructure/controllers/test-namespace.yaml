@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ${infra.test.namespace}
+  name: ${infra_test_namespace}
