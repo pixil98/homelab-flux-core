@@ -12,8 +12,13 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: homelab-flux-core
+    name: flux-core
   path: ./infrastructure/controllers
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+        namespace: flux-system
   prune: true
   wait: true
 ---
@@ -30,6 +35,11 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: homelab-flux-core
+    name: flux-core
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+        namespace: flux-system
   path: ./infrastructure/configs
   prune: true
