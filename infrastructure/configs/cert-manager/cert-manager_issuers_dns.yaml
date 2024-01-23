@@ -1,0 +1,39 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: ${info_owner_email}
+    privateKeySecretRef:
+      name: letsencrypt-staging-dns
+    solvers:
+    - dns01:
+        rfc2136:
+          nameserver: ns1.reisman.org
+          tsigKeyName: letsencrypt-dev
+          tsigAlgorithm: HMACSHA512
+          tsigSecretSecretRef:
+            name: letsencrypt-dev-tsig
+            key: key
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ${info_owner_email}
+    privateKeySecretRef:
+      name: letsencrypt-production-dns
+    solvers:
+    - dns01:
+        rfc2136:
+          nameserver: ns1.reisman.org
+          tsigKeyName: letsencrypt-dev
+          tsigAlgorithm: HMACSHA512
+          tsigSecretSecretRef:
+            name: letsencrypt-prd-tsig
+            key: key
