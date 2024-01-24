@@ -22,5 +22,5 @@ spec:
       name: nfs-client-backup
       provisionerName: k8s-sigs.io/nfs-subdir-external-provisioner-backup
       pathPattern: ${.PVC.namespace}-${.PVC.name}
-      reclaimPolicy: ${infrastructure_csi_nfs-subdir_reclaimPolicy}
+      reclaimPolicy: ${infrastructure_csi_nfsSubdir_reclaimPolicy}
 
