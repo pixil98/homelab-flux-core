@@ -16,11 +16,10 @@ spec:
   values:
     nfs:
       server: 192.168.1.10
-      path: /mnt/main/kubernetes/${info_cluster_name}
+      path: /mnt/main/kubernetes
       reclaimPolicy: Retain
     storageClass:
       name: nfs-client-backup
       provisionerName: k8s-sigs.io/nfs-subdir-external-provisioner-backup
-      pathPattern: ${.PVC.namespace}-${.PVC.name}
+      pathPattern: "${info_cluster_name}/$${.PVC.namespace}-$${.PVC.name}"
       reclaimPolicy: ${infrastructure_csi_nfsSubdir_reclaimPolicy}
-
