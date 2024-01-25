@@ -17,7 +17,6 @@ spec:
       - kind: ConfigMap
         name: flux-values
   prune: true
-  wait: true
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
