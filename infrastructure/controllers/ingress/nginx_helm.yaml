@@ -22,7 +22,7 @@ spec:
       kind: DaemonSet
       service:
         externalTrafficPolicy: Local
-        loadBalancerIP: ${infrastructure_ingress_ipAddress}
+        loadBalancerIP: ${vals_infra_ingress_ipAddress}
         type: LoadBalancer
       metrics:
         enabled: false

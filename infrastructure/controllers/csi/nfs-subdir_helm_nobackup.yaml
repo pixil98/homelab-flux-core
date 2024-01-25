@@ -21,5 +21,5 @@ spec:
     storageClass:
       name: nfs-client-nobackup
       provisionerName: k8s-sigs.io/nfs-subdir-external-provisioner-nobackup
-      pathPattern: "${info_cluster_name}/$${.PVC.namespace}-$${.PVC.name}"
-      reclaimPolicy: ${infrastructure_csi_nfsSubdir_reclaimPolicy}
+      pathPattern: "${vals_info_cluster_name}/$${.PVC.namespace}-$${.PVC.name}"
+      reclaimPolicy: ${vals_infra_csi_nfsSubdir_reclaimPolicy}
