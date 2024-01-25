@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: authentik-postgresql
+  namespace: auth
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: bitnamicharts/postgresql
+      version: '>=12.4.2 <13.0.0'
+      sourceRef:
+        kind: HelmRepository
+        name: registry-lab
+        namespace: flux-system
+  values:
+    global:
+      imageRegistry: registry.lab.reisman.org/proxy.docker.io
+      storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    architecture: standalone
+    primary:
+      livenessProbe:
+        initialDelaySeconds: 120
+    auth:
+      database: authentik
+      username: authentik
+      existingSecret: authentik-secrets
+      secretKeys:
+        adminPasswordKey: postgresql-admin-password
+        userPasswordKey: postgresql-user-password

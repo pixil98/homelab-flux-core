@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentik-server
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: authentik
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9100
+      name: http-metrics
+      protocol: TCP
+      targetPort: http-metrics
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: authentik
