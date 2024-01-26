@@ -16,8 +16,7 @@ spec:
   values:
     architecture: standalone
     auth:
-      existingSecret: authentik-secrets
-      existingSecretPasswordKey: redis-password 
+      password: ${secrets_apps_auth_authentik_redisPassword}
     image:
       registry: registry.lab.reisman.org/proxy.docker.io
     master:

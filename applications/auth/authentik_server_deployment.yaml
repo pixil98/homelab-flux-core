@@ -31,7 +31,7 @@ spec:
             - name: AUTHENTIK_BOOTSTRAP_TOKEN
               value: "${secrets_apps_auth_authentik_bootstrapToken}"
             - name: AUTHENTIK_BOOTSTRAP_EMAIL
-              value: "aaron@reisman.org"
+              value: "${vals_info_cluster_email}"
             - name: AUTHENTIK_DEFAULT_USER_CHANGE_USERNAME
               value: "false"
             - name: AUTHENTIK_EMAIL__FROM

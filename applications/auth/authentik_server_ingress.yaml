@@ -7,15 +7,15 @@ metadata:
     app.kubernetes.io/name: server
     app.kubernetes.io/instance: authentik
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "auth.reisman.org"
+      - "auth.${vals_info_cluster_domain}"
       secretName: authentik-server-tls
   rules:
-    - host: "auth.reisman.org"
+    - host: "auth.${vals_info_cluster_domain}"
       http:
         paths:
           - path: "/"
