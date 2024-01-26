@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: immich-redis
+  namespace: photos
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: bitnamicharts/redis
+      version: '>=17.0.0 <18.0.0'
+      sourceRef:
+        kind: HelmRepository
+        name: registry-lab
+        namespace: flux-system
+  values:
+    architecture: standalone
+    auth:
+      password: ${secrets_apps_photos_immich_redisPassword}
+    image:
+      registry: registry.lab.reisman.org/proxy.docker.io
+    master:
+      persistence:
+        enabled: false
+        storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: immich-server
+  namespace: photos
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: server
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - "photos.${vals_info_cluster_domain}"
+      secretName: immich-tls
+  rules:
+    - host: "photos.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: immich-server
+                port:
+                  name: http

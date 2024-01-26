@@ -1,0 +1,62 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: immich-postgresql
+  namespace: photos
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: bitnamicharts/postgresql
+      version: '>=12.4.2 <13.0.0'
+      sourceRef:
+        kind: HelmRepository
+        name: registry-lab
+        namespace: flux-system
+  values:
+    global:
+      imageRegistry: registry.lab.reisman.org/proxy.docker.io
+      storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    architecture: standalone
+    postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
+    primary:
+      extraVolumes:
+        - name: postgresql-lib
+          emptyDir: {}
+        - name: postgresql-extension
+          emptyDir: {}
+        - name: init-container-scripts
+          configMap:
+            name: immich-postgresql-init-container-scripts
+      extraVolumeMounts:
+        - name: postgresql-lib
+          mountPath: /opt/bitnami/postgresql/lib
+        - name: postgresql-extension
+          mountPath: /opt/bitnami/postgresql/share/extension
+      initContainers:
+        - name: init-extensions
+          image: bitnami/postgresql:15
+          command: [ "/bin/sh", "/scripts/init-extensions.sh"]
+          env:
+            - name: PGVECTORS_VERSION
+              value: "0.1.11"
+          volumeMounts:
+            - name: postgresql-lib
+              mountPath: /postgresql-lib
+            - name: postgresql-extension
+              mountPath: /postgresql-extension
+            - name: init-container-scripts
+              mountPath: /scripts
+          securityContext:
+            runAsUser: 0
+      initdb:
+        scriptsConfigMap: immich-postgresql-initdb
+      livenessProbe:
+        initialDelaySeconds: 120
+    auth:
+      database: immich
+      username: immich
+      password: ${secrets_apps_photos_immich_postgresqlUserPassword}
+      postgresPassword: ${secrets_apps_photos_immich_postgresqlAdminPassword}
+      usePasswordFiles: true
+

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-postgresql-init-container-scripts
+  namespace: photos
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: postgresql
+data:
+  init-extensions.sh: |
+    #!/bin/sh
+    apt-get update && apt-get install --yes wget
+
+    POSTGRESQL_MAJOR=${APP_VERSION%%.*}
+    #PGVECTORS_DEB=vectors-pg${POSTGRESQL_MAJOR}_${PGVECTORS_VERSION}_${OS_ARCH}.deb
+    PGVECTORS_DEB=vectors-pg${POSTGRESQL_MAJOR}-v${PGVECTORS_VERSION}-x86_64-unknown-linux-gnu.deb
+    wget https://github.com/tensorchord/pgvecto.rs/releases/download/v${PGVECTORS_VERSION}/${PGVECTORS_DEB}
+    apt install ./${PGVECTORS_DEB}
+
+    cp -rv /opt/bitnami/postgresql/lib/* /postgresql-lib
+    cp -rv /opt/bitnami/postgresql/share/extension/* /postgresql-extension
+
+    cp -rv /usr/lib/postgresql/${POSTGRESQL_MAJOR}/lib/* /postgresql-lib
+    cp -rv /usr/share/postgresql/${POSTGRESQL_MAJOR}/extension/* /postgresql-extension
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-postgresql-initdb
+  namespace: photos
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: postgresql
+data:
+  00_init_extensions.sh: |
+    #!/bin/sh
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS cube;"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS earthdistance;"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS vectors;"
+    echo "00_init_extensions.sh complete"
