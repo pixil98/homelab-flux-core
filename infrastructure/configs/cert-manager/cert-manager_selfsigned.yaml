@@ -1,7 +1,8 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
-  name: selfsigned-ca
+  name: selfsigned-issuer
+  namespace: cert-manager
 spec:
   selfSigned: {}
 ---
@@ -13,18 +14,10 @@ metadata:
 spec:
   isCA: true
   commonName: selfsigned-ca
-  subject:
-    organizations:
-      - ACME Inc.
-    organizationalUnits:
-      - Widgets
-  secretName: selfsigned-secret
-  privateKey:
-    algorithm: ECDSA
-    size: 256
+  secretName: selfsigned-ca
   issuerRef:
-    name: selfsigned-ca
-    kind: ClusterIssuer
+    name: selfsigned-issuer
+    kind: Issuer
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
@@ -33,4 +26,4 @@ metadata:
   name: selfsigned
 spec:
   ca:
-    secretName: selfsigned-secret
+    secretName: selfsigned-ca
