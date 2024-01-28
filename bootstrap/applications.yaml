@@ -17,5 +17,7 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
+      - kind: Secret
+        name: flux-secrets
   path: ./applications
   prune: true

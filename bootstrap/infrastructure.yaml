@@ -16,6 +16,8 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
+      - kind: Secret
+        name: flux-secrets
   prune: true
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -36,5 +38,7 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
+      - kind: Secret
+        name: flux-secrets
   path: ./infrastructure/configs
   prune: true
