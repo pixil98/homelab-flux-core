@@ -24,6 +24,8 @@ spec:
     auth:
       database: authentik
       username: authentik
-      password: ${secrets_apps_auth_authentik_postgresqlUserPassword}
-      postgresPassword: ${secrets_apps_auth_authentik_postgresqlAdminPassword}
+      existingSecret: authentik-secrets
+      secretKeys:
+        adminPasswordKey: postgresql-admin-password
+        userPasswordKey: postgresql-user-password
       usePasswordFiles: true

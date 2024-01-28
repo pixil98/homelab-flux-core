@@ -27,9 +27,17 @@ spec:
             - name: AUTHENTIK_AVATARS
               value: "gravatar"
             - name: AUTHENTIK_BOOTSTRAP_PASSWORD
-              value: "${secrets_apps_auth_authentik_bootstrapPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: bootstrap-password
+                  optional: false
             - name: AUTHENTIK_BOOTSTRAP_TOKEN
-              value: "${secrets_apps_auth_authentik_bootstrapToken}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: bootstrap-token
+                  optional: false
             - name: AUTHENTIK_BOOTSTRAP_EMAIL
               value: "${vals_info_cluster_email}"
             - name: AUTHENTIK_DEFAULT_USER_CHANGE_USERNAME
@@ -39,7 +47,11 @@ spec:
             - name: AUTHENTIK_EMAIL__HOST
               value: "mail.reisman.org"
             - name: AUTHENTIK_EMAIL__PASSWORD
-              value: "${secrets_apps_auth_authentik_emailPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: email-password
+                  optional: false
             - name: AUTHENTIK_EMAIL__PORT
               value: "587"
             - name: AUTHENTIK_EMAIL__TIMEOUT
@@ -67,7 +79,11 @@ spec:
             - name: AUTHENTIK_POSTGRESQL__NAME
               value: "authentik"
             - name: AUTHENTIK_POSTGRESQL__PASSWORD
-              value: "${secrets_apps_auth_authentik_postgresqlUserPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: postgresql-user-password
+                  optional: false
             - name: AUTHENTIK_POSTGRESQL__PORT
               value: "5432"
             - name: AUTHENTIK_POSTGRESQL__USER
@@ -75,9 +91,17 @@ spec:
             - name: AUTHENTIK_REDIS__HOST
               value: "authentik-redis-master"
             - name: AUTHENTIK_REDIS__PASSWORD
-              value: "${secrets_apps_auth_authentik_redisPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: redis-password
+                  optional: false
             - name: AUTHENTIK_SECRET_KEY
-              value: "${secrets_apps_auth_authentik_secretKey}"
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secrets
+                  key: secret-key
+                  optional: false
           ports:
             - name: http
               containerPort: 9000
