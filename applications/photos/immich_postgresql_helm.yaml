@@ -56,7 +56,8 @@ spec:
     auth:
       database: immich
       username: immich
-      password: ${secrets_apps_photos_immich_postgresqlUserPassword}
-      postgresPassword: ${secrets_apps_photos_immich_postgresqlAdminPassword}
+      existingSecret: immich-secrets
+      secretKeys:
+        adminPasswordKey: postgresql-admin-password
+        userPasswordKey: postgresql-user-password
       usePasswordFiles: true
-

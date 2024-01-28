@@ -31,13 +31,21 @@ spec:
             - name: DB_HOSTNAME
               value: "immich-postgresql"
             - name: DB_PASSWORD
-              value: "${secrets_apps_photos_immich_postgresqlUserPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets 
+                  key: postgresql-user-password
+                  optional: false
             - name: DB_USERNAME
               value: "immich"
             - name: REDIS_HOSTNAME
               value: "immich-redis-master"
             - name: REDIS_PASSWORD
-              value: "${secrets_apps_photos_immich_redisPassword}"
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets 
+                  key: redis-password
+                  optional: false
           volumeMounts:
             - name: geodata-cache
               mountPath: /geodata-cache
