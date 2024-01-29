@@ -24,7 +24,7 @@ spec:
         - name: immich-server
           image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.93.3
           imagePullPolicy: IfNotPresent
-          command: [ "start.sh", "immich" ]
+          command: [ "./start.sh", "immich" ]
           env:
             - name: DB_DATABASE_NAME
               value: "immich"

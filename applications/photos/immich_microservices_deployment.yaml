@@ -24,7 +24,7 @@ spec:
         - name: immich-microservices
           image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.93.3
           imagePullPolicy: IfNotPresent
-          command: [ "start.sh", "microservices" ]
+          command: [ "./start.sh", "microservices" ]
           env:
             - name: DB_DATABASE_NAME
               value: "immich"
