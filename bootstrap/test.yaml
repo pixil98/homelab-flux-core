@@ -5,7 +5,7 @@ metadata:
   name: test
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   retryInterval: 1m
   timeout: 5m
   sourceRef:
