@@ -16,6 +16,18 @@ spec:
       interval: 1h0m0s
   values:
     installCRDs: "true"
-    replicaCount: 1
+    replicaCount: 2
     image:
       repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-controller
+    webhook:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-webhook
+    cainjector:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-controller
+    acmesolver:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-acmesolver
+    startupapicheck:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-startupapicheck
