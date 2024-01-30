@@ -19,6 +19,7 @@ spec:
       retries: 3
   values:
     controller:
+      #TODO: Setup registry/image tags
       kind: DaemonSet
       service:
         externalTrafficPolicy: Local
