@@ -18,4 +18,4 @@ spec:
     installCRDs: "true"
     replicaCount: 1
     image:
-      registry: registry.lab.reisman.org/proxy.quay.io
+      repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-controller
