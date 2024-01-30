@@ -13,3 +13,10 @@ spec:
         namespace: flux-system
       version: "0.13.12"
   interval: 1h0m0s
+  values:
+    controller:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/metallb/controller
+    speaker:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/metallb/speaker
