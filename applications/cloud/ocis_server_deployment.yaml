@@ -36,7 +36,7 @@ spec:
             readOnlyRootFilesystem: true
           env:
             - name: OCIS_LOG_LEVEL
-              value: "${vals_apps_cloud_ocis_logLevel:info}"
+              value: "${vals_apps_cloud_ocis_logLevel:=info}"
             - name: OCIS_LOG_PRETTY
               value: "true"
             - name: OCIS_LOG_COLOR
