@@ -1,0 +1,34 @@
+$ORIGIN scobie.org.
+$TTL    6h
+
+@       SOA     ns1.reisman.org. hostmaster.scobie.org. (
+                2022042402      ; serial
+                3h              ; refresh
+                15m             ; retry
+                4w              ; expire
+                15m             ; negttl
+                )
+
+        NS      ns1.reisman.org.
+        NS      ns2.reisman.org.
+
+@       A       216.165.140.134
+
+www     A       216.165.140.134
+
+mail    A       216.165.140.134
+
+; Mail
+@       MX      10 mail.scobie.org.
+        TXT     "v=spf1 a:mail.scobie.org -all"
+
+20220424._domainkey     TXT     ( "v=DKIM1; h=sha256; k=rsa; p="
+                        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAywsWZcvJduYND+GtiN0I"
+                        "Z0CVGTu5aPIY/Z9IdsPAqbBa0++oWf15RT8xvGhpXLX85d2gn5sL87BC+SJ9+KT5"
+                        "Q4vdSu7d91nRycLnn84JM69TbdKsWAXiE13fNJNTMIpGs3vVkJAqPUJ1cpryfCFU"
+                        "hKK0rgVHMeNHv0rZH5gUIu6Ysqu7nleeW/0i1nUtwk4sGHduSFIyCZ8tRMrmBHER"
+                        "swttkXNj82/9+/nLGjTITQ7n0KvtGJywqDFIn+2CP125nGagElyMleSRi9m27UeG"
+                        "+vi+Dd6p4DBseIXR/3cTSnKh4e1XS4W5uDMgUpFtEFrLhr+YvMaJlDAiaHcrjRz6"
+                        "5wIDAQAB" )  ; ----- DKIM key 20220424 for scobie.org
+
+_dmarc  TXT     "v=DMARC1; p=reject; rua=mailto:dmarc-rua@scobie.org; ruf=mailto:dmarc-ruf@scobie.org; sp=reject; fo=1;"

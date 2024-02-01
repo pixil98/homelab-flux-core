@@ -1,0 +1,41 @@
+$ORIGIN xcoolgroup.org.
+$TTL    6h
+
+@       SOA     ns1.reisman.org. hostmaster.xcoolgroup.org. (
+                2022052401      ; serial
+                3h              ; refresh
+                15m             ; retry
+                4w              ; expire
+                15m             ; negttl
+                )
+
+        NS      ns1.reisman.org.
+        NS      ns2.reisman.org.
+
+@       A       216.165.140.134
+
+www     A       216.165.140.134
+
+mail    A       216.165.140.134
+
+necesse A       216.165.140.134
+
+; Redirct for xcoolchat
+chat    CNAME   xcoolgroup.no-ip.org.
+
+; Mail
+@       MX      10 mail.xcoolgroup.org.
+        TXT     "v=spf1 a:mail.xcoolgroup.org -all"
+
+20220424._domainkey     TXT     ( "v=DKIM1; h=sha256; k=rsa; p="
+                        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2vBT+/IJoL2W7x0+ywFF"
+                        "7FC8BsEaT9hTq6dyrfa7IMmOCOM224dw0JpQYy9A/tL5VQ4hV25Qcgyeu6Eto3yh"
+                        "5z3J09bvSKMHPOaiKcGQi7mGjzDldBvL5zVnANE/JqGuo3Wd+ggqP7TxAYB8SRFl"
+                        "IMfB0Cbcl1NjoI7kbgMCP/zh7LzPBzJJ+gHWmP/nZmfWDT+eRPs6MKS2fdwy0BG1"
+                        "bkyAU9ypL3CwEHlcC2Ox6mp33HIty/cbl9UB9/+AVokqEiyTmQ4Y+NqFwRs5OHu1"
+                        "frG00mM8wUrbGPIv8BieSLEsFd9kcpoDXgg0ufs01I5QcmPlPvs4wtduAxHCQTDB"
+                        "LwIDAQAB" )  ; ----- DKIM key 20220424 for xcoolgroup.org
+
+
+_dmarc  TXT     "v=DMARC1; p=reject; rua=mailto:dmarc-rua@xcoolgroup.org; ruf=mailto:dmarc-ruf@xcoolgroup.org; sp=reject; fo=1;"
+

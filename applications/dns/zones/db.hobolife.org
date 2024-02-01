@@ -1,0 +1,34 @@
+$ORIGIN hobolife.org.
+$TTL    6h
+
+@       SOA     ns1.reisman.org. hostmaster.hobolife.org. (
+                2022042402      ; serial
+                3h              ; refresh
+                15m             ; retry
+                4w              ; expire
+                15m             ; negttl
+                )
+
+        NS      ns1.reisman.org.
+        NS      ns2.reisman.org.
+
+@       A       216.165.140.134
+
+www     A       216.165.140.134
+
+mail    A       216.165.140.134
+
+; Mail
+@       MX      10 mail.hobolife.org.
+        TXT     "v=spf1 a:mail.hobolife.org -all"
+
+20220424._domainkey     TXT     ( "v=DKIM1; h=sha256; k=rsa; p="
+                        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArPzggU505M0lkEUlx9Zo"
+                        "2FlNcMA73ORaMldO/gvhtiEZnpFCn41OStnIZb/FHW1UYR+yX9tQUgWkJGH2iRnt"
+                        "Jpi1HKsVYjeCLaCOGm18fpdnp8Axpl5IWYRgeIK9ZHPht+vA87evS9SeKlH1xaGt"
+                        "NSB6B/gq4CippBeBGqmX+C5FvGUtWJAfyBN3/3tohUdq51McKfaIzZ+udxDbN1uE"
+                        "ATrwrLhV8BeoUAy8z/tdUHmJykK8xtB2aRPd0YgKGbfmNTMdMEcIATOjqQPfPrpV"
+                        "QYUKtJFC4tXd9lKdPRXPcNNA5fOKvW/DM1nUJjpSRx+h2ztL0guRHaS0nkZuK7j/"
+                        "6QIDAQAB" )  ; ----- DKIM key 20220424 for hobolife.org
+
+_dmarc  TXT     "v=DMARC1; p=reject; rua=mailto:dmarc-rua@hobolife.org; ruf=mailto:dmarc-ruf@hobolife.org; sp=reject; fo=1;"

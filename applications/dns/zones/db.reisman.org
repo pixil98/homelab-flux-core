@@ -1,0 +1,59 @@
+$ORIGIN reisman.org. 
+$TTL    6h
+
+@       SOA     ns1.reisman.org. hostmaster.reisman.org. (
+                2023101501      ; serial
+                3h              ; refresh
+                15m             ; retry
+                4w              ; expire
+                15m             ; negttl
+                )
+
+        NS      ns1.reisman.org.
+        NS      ns2.reisman.org.
+
+; Nameservers
+ns1             A       216.165.140.134
+ns2             A       216.165.140.134
+
+; Madison
+@               A       216.165.140.134
+madison         A       216.165.140.134
+www             A       216.165.140.134
+
+mail            A       216.165.140.134
+webmail         A       216.165.140.134
+postfixadmin    A       216.165.140.134
+
+paperless       A       216.165.140.134
+pihole          A       216.165.140.134
+prometheus      A       216.165.140.134
+alertmanager    A       216.165.140.134
+
+tubesync        A       216.165.140.134
+
+; Cloud
+auth            A       216.165.140.134
+photos          A       216.165.140.134
+cloud           A       216.165.140.134
+
+; Afton
+webscan         A       192.168.1.31
+
+
+; Mail Exchange - explicitly prefer AAAA (mail2) over A (mail)
+@               MX      10 mail.reisman.org.
+                TXT     "v=spf1 a:mail.reisman.org -all"
+
+20220424._domainkey     TXT     ( "v=DKIM1; h=sha256; k=rsa; p="
+                        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvZa678GAv1a5p0LyJNfJ"
+                        "7YXs3yqbhq67K7dvBpSFmk+qDKXAS/cQyBNqyxps+pXH+oDgqdYu285ucfxIvDO6"
+                        "/2v/J0c5Sy3tXG6kN8bTRxW6qtOqw+oUxxgYCB29bxRn2ZPhSnGUnPOrFrXHQZhC"
+                        "3njfQICjHvWaGC/D4QqxYaXsggGUkR+I8wB6sMiWBg0+b1tkcejG6LUWFCKYCfzM"
+                        "OsUqCsukPBGaMGU3fIlSMcDPIVcXVuftKMoUCt8QycAmdYNC7zNHjfQx0AkRV9NB"
+                        "6du0MepVYRhMPqzPKZgvoO2m+ytyXbPX5VXEqYEUhJOz0hzQWVnr2DmM+98hWjGB"
+                        "ewIDAQAB" )  ; ----- DKIM key 20220424 for reisman.org
+
+_dmarc                  TXT     "v=DMARC1; p=quarantine; rua=mailto:dmarc-rua@reisman.org; ruf=mailto:dmarc-ruf@reisman.org; sp=reject; fo=1;"
+_dmarc.hobbes.lab       TXT     "v=DMARC1; p=none; sp=reject;"
+_dmarc.luke.lab         TXT     "v=DMARC1; p=none; sp=reject;"

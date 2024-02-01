@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authoritative-dns-tcp
+  namespace: dns
+  annotations:
+    metallb.universe.tf/allow-shared-ip: authoritative-dns
+spec:
+  type: LoadBalancer
+  loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress}
+  selector:
+    app: authoritative-dns
+  ports:
+    - port: 53
+      targetPort: 53
+      protocol: TCP
+      name: dns-tcp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authoritative-dns-udp
+  namespace: dns
+  annotations:
+    metallb.universe.tf/allow-shared-ip: authoritative-dns
+spec:
+  type: LoadBalancer
+  loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress
+  selector:
+    app: authoritative-dns
+  ports:
+    - port: 53
+      targetPort: 53
+      protocol: UDP
+      name: dns-udp

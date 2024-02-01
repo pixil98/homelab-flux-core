@@ -11,12 +11,12 @@ spec:
     solvers:
     - dns01:
         rfc2136:
+          #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
-          #TODO: Get secret from stream
-          tsigKeyName: letsencrypt-dev
+          tsigKeyName: letsencrypt
           tsigAlgorithm: HMACSHA512
           tsigSecretSecretRef:
-            name: letsencrypt-dev-tsig
+            name: letsencrypt-dns
             key: key
 ---
 apiVersion: cert-manager.io/v1
@@ -32,10 +32,19 @@ spec:
     solvers:
     - dns01:
         rfc2136:
+          #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
-          #TODO: Get secret from stream
-          tsigKeyName: letsencrypt-dev
+          tsigKeyName: letsencrypt
           tsigAlgorithm: HMACSHA512
           tsigSecretSecretRef:
-            name: letsencrypt-prd-tsig
+            name: letsencrypt-dns
             key: key
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: letsencrypt-dns
+  namespace: dns
+type: Opaque
+stringData:
+  key: ${secrets_apps_dns_authoritative_letsencryptKey}
