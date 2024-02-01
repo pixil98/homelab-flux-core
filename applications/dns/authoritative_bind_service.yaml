@@ -25,7 +25,7 @@ metadata:
     metallb.universe.tf/allow-shared-ip: authoritative-dns
 spec:
   type: LoadBalancer
-  loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress
+  loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress}
   selector:
     app: authoritative-dns
   ports:
