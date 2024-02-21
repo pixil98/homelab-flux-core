@@ -39,7 +39,7 @@ spec:
           command: [ "/bin/sh", "/scripts/init-extensions.sh"]
           env:
             - name: PGVECTORS_VERSION
-              value: "0.1.11"
+              value: "0.2.0"
           volumeMounts:
             - name: postgresql-lib
               mountPath: /postgresql-lib
