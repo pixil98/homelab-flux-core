@@ -18,3 +18,4 @@ spec:
       - kind: Secret
         name: flux-secrets
   prune: true
+  wait: true
