@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 5m
   retryInterval: 1m
-  timeout: 5m
+  timeout: 30m
   dependsOn:
     - name: infrastructure-controllers
   sourceRef:
