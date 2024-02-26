@@ -15,8 +15,12 @@ spec:
         namespace: flux-system
       interval: 1h0m0s
   values:
-    installCRDs: "true"
+    crds:
+      enabled: true
+      keep: true
     replicaCount: 2
+    podDisruptionBudget:
+      enabled: true
     image:
       repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-controller
     webhook:
