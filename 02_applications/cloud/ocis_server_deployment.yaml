@@ -166,7 +166,7 @@ spec:
             # - name: NOTIFICATIONS_SMTP_PORT
             #   value: "587"
             # - name: NOTIFICATIONS_SMTP_USERNAME
-            #   value: "cloud@reisman.org"
+            #   value: "cloud@${vals_info_cluster_domain}"
             # - name: NOTIFICATIONS_SMTP_PASSWORD
             #   value: "REDACTED"
             # - name: NOTIFICATIONS_SMTP_INSECURE
@@ -176,7 +176,7 @@ spec:
             # - name: NOTIFICATIONS_SMTP_ENCRYPTION
             #   value: "tls??"
             # - name: NOTIFICATIONS_SMTP_SENDER
-            #   value: "ownCloud <cloud@reisman.org>"
+            #   value: "ownCloud <cloud@${vals_info_cluster_domain}>"
 
           livenessProbe:
             httpGet:

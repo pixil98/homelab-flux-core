@@ -5,12 +5,14 @@ metadata:
   name: infrastructure-controllers
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: pre-infrastructure-configs
   interval: 5m
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
     name: flux-core
-  path: ./infrastructure/controllers
+  path: ./01_infrastructure/controllers
   postBuild:
     substituteFrom:
       - kind: ConfigMap

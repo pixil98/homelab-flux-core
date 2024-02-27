@@ -44,7 +44,7 @@ spec:
             - name: AUTHENTIK_DEFAULT_USER_CHANGE_USERNAME
               value: "false"
             - name: AUTHENTIK_EMAIL__FROM
-              value: "authentik@reisman.org"
+              value: "authentik@${vals_info_cluster_domain}"
             - name: AUTHENTIK_EMAIL__HOST
               value: "mail.reisman.org"
             - name: AUTHENTIK_EMAIL__PASSWORD
