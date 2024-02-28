@@ -15,9 +15,7 @@ spec:
         namespace: flux-system
       interval: 1h0m0s
   values:
-    crds:
-      enabled: true
-      keep: true
+    installCRDs: true
     replicaCount: 2
     podDisruptionBudget:
       enabled: true
