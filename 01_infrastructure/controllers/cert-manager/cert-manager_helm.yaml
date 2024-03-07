@@ -14,6 +14,8 @@ spec:
         name: jetstack
         namespace: flux-system
       interval: 1h0m0s
+  install:
+    timedOut: 30m
   values:
     installCRDs: true
     replicaCount: 2
