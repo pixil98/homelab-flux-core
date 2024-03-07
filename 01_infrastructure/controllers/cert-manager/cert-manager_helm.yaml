@@ -4,16 +4,16 @@ metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
-  interval: 5m
+  interval: 30m
   chart:
     spec:
       chart: cert-manager
-      version: '>=1.10.0 <1.15.0'
+      version: '1.x'
       sourceRef:
         kind: HelmRepository
         name: jetstack
         namespace: flux-system
-      interval: 1h0m0s
+      interval: 1h
   install:
     timeout: 30m
   values:
