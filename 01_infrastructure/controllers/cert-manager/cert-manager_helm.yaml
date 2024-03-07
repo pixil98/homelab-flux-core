@@ -21,9 +21,7 @@ spec:
     remediation:
       retries: 3
   values:
-    crds:
-      enabled: true
-      keep: true
+    installCRDs: true
     replicaCount: 2
     podDisruptionBudget:
       enabled: true
@@ -41,3 +39,4 @@ spec:
     startupapicheck:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-startupapicheck
+      timeout: 10m
