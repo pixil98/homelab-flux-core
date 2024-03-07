@@ -14,12 +14,6 @@ spec:
         name: jetstack
         namespace: flux-system
       interval: 1h0m0s
-  install:
-    remediation:
-      retries: 50
-  upgrade:
-    remediation:
-      retries: 3
   values:
     installCRDs: true
     replicaCount: 2
@@ -39,4 +33,3 @@ spec:
     startupapicheck:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-startupapicheck
-      timeout: 10m
