@@ -19,6 +19,9 @@ spec:
   values:
     installCRDs: true
     replicaCount: 2
+    global:
+      leaderElection:
+        namespace: cert-manager
     podDisruptionBudget:
       enabled: true
     image:
