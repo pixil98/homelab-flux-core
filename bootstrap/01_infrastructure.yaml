@@ -42,5 +42,5 @@ spec:
         name: flux-values
       - kind: Secret
         name: flux-secrets
-  path: ./infrastructure/configs
+  path: ./01_infrastructure/configs
   prune: true
