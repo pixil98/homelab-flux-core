@@ -21,3 +21,26 @@ spec:
         name: flux-secrets
   prune: true
   wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-configs
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infrastructure-controllers
+  interval: 5m
+  retryInterval: 1m
+  timeout: 30m
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  path: ./infrastructure/configs
+  prune: true
