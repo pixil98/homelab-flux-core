@@ -24,9 +24,15 @@ spec:
     webhook:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-webhook
+      replicaCount: 2
+      podDisruptionBudget:
+        enabled: true
     cainjector:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-cainjector
+      replicaCount: 2
+      podDisruptionBudget:
+        enabled: true
     acmesolver:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-acmesolver
