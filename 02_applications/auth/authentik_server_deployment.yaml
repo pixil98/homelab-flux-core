@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: authentik
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2023.10.6
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2024.2.2
           imagePullPolicy: IfNotPresent
           args: ["server"]
           env:
