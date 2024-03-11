@@ -11,8 +11,8 @@ spec:
       version: '1.14.x'
       sourceRef:
         kind: HelmRepository
-        name: jetstack
-        namespace: flux-system
+        name: cert-manager
+        namespace: cert-manager
       interval: 1h
   values:
     installCRDs: true
