@@ -21,3 +21,4 @@ spec:
         name: flux-secrets
   path: ./02_applications
   prune: true
+  wait: true
