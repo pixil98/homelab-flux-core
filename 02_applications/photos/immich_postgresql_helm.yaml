@@ -35,7 +35,7 @@ spec:
           mountPath: /opt/bitnami/postgresql/share/extension
       initContainers:
         - name: init-extensions
-          image: bitnami/postgresql:15
+          image: bitnami/postgresql:16
           imagePullPolicy: Always 
           command: [ "/bin/sh", "/scripts/init-extensions.sh"]
           env:
