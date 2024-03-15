@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-postgresql-user
+  namespace: auth
+type: kubernetes.io/basic-auth
+stringData:
+  password: ${secrets_apps_auth_authentik_postgresqlUserPassword}
+  username: authentik
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik
+  namespace: auth
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-postgresql-user
+  storage:
+    storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    size: 1Gi
