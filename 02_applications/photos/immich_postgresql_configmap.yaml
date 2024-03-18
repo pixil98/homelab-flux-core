@@ -34,7 +34,8 @@ metadata:
 data:
   00_init_extensions.sh: |
     #!/bin/sh
-    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS cube;"
-    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS earthdistance;"
-    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS vectors;"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS cube"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS earthdistance"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "CREATE EXTENSION IF NOT EXISTS vectors"
+    psql "postgresql://postgres:$(cat /opt/bitnami/postgresql/secrets/postgresql-admin-password)@127.0.0.1/$${POSTGRES_DATABASE}" -c "ALTER SYSTEM SET search_path TO "$user", public, vectors"
     echo "00_init_extensions.sh complete"
