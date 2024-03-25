@@ -125,3 +125,10 @@ spec:
               port: http
             initialDelaySeconds: 50
             periodSeconds: 10
+          volumeMounts:
+            - name: blueprints
+              mountPath: /blueprints/custom
+      volumes:
+        - name: blueprints
+          configMap:
+            name: authentik-blueprints

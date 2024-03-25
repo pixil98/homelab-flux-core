@@ -86,3 +86,10 @@ spec:
                   name: authentik-secrets
                   key: secret-key
                   optional: false
+          volumeMounts:
+            - name: blueprints
+              mountPath: /blueprints/custom
+      volumes:
+        - name: blueprints
+          configMap:
+            name: authentik-blueprints
