@@ -84,7 +84,7 @@ spec:
       volumes:
         - name: config
           secret:
-            secretName: immich-config
+            secretName: immich-server-config
         - name: library
           persistentVolumeClaim:
             claimName: immich-library
