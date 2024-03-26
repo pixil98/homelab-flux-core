@@ -16,3 +16,7 @@ secretGenerator:
     namespace: auth
     files:
       - authentik_blueprints/immich.yaml
+      - authentik_blueprints/owncloud-android.yaml
+      - authentik_blueprints/owncloud-desktop.yaml
+      - authentik_blueprints/owncloud-ios.yaml
+      - authentik_blueprints/owncloud-web.yaml
