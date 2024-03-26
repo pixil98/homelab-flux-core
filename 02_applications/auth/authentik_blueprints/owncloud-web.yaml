@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+version: 1
+metadata:
+    name: owncloud
+entries:
+  - model: authentik_providers_oauth2.oauth2provider
+    id: owncloud
+    identifiers:
+      name: owncloud
+    state: present
+    attrs:
+      authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+      authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+      client_type: confidential
+      client_id: ${secrets_apps_auth_applications_owncloud_clientId}
+      client_secret: ${secrets_apps_auth_applications_owncloud_clientSecret}
+      redirect_uris: |
+        https://cloud.${vals_info_cluster_domain}/
+        https://cloud.${vals_info_cluster_domain}/oidc-callback.html
+        https://cloud.${vals_info_cluster_domain}/oidc-silent-redirect.html
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, authentik Self-signed Certificate]]
+      property_mappings:
+        - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
+        - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
+        - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
+
+  - model: authentik_core.application
+    identifiers:
+      slug: owncloud
+    state: present
+    attrs:
+      name: owncloud
+      slug: owncloud
+      provider: !KeyOf owncloud
+      meta_launch_url: https://cloud.${vals_info_cluster_domain}/
+      policy_engine_mode: any
