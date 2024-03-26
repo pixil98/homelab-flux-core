@@ -28,11 +28,10 @@ entries:
   - model: authentik_core.application
     identifiers:
       slug: immich
-    attrs:
-      meta_launch_url: https://photos.${vals_info_cluster_domain}/
-      name: immich
-      policy_engine_mode: any
-      provider: 1
-      slug: immich
     state: present
-
+    attrs:
+      name: immich
+      slug: immich
+      provider: !KeyOf immich
+      meta_launch_url: https://photos.${vals_info_cluster_domain}/
+      policy_engine_mode: any
