@@ -63,7 +63,7 @@ stringData:
       },
       "logging": {
         "enabled": true,
-        "level": "${vals_apps_photos_immich_logLevel:=log}",
+        "level": "${vals_apps_photos_immich_logLevel:=log}"
       },
       "machineLearning": {
         "enabled": true,
@@ -93,27 +93,14 @@ stringData:
         "issuerUrl": "https://auth.${vals_info_cluster_domain}/application/o/immich/",
         "clientId": "${secrets_apps_auth_applications_immich_clientId}",
         "clientSecret": "${secrets_apps_auth_applications_immich_clientSecret}",
-        "mobileOverrideEnabled": false,
-        "mobileRedirectUri": "",
-        "scope": "openid email profile",
-        "storageLabelClaim": "preferred_username",
-        "buttonText": "Login",
-        "autoRegister": true,
-        "autoLaunch": true
-      },
-      "oauth": {
-        "enabled": true,
-        "issuerUrl": "https://auth.${vals_info_cluster_domain}/application/o/immich/",
-        "clientId": "${secrets_apps_auth_applications_immich_clientId}",
-        "clientSecret": "${secrets_apps_auth_applications_immich_clientSecret}",
         "scope": "openid email profile",
         "signingAlgorithm": "RS256",
         "storageLabelClaim": "preferred_username",
         "storageQuotaClaim": "immich_quota",
         "defaultStorageQuota": 0,
-        "buttonText": "Login with OAuth",
+        "buttonText": "Login",
         "autoRegister": true,
-        "autoLaunch": false,
+        "autoLaunch": true,
         "mobileOverrideEnabled": false,
         "mobileRedirectUri": ""
       },
