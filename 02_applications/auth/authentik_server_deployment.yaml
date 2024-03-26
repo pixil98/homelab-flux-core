@@ -130,5 +130,5 @@ spec:
               mountPath: /blueprints/custom
       volumes:
         - name: blueprints
-          configMap:
-            name: authentik-blueprints
+          secret:
+            secretName: authentik-blueprints

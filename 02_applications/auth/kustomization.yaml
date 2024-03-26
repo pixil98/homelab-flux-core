@@ -11,7 +11,7 @@ resources:
   - authentik_server_service.yaml
   - authentik_worker_deployment.yaml
 
-configMapGenerator:
+secretGenerator:
   - name: authentik-blueprints
     namespace: auth
     files:
