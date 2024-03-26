@@ -38,8 +38,10 @@ spec:
                   optional: false
             - name: DB_USERNAME
               value: "immich"
+            - name: IMMICH_CONFIG_FILE
+              value: "/config/immich.json"
             - name: REDIS_HOSTNAME
-              value: immich-redis-master
+              value: "immich-redis-master"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -51,6 +53,8 @@ spec:
               containerPort: 3001
               protocol: TCP
           volumeMounts:
+            - name: config
+              mountPath: /config
             - name: library
               mountPath: /usr/src/app/upload/library
             - name: upload
@@ -78,6 +82,9 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 1
       volumes:
+        - name: config
+          secret:
+            secretName: immich-config
         - name: library
           persistentVolumeClaim:
             claimName: immich-library
