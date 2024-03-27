@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik
+  name: authentik-env
   namespace: auth
   labels:
     app.kubernetes.io/name: "authentik"
