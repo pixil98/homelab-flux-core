@@ -47,8 +47,6 @@ spec:
                   key: redis-password
                   optional: false
           volumeMounts:
-            - name: geodata-cache
-              mountPath: /geodata-cache
             - name: library
               mountPath: /usr/src/app/upload/library
             - name: upload
@@ -60,8 +58,6 @@ spec:
             - name: thumbs
               mountPath: /usr/src/app/upload/thumbs
       volumes:
-        - name: geodata-cache
-          emptyDir: {}
         - name: library
           persistentVolumeClaim:
             claimName: immich-library
