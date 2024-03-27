@@ -19,9 +19,8 @@ stringData:
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
-          client_type: confidential
+          client_type: public
           client_id: ${secrets_apps_auth_applications_owncloud_clientId}
-          client_secret: ${secrets_apps_auth_applications_owncloud_clientSecret}
           redirect_uris: |
             https://cloud.${vals_info_cluster_domain}/
             https://cloud.${vals_info_cluster_domain}/oidc-callback.html
