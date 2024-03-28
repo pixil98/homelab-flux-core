@@ -14,7 +14,7 @@ spec:
   tls:
     - hosts:
       - "photos.${vals_info_cluster_domain}"
-      secretName: immich-tls
+      secretName: immich-server-tls
   rules:
     - host: "photos.${vals_info_cluster_domain}"
       http:

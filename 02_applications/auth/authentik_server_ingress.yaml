@@ -4,8 +4,9 @@ metadata:
   name: authentik
   namespace: auth
   labels:
-    app.kubernetes.io/name: server
-    app.kubernetes.io/instance: authentik
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "server"
   annotations:
     cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
 spec:

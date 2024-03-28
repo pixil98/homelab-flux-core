@@ -4,19 +4,21 @@ metadata:
   name: authentik-server
   namespace: auth
   labels:
-    app.kubernetes.io/name: server
-    app.kubernetes.io/instance: authentik
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "server"
 spec:
   type: ClusterIP
   ports:
-    - port: 9100
-      name: http-metrics
+    - name: http
       protocol: TCP
-      targetPort: http-metrics
-    - port: 80
+      port: 80
       targetPort: http
+    - name: https
       protocol: TCP
-      name: http
+      port: 443
+      targetPort: https
   selector:
-    app.kubernetes.io/name: server
-    app.kubernetes.io/instance: authentik
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "server"
