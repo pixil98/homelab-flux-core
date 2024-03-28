@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: bitnamicharts/postgresql
-      version: '14.x'
+      version: '15.x'
       sourceRef:
         kind: HelmRepository
         name: registry-lab
