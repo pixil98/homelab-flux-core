@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik-blueprint-owncloud-web
+  name: authentik-blueprint-owncloud
   namespace: auth
 type: Opaque
 stringData:

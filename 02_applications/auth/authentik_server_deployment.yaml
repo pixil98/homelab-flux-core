@@ -86,10 +86,4 @@ spec:
               - secret:
                   name: authentik-blueprint-immich
               - secret:
-                  name: authentik-blueprint-owncloud-android
-              - secret:
-                  name: authentik-blueprint-owncloud-desktop
-              - secret:
-                  name: authentik-blueprint-owncloud-ios
-              - secret:
-                  name: authentik-blueprint-owncloud-web
+                  name: authentik-blueprint-owncloud
