@@ -1,4 +1,3 @@
-#TODO this is not working
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -35,7 +34,8 @@ spec:
         rfc2136:
           #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
-          tsigKeyName: letsencrypt
+          #TODO rename this to letsencrypt
+          tsigKeyName: letsencrypt-dev
           tsigAlgorithm: HMACSHA512
           tsigSecretSecretRef:
             name: letsencrypt-dns
