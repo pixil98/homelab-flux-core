@@ -13,30 +13,30 @@ stringData:
     entries:
 
       # Groups
-    - model: authentik_core.group
-      id: owncloud
-      identifiers:
-        name: owncloud
-      state: present
-      attrs:
-        name: owncloud
-        parent: null
-    - model: authentik_core.group
-      id: owncloud-admins
-      identifiers:
-        name: owncloud-admins
-      state: present
-      attrs:
-        name: owncloud-admins
-        parent: !Find [authentik_core.group, [name, owncloud]]
-    - model: authentik_core.group
-      id: owncloud-users
-      identifiers:
-        name: owncloud-users
-      state: present
-      attrs:
-        name: owncloud-users
-        parent: !Find [authentik_core.group, [name, owncloud]]`
+      - model: authentik_core.group
+        id: owncloud
+        identifiers:
+          name: owncloud
+        state: present
+        attrs:
+          name: owncloud
+          parent: null
+      - model: authentik_core.group
+        id: owncloud-admins
+        identifiers:
+          name: owncloud-admins
+        state: present
+        attrs:
+          name: owncloud-admins
+          parent: !Find [authentik_core.group, [name, owncloud]]
+      - model: authentik_core.group
+        id: owncloud-users
+        identifiers:
+          name: owncloud-users
+        state: present
+        attrs:
+          name: owncloud-users
+          parent: !Find [authentik_core.group, [name, owncloud]]
 
       # Website
       - model: authentik_providers_oauth2.oauth2provider
@@ -107,7 +107,7 @@ stringData:
           policy_engine_mode: any
 
       # Android Client
-            - model: authentik_providers_oauth2.oauth2provider
+      - model: authentik_providers_oauth2.oauth2provider
         id: owncloud-android
         identifiers:
           name: owncloud-android
