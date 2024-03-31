@@ -70,12 +70,7 @@ stringData:
           provider: !KeyOf owncloud-web
           meta_launch_url: https://cloud.${vals_info_cluster_domain}/
           policy_engine_mode: any
-      - model: authentik_policies.PolicyBinding
-        id: owncloud-web-policy-binding
-        attrs:
-          group: !KeyOf owncloud
-          order: 10
-          target: !Find [authentik_core.Application, [slug, owncloud-web]]
+
 
       # Desktop Client
       - model: authentik_providers_oauth2.oauth2provider
