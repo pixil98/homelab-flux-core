@@ -32,9 +32,9 @@ spec:
           envFrom:
             - secretRef:
                 name: authentik-env
-          #volumeMounts:
-          #  - name: blueprints
-          #    mountPath: /blueprints/custom
+          volumeMounts:
+            - name: blueprints
+              mountPath: /blueprints/custom
       volumes:
         - name: blueprints
           projected:
