@@ -6,7 +6,9 @@ metadata:
   labels:
     app.kubernetes.io/name: "authentik"
     app.kubernetes.io/instance: "authentik"
-stringData:  
+stringData:
+  AUTHENTIK_BOOTSTRAP_EMAIL: "${vals_info_cluster_email}"
+  AUTHENTIK_BOOTSTRAP_PASSWORD: "${secrets_apps_auth_authentik_bootstrapPassword}"
   AUTHENTIK_EMAIL__HOST: "mail.${vals_info_cluster_domain}"
   AUTHENTIK_EMAIL__PORT: "587"
   AUTHENTIK_EMAIL__USERNAME: "authentik@${vals_info_cluster_domain}"
