@@ -110,6 +110,13 @@ stringData:
           provider: !KeyOf owncloud-desktop
           meta_launch_url: blank://blank
           policy_engine_mode: any
+      - model: authentik_policies.PolicyBinding
+        id: owncloud-desktop-policy-binding
+        identifiers:
+          order: 10
+        attrs:
+          group: !KeyOf owncloud
+          target: !Find [authentik_core.Application, [slug, owncloud-desktop]]
 
       # Android Client
       - model: authentik_providers_oauth2.oauth2provider
@@ -142,6 +149,13 @@ stringData:
           provider: !KeyOf owncloud-android
           meta_launch_url: blank://blank
           policy_engine_mode: any
+      - model: authentik_policies.PolicyBinding
+        id: owncloud-android-policy-binding
+        identifiers:
+          order: 10
+        attrs:
+          group: !KeyOf owncloud
+          target: !Find [authentik_core.Application, [slug, owncloud-android]]
 
       # iOS Client
       - model: authentik_providers_oauth2.oauth2provider
@@ -175,3 +189,10 @@ stringData:
           provider: !KeyOf owncloud-ios
           meta_launch_url: blank://blank
           policy_engine_mode: any
+      - model: authentik_policies.PolicyBinding
+        id: owncloud-ios-policy-binding
+        identifiers:
+          order: 10
+        attrs:
+          group: !KeyOf owncloud
+          target: !Find [authentik_core.Application, [slug, owncloud-ios]]
