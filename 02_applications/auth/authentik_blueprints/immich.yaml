@@ -44,3 +44,20 @@ stringData:
           provider: !KeyOf immich
           meta_launch_url: https://photos.${vals_info_cluster_domain}/
           policy_engine_mode: any
+
+      - model: authentik_core.group
+        id: immich
+        identifiers:
+          name: immich
+        state: present
+        attrs:
+          name: immich
+          parent: null
+      
+      - model: authentik_policies.PolicyBinding
+        id: immich-policy-binding
+        identifiers:
+          order: 10
+        attrs:
+          group: !KeyOf immich
+          target: !Find [authentik_core.Application, [slug, immich]]
