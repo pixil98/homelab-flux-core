@@ -35,6 +35,7 @@ stringData:
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
 
       - model: authentik_core.application
+        id: immich
         identifiers:
           slug: immich
         state: present
@@ -52,7 +53,6 @@ stringData:
         state: present
         attrs:
           name: immich
-          parent: null
       
       - model: authentik_policies.PolicyBinding
         id: immich-policy-binding
