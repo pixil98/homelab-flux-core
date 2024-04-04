@@ -60,5 +60,5 @@ stringData:
           order: 10
         attrs:
           order: 10
-          group: !KeyOf immich
+          group: !Find [authentik_core.group, [name, immich]]
           target: !Find [authentik_core.Application, [slug, immich]]
