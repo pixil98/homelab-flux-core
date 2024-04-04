@@ -9,7 +9,7 @@ stringData:
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
-        name: owncloud
+        name: custom-owncloud
     entries:
 
       # Groups
@@ -75,6 +75,7 @@ stringData:
         identifiers:
           order: 10
         attrs:
+          order: 10
           group: !KeyOf owncloud
           target: !Find [authentik_core.Application, [slug, owncloud-web]]
 
@@ -115,6 +116,7 @@ stringData:
         identifiers:
           order: 10
         attrs:
+          order: 10
           group: !KeyOf owncloud
           target: !Find [authentik_core.Application, [slug, owncloud-desktop]]
 
@@ -154,6 +156,7 @@ stringData:
         identifiers:
           order: 10
         attrs:
+          order: 10
           group: !KeyOf owncloud
           target: !Find [authentik_core.Application, [slug, owncloud-android]]
 
@@ -194,5 +197,6 @@ stringData:
         identifiers:
           order: 10
         attrs:
+          order: 10
           group: !KeyOf owncloud
           target: !Find [authentik_core.Application, [slug, owncloud-ios]]
