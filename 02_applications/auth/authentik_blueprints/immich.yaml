@@ -57,6 +57,7 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: immich-policy-binding
         identifiers:
+          name: immich-policy-binding
           order: 10
         attrs:
           order: 10
