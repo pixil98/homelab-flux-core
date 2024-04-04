@@ -57,8 +57,9 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: immich-policy-binding
         identifiers:
-          name: immich-policy-binding
           order: 10
+          group: !Find [authentik_core.group, [name, immich]]
+          target: !Find [authentik_core.Application, [slug, immich]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, immich]]

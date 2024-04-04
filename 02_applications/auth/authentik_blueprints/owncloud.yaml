@@ -73,8 +73,9 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: owncloud-web-policy-binding
         identifiers:
-          name: owncloud-web-policy-binding
           order: 10
+          group: !Find [authentik_core.group, [name, owncloud]]
+          target: !Find [authentik_core.Application, [slug, owncloud-web]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, owncloud]]
@@ -115,8 +116,9 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: owncloud-desktop-policy-binding
         identifiers:
-          name: owncloud-desktop-policy-binding
           order: 10
+          group: !Find [authentik_core.group, [name, owncloud]]
+          target: !Find [authentik_core.Application, [slug, owncloud-desktop]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, owncloud]]
@@ -156,8 +158,9 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: owncloud-android-policy-binding
         identifiers:
-          name: owncloud-android-policy-binding
           order: 10
+          group: !Find [authentik_core.group, [name, owncloud]]
+          target: !Find [authentik_core.Application, [slug, owncloud-android]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, owncloud]]
@@ -198,8 +201,9 @@ stringData:
       - model: authentik_policies.PolicyBinding
         id: owncloud-ios-policy-binding
         identifiers:
-          name: owncloud-ios-policy-binding
           order: 10
+          group: !Find [authentik_core.group, [name, owncloud]]
+          target: !Find [authentik_core.Application, [slug, owncloud-ios]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, owncloud]]
