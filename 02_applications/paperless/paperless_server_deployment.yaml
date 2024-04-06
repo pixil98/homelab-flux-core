@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-server
+  namespace: paperless
+  labels:
+    app.kubernetes.io/name: "paperless"
+    app.kubernetes.io/instance: "paperless"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "paperless"
+      app.kubernetes.io/instance: "paperless"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "paperless"
+        app.kubernetes.io/instance: "paperless"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name: paperless
+          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.7.0
+          imagePullPolicy: IfNotPresent
+          env:
+            # Redis
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: paperless-secrets
+            - name: PAPERLESS_REDIS
+              value: "redis://:$(REDIS_PASSWORD)@paperless-redis-master:6379"
+
+            # Postgresql
+            - name: PAPERLESS_DBENGINE
+              value: "postgresql"
+            - name: PAPERLESS_DBHOST
+              value: "paperless-postgresql"
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-user-password
+                  name: paperless-secrets
+
+            # Tika
+            - name: PAPERLESS_TIKA_ENABLED
+              value: "true"
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: "http://paperless-tika:9998"
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: "http://paperless-gotenberg:3000"
+
+            # Paperless
+            - name: PAPERLESS_SECRET_KEY
+              value: "paperless-postgresql"
+            - name: PAPERLESS_URL
+              value: "paperless.{vals_info_cluster_domain}"
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: "eng"
+
+            # OIDC
+            - name: PAPERLESS_SSO_OIDC_NAME
+              value: "authentik"
+            - name: PAPERLESS_SSO_OIDC_URL
+              value: "https://auth.{vals_info_cluster_domain}/application/o/paperless"
+            - name: PAPERLESS_SSO_OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: auth-client-id
+                  name: paperless-secrets
+            - name: PAPERLESS_SSO_OIDC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: auth-client-secret
+                  name: paperless-secrets
+            - name: PAPERLESS_LOGIN_HIDE_PASSWORD_FORM
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1

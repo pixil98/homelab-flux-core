@@ -43,3 +43,5 @@ spec:
                   name: authentik-blueprint-immich
               - secret:
                   name: authentik-blueprint-owncloud
+              - secret:
+                  name: authentik-blueprint-paperless
