@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: paperless-tika
+  namespace: paperless
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: tika/tika
+      version: '2.9.x'
+      sourceRef:
+        kind: HelmRepository
+        name: paperless-tika
+        namespace: paperless
+  values:
+    image:
+      repository: registry.lab.reisman.org/proxy.docker.io/apache/tika
