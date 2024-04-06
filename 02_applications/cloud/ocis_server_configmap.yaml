@@ -13,8 +13,8 @@ data:
         oidc_role_mapper:
           role_mapping:
           - role_name: admin
-            claim_value: cloud-admins
+            claim_value: owncloud-admins
           - role_name: user
-            claim_value: cloud-users
+            claim_value: owncloud-users
           - role_name: guest
-            claim_value: cloud-guests
+            claim_value: owncloud-guests
