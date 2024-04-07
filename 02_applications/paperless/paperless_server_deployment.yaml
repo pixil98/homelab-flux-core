@@ -107,3 +107,23 @@ spec:
             tcpSocket:
               port: 8000
             timeoutSeconds: 1
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-server-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-server-media
+        - name: consume
+          emptyDir: {}
+        - name: tmp-volume
+          emptyDir: {}
