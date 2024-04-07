@@ -23,7 +23,7 @@ stringData:
           client_id: ${secrets_apps_auth_applications_paperless_clientId}
           client_secret: ${secrets_apps_auth_applications_paperless_clientSecret}
           redirect_uris: |
-            https://paperless.${vals_info_cluster_domain}/accounts/authentik/login/callback/
+            https://paperless.${vals_info_cluster_domain}/accounts/oidc/authentik/login/callback/
           access_code_validity: minutes=1
           access_token_validity: minutes=5
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, authentik Self-signed Certificate]]
