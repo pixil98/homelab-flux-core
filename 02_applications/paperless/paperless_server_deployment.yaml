@@ -56,7 +56,10 @@ spec:
 
             # Paperless
             - name: PAPERLESS_SECRET_KEY
-              value: "paperless-postgresql"
+              valueFrom:
+                secretKeyRef:
+                  key: secret-key
+                  name: paperless-secrets
             - name: PAPERLESS_URL
               value: "https://paperless.${vals_info_cluster_domain}"
             - name: PAPERLESS_OCR_LANGUAGE
