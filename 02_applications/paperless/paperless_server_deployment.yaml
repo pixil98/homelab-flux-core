@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: paperless
-          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.7.0
+          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.7.1
           imagePullPolicy: IfNotPresent
           env:
             # Redis
