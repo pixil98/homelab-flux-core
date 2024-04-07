@@ -66,19 +66,12 @@ spec:
               value: "eng"
 
             # OIDC
-            - name: PAPERLESS_SSO_OIDC_NAME
-              value: "authentik"
-            - name: PAPERLESS_SSO_OIDC_URL
-              value: "https://auth.${vals_info_cluster_domain}/application/o/paperless"
-            - name: PAPERLESS_SSO_OIDC_CLIENT_ID
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
               valueFrom:
                 secretKeyRef:
-                  key: auth-client-id
-                  name: paperless-secrets
-            - name: PAPERLESS_SSO_OIDC_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: auth-client-secret
+                  key: oidc-config
                   name: paperless-secrets
             - name: PAPERLESS_LOGIN_HIDE_PASSWORD_FORM
               value: "true"
