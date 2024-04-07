@@ -73,7 +73,9 @@ spec:
                 secretKeyRef:
                   key: oidc-config
                   name: paperless-secrets
-            - name: PAPERLESS_LOGIN_HIDE_PASSWORD_FORM
+            - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
+              value: "true"
+            - name: PAPERLESS_DISABLE_REGULAR_LOGIN
               value: "true"
           ports:
             - name: http
