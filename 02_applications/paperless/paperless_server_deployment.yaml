@@ -69,6 +69,9 @@ spec:
               value: "eng"
 
             # OIDC
+            # TODO figure out permissions
+            # https://github.com/paperless-ngx/paperless-ngx/pull/5190
+            # https://github.com/paperless-ngx/paperless-ngx/discussions/5869
             - name: PAPERLESS_APPS
               value: "allauth.socialaccount.providers.openid_connect"
             - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
@@ -114,6 +117,8 @@ spec:
               mountPath: /usr/src/paperless/media
             - name: consume
               mountPath: /usr/src/paperless/consume
+            - name: export
+              mountPath: /usr/src/paperless/export
             - name: tmp-volume
               mountPath: /tmp
       volumes:
@@ -124,6 +129,8 @@ spec:
           persistentVolumeClaim:
             claimName: paperless-server-media
         - name: consume
+          emptyDir: {}
+        - name: export
           emptyDir: {}
         - name: tmp-volume
           emptyDir: {}
