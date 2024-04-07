@@ -58,7 +58,7 @@ spec:
             - name: PAPERLESS_SECRET_KEY
               value: "paperless-postgresql"
             - name: PAPERLESS_URL
-              value: "paperless.{vals_info_cluster_domain}"
+              value: "https://paperless.${vals_info_cluster_domain}"
             - name: PAPERLESS_OCR_LANGUAGE
               value: "eng"
 
