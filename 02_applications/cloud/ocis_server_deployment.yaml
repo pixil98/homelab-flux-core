@@ -196,7 +196,7 @@ spec:
           volumeMounts:
             - name: ocis-config
               mountPath: /etc/ocis
-            - name: ocis-data
+            - name: ocis-server-data
               mountPath: /var/lib/ocis
             - name: tmp-volume
               mountPath: /tmp
@@ -204,8 +204,8 @@ spec:
         - name: ocis-config
           configMap:
             name: ocis-server-config
-        - name: ocis-data
+        - name: ocis-server-data
           persistentVolumeClaim:
-            claimName: ocis-data
+            claimName: ocis-server-data
         - name: tmp-volume
           emptyDir: {}
