@@ -75,6 +75,8 @@ spec:
                   name: paperless-secrets
             - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
               value: "true"
+            - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
+              value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
               value: "true"
           ports:
