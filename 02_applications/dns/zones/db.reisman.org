@@ -2,7 +2,7 @@ $ORIGIN reisman.org.
 $TTL    6h
 
 @       SOA     ns1.reisman.org. hostmaster.reisman.org. (
-                2023101501      ; serial
+                2024040601      ; serial
                 3h              ; refresh
                 15m             ; retry
                 4w              ; expire
@@ -34,8 +34,10 @@ tubesync        A       216.165.140.134
 
 ; Cloud
 auth            A       216.165.140.134
-photos          A       216.165.140.134
 cloud           A       216.165.140.134
+paperles        A       216.165.140.134
+photos          A       216.165.140.134
+
 
 ; Afton
 webscan         A       192.168.1.31
