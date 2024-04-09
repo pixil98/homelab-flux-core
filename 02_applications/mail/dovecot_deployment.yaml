@@ -44,16 +44,33 @@ spec:
             - name: lmtp
               containerPort: 24
               protocol: TCP
-            - name: managedsieve
+            - name: sieve
               containerPort: 4190
               protocol: TCP
+            - name: health
+              containerPort: 5001
+              protocol: TCP
           livenessProbe:
-            tcpSocket:
-              port: imap
+            httpGet:
+              path: /
+              port: health
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
-            tcpSocket:
-              port: imap
+            httpGet:
+              path: /
+              port: health
             initialDelaySeconds: 5
             periodSeconds: 10
+          volumeMounts:
+            - name: mailboxes
+              mountPath: /var/vmail
+            - name: config
+              mountPath: /etc/dovecot/conf.d
+      volumes:
+      - name: mailboxes
+        persistentVolumeClaim:
+          claimName: dovecot-mailboxes
+      - name: config
+        configMap:
+          name: dovecot-config

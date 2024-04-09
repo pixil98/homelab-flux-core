@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocis-server-config
+  namespace: cloud
+  labels:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: ocis
+data:
+  00-nfs.conf: |
+    mail_nfs_index = no
+    mail_nfs_storage = no
+    mail_fsync = always
+    mmap_disable = yes
+  10-mail.conf: |
+    mail_home = /var/vmail/%d/%n
+    mail_location = maildir:/var/vmail/%d/%n/:LAYOUT=fs
+
+    # If you need to set multiple mailbox locations or want to change default
+    # namespace settings, you can do it by defining namespace sections.
+    namespace inbox {
+      inbox = yes
+
+      # See 15-mailboxes.conf for definitions of special mailboxes.
+    }
+
+    mail_uid = vmail
+    mail_gid = vmail
+    mail_privileged_group = vmail
+  10-ssl.conf: |
+    ssl = required 
+    ssl_cert = <__PF_TLS_CERTCHAIN_FILE__
+    ssl_key = <__PF_TLS_KEY_FILE__
+  15-mailboxes.conf: |    
+    # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
+    namespace inbox {
+      inbox = yes
+
+      mailbox Drafts {
+        auto = subscribe
+        special_use = \Drafts
+      }
+      mailbox Spam {
+        auto = subscribe
+        special_use = \Junk
+      }
+      mailbox Trash {
+        auto = subscribe
+        special_use = \Trash
+      }
+
+      mailbox Sent {
+        auto = subscribe
+        special_use = \Sent
+      }
+    }
+  50-health.conf: |
+    service health-check {
+      executable = script -p health-check.sh
+      inet_listener health-check {
+          port = 5001
+      }
+    }

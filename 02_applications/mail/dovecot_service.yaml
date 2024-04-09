@@ -26,6 +26,10 @@ spec:
       protocol: TCP
       port: 993
       targetPort: imaps
+    - name: sieve
+      protocol: TCP
+      port: 4190
+      targetPort: sieve
   selector:
     app.kubernetes.io/name: "dovecot"
     app.kubernetes.io/instance: "dovecot"
