@@ -9,6 +9,18 @@ data:
     mail_nfs_storage = no
     mail_fsync = always
     mmap_disable = yes
+  10-auth.conf: |
+    disable_plaintext_auth = yes
+    auth_mechanisms = oauthbearer xoauth2
+    passdb {
+      driver = oauth2
+      mechanisms = oauthbearer xoauth2
+      args = dovecot-oauth2.conf.ext
+    }
+    userdb {
+      driver = static
+      args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+    }
   10-mail.conf: |
     mail_home = /var/vmail/%d/%n
     mail_location = maildir:/var/vmail/%d/%n/:LAYOUT=fs
@@ -46,11 +58,20 @@ data:
         special_use = \Sent
       }
     }
+  #TODO maybe remove this and related config
   50-health.conf: |
-    #TODO maybe remove this and related config
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
       inet_listener health-check {
           port = 5001
       }
     }
+  dovecot-oauth2.conf.ext: |
+    tokeninfo_url = https://auth.${vals_info_cluster_domain}/application/o/userinfo/?access_token=
+    introspection_url = https://<Client ID>:<Client Secret>@auth.${vals_info_cluster_domain}/application/o/introspect/
+    introspection_mode = post
+    force_introspection = yes
+    active_attribute = active
+    active_value = true
+    username_attribute = email
+    tls_ca_cert_file = /var/certificate/tls.crt
