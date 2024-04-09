@@ -20,9 +20,9 @@ data:
       # See 15-mailboxes.conf for definitions of special mailboxes.
     }
   10-ssl.conf: |
-    ssl = required 
-    ssl_cert = <%{env:DOVECOT_TLS_CERT_FILE}
-    ssl_key = <%{env:DOVECOT_TLS_KEY_FILE}
+    ssl = required
+    ssl_cert = </var/certificate/tls.crt
+    ssl_key = </var/certificate/tls.key
   15-mailboxes.conf: |    
     # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
