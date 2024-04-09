@@ -16,9 +16,6 @@ data:
     } &
     read -r input
 
-    exit_code=$?
-    if [ ${exit_code} -eq 0 ];then
-      echo "OK"
-    fi
+    echo "OK"
     # always exit successful
     exit 0
