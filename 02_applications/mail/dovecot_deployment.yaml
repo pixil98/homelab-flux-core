@@ -25,6 +25,11 @@ spec:
         - name:  dovecot
           image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.3.21
           imagePullPolicy: IfNotPresent
+          env:
+            - name: DOVECOT_TLS_CERT_FILE
+              value: "/var/certificate/tls.crt"
+            - name: DOVECOT_TLS_KEY_FILE
+              value: "/var/certificate/tls.key"
           ports:
             - name: pop3
               containerPort: 110
@@ -67,6 +72,8 @@ spec:
               mountPath: /var/vmail
             - name: config
               mountPath: /etc/dovecot/conf.d
+            - name: certificate
+              mountPath: /var/certificate
       volumes:
       - name: mailboxes
         persistentVolumeClaim:
@@ -74,3 +81,6 @@ spec:
       - name: config
         configMap:
           name: dovecot-config
+      - name: certificate
+        secret:
+          secretName: mail-cert-tls

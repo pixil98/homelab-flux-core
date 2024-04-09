@@ -21,8 +21,8 @@ data:
     }
   10-ssl.conf: |
     ssl = required 
-    ssl_cert = <__PF_TLS_CERTCHAIN_FILE__
-    ssl_key = <__PF_TLS_KEY_FILE__
+    ssl_cert = <env:DOVECOT_TLS_CERT_FILE
+    ssl_key = <env:DOVECOT_TLS_KEY_FILE
   15-mailboxes.conf: |    
     # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
