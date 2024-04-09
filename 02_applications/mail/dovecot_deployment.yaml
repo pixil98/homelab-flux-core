@@ -74,6 +74,8 @@ spec:
               mountPath: /etc/dovecot/conf.d
             - name: certificate
               mountPath: /var/certificate
+            - name: scripts
+              mountPath: /opt/dovecot/bin
       volumes:
       - name: mailboxes
         persistentVolumeClaim:
@@ -81,6 +83,9 @@ spec:
       - name: config
         configMap:
           name: dovecot-config
+      - name: scripts
+        configMap:
+          name: dovecot-config-scripts
       - name: certificate
         secret:
           secretName: mail-cert-tls

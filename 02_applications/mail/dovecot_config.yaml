@@ -48,7 +48,7 @@ data:
     }
   50-health.conf: |
     service health-check {
-      executable = script -p health-check.sh
+      executable = script -p /opt/dovecot/bin/health-check.sh
       inet_listener health-check {
           port = 5001
       }
