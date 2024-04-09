@@ -86,6 +86,7 @@ spec:
       - name: scripts
         configMap:
           name: dovecot-config-scripts
+          defaultMode: 0777
       - name: certificate
         secret:
           secretName: mail-cert-tls
