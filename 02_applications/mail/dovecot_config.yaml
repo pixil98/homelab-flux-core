@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ocis-server-config
+  name: dovecot-config
   namespace: mail
 data:
   00-nfs.conf: |
