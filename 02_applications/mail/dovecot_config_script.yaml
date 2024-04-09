@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dovecot-scripts
+  name: dovecot-config-scripts
   namespace: mail
 data:
   health-check.sh: |
