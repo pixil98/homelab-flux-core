@@ -84,6 +84,8 @@ spec:
           projected:
             sources:
               - secret:
+                  name: authentik-blueprint-dovecot
+              - secret:
                   name: authentik-blueprint-immich
               - secret:
                   name: authentik-blueprint-owncloud
