@@ -79,8 +79,8 @@ spec:
         persistentVolumeClaim:
           claimName: dovecot-mailboxes
       - name: config
-        configMap:
-          name: dovecot-config
+        secret:
+          secretName: dovecot-config
       - name: scripts
         configMap:
           name: dovecot-config-scripts
