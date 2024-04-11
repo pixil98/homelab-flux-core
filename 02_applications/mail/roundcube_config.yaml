@@ -11,13 +11,13 @@ stringData:
               'peer_name' => 'mail.${vals_info_cluster_domain}',
               'verify_peer' => true,
               'verify_peer_name' => true,
-              'allow_self_signed' => true
+              'allow_self_signed' => true,
             ),
             'tls' => array(
               'peer_name' => 'mail.${vals_info_cluster_domain}',
               'verify_peer' => true,
               'verify_peer_name' => true,
-              'allow_self_signed' => true
+              'allow_self_signed' => true,
             ),
     );
     $config['smtp_conn_options'] = array(
@@ -25,13 +25,13 @@ stringData:
               'peer_name' => 'mail.${vals_info_cluster_domain}',
               'verify_peer' => true,
               'verify_peer_name' => true,
-              'allow_self_signed' => true
+              'allow_self_signed' => true,
             ),
             'tls' => array(
               'peer_name' => 'mail.${vals_info_cluster_domain}',
               'verify_peer' => true,
               'verify_peer_name' => true,
-              'allow_self_signed' => true
+              'allow_self_signed' => true,
             ),
     );
   oauth.php: |
