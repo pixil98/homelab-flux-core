@@ -42,9 +42,9 @@ spec:
             - name: ROUNDCUBEMAIL_DES_KEY
               value: "TODO CHANGE THIS KEY TO A SECRET"
             - name: ROUNDCUBEMAIL_DEFAULT_HOST
-              value: "tls://mail.${vals_info_cluster_domain}"
+              value: "tls://dovecot-server"
             - name: ROUNDCUBEMAIL_SMTP_SERVER
-              value: "tls://mail.${vals_info_cluster_domain}"
+              value: "tls://postfix-server"
             - name: ROUNDCUBEMAIL_SKIN
               value: "elastic"
             - name: ROUNDCUBEMAIL_PLUGINS
@@ -100,7 +100,6 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-
           volumeMounts:
             - name: www-data
               mountPath: /var/www/html
