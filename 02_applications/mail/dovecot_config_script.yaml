@@ -16,6 +16,6 @@ data:
     } &
     read -r input
 
-    echo "OK"
+    echo "HTTP/1.1 204 No Content"
     # always exit successful
     exit 0
