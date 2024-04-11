@@ -17,5 +17,7 @@ data:
     read -r input
 
     echo "HTTP/1.1 204 No Content"
+    echo "Date: $(date)"
+    echo ""
     # always exit successful
     exit 0
