@@ -53,6 +53,16 @@ spec:
             - name: fastcgi
               containerPort: 9000
               protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: fastcgi
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: fastcgi
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: www-data
               mountPath: /var/www/html
@@ -72,6 +82,25 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+
           volumeMounts:
             - name: www-data
               mountPath: /var/www/html
