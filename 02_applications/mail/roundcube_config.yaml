@@ -6,26 +6,14 @@ metadata:
 type: Opaque
 stringData:
   connections.php: |
-    $config['imap_conn_options'] = [
-      'ssl'         => [
-        'verify_peer'  => true,
-        'verfify_peer_name' => false
-      ],
-      'tls'         => [
-        'verify_peer' => true, 
-        'verfify_peer_name' => false
-      ]
-    ];
-    $config['smtp_conn_options'] = [
-      'ssl'         => [
-        'verify_peer'  => true,
-        'verfify_peer_name' => false
-      ],
-      'tls'         => [
-        'verify_peer' => true, 
-        'verfify_peer_name' => false
-      ]
-    ];
+    $config['imap_conn_options'] = array(
+            'ssl' => array('verify_peer' => true, 'verify_peer_name' => false),
+            'tls' => array('verify_peer' => true, 'verify_peer_name' => false),
+    );
+    $config['smtp_conn_options'] = array(
+            'ssl' => array('verify_peer' => true, 'verify_peer_name' => false),
+            'tls' => array('verify_peer' => true, 'verify_peer_name' => false),
+    );
   oauth.php: |
     $config['oauth_provider'] = 'generic';
     $config['oauth_provider_name'] = 'Authentik';
