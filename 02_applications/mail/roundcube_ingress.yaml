@@ -13,10 +13,21 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "mail.${vals_info_cluster_domain}"
+        - "mail.${vals_info_cluster_domain}"
+        - "webmail.${vals_info_cluster_domain}"
       secretName: mail-server-tls
   rules:
     - host: "mail.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: roundcube-server
+                port:
+                  name: http
+    - host: "webmail.${vals_info_cluster_domain}"
       http:
         paths:
           - path: "/"
