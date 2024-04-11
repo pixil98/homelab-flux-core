@@ -5,9 +5,30 @@ metadata:
   namespace: mail
 type: Opaque
 stringData:
+  connections.php: |
+    $config['imap_conn_options'] = [
+      'ssl'         => [
+        'verify_peer'  => true,
+        'verfify_peer_name' => false
+      ],
+      'tls'         => [
+        'verify_peer' => true, 
+        'verfify_peer_name' => false
+      ]
+    ];
+    $config['smtp_conn_options'] = [
+      'ssl'         => [
+        'verify_peer'  => true,
+        'verfify_peer_name' => false
+      ],
+      'tls'         => [
+        'verify_peer' => true, 
+        'verfify_peer_name' => false
+      ]
+    ];
   oauth.php: |
     $config['oauth_provider'] = 'generic';
-    $config['oauth_provider_name'] = 'authentik';
+    $config['oauth_provider_name'] = 'Authentik';
     $config['oauth_client_id'] = '${secrets_apps_auth_applications_dovecot_clientId}';
     $config['oauth_client_secret'] = '${secrets_apps_auth_applications_dovecot_clientSecret}';
     $config['oauth_auth_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/authorize/';
@@ -16,3 +37,4 @@ stringData:
     $config['oauth_scope'] = "email openid dovecot-profile";
     $config['oauth_auth_parameters'] = [];
     $config['oauth_identity_fields'] = ['email'];
+    $config['oauth_login_redirect'] = true;
