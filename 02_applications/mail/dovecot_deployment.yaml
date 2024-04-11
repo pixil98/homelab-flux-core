@@ -56,13 +56,15 @@ spec:
               containerPort: 5001
               protocol: TCP
           livenessProbe:
-            tcpSocket:
-              port: submission
+            httpGet:
+              path: /
+              port: health
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
-            tcpSocket:
-              port: submission
+            httpGet:
+              path: /
+              port: health
             initialDelaySeconds: 5
             periodSeconds: 10
           volumeMounts:
