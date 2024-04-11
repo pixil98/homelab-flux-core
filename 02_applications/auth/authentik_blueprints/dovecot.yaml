@@ -41,6 +41,9 @@ stringData:
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_dovecot_clientId}
           client_secret: ${secrets_apps_auth_applications_dovecot_clientSecret}
+          redirect_uris: |
+            https://mail.${vals_info_cluster_domain}/index.php/login/oauth
+            https://webmail.${vals_info_cluster_domain}/index.php/login/oauth
           access_code_validity: minutes=1
           access_token_validity: minutes=5
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, authentik Self-signed Certificate]]
