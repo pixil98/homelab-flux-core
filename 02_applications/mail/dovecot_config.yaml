@@ -16,7 +16,7 @@ stringData:
     passdb {
       driver = oauth2
       mechanisms = oauthbearer xoauth2
-      args = dovecot-oauth2.conf.ext
+      args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
     }
     userdb {
       driver = static
