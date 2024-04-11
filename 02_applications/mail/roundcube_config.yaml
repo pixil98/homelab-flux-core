@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: roundcube-config
+  name: roundcube-server-config
   namespace: mail
 type: Opaque
 stringData:
-  dovecot-oauth2.conf.ext: |
+  oauth.php: |
     $config['oauth_provider'] = 'generic';
     $config['oauth_provider_name'] = 'authentik';
     $config['oauth_client_id'] = '${secrets_apps_auth_applications_dovecot_clientId}';

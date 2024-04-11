@@ -56,6 +56,10 @@ spec:
           volumeMounts:
             - name: www-data
               mountPath: /var/www/html
+            - name: roundcube-temp
+              mountPath: /tmp/roundcube-temp
+            - name: roundcube-config
+              mountPath: /var/roundcube/config
         - name: nginx
           image: registry.lab.reisman.org/proxy.docker.io/nginx:stable
           imagePullPolicy: Always
@@ -77,6 +81,11 @@ spec:
       volumes:
       - name: www-data
         emptydir: {}
+      - name: roundcube-temp
+        emptydir: {}
+      - name: roundcube-config
+        secret:
+          secretName: roundcube-server-config
       - name: nginx-config
         configMap:
           name: roundcube-nginx-config
