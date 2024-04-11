@@ -16,6 +16,7 @@ data:
 
         location ~ \.php(/|$) {
             try_files $uri =404;
+            port_in_redirect off;
             fastcgi_pass localhost:9000;
             fastcgi_read_timeout 300;
             proxy_read_timeout 300;
