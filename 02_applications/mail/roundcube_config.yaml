@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dovecot-config
+  namespace: mail
+type: Opaque
+stringData:
+  dovecot-oauth2.conf.ext: |
+    $config['oauth_provider'] = 'generic';
+    $config['oauth_provider_name'] = 'authentik';
+    $config['oauth_client_id'] = '${secrets_apps_auth_applications_dovecot_clientId}';
+    $config['oauth_client_secret'] = '${secrets_apps_auth_applications_dovecot_clientSecret}';
+    $config['oauth_auth_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/authorize/';
+    $config['oauth_token_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/token/';
+    $config['oauth_identity_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/userinfo/';
+    $config['oauth_scope'] = "email openid dovecot-profile";
+    $config['oauth_auth_parameters'] = [];
+    $config['oauth_identity_fields'] = ['email'];

@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: roundcube-postgresql
+  namespace: mail
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: bitnamicharts/postgresql
+      version: '15.x'
+      sourceRef:
+        kind: HelmRepository
+        name: registry-lab
+        namespace: flux-system
+  values:
+    global:
+      imageRegistry: registry.lab.reisman.org/proxy.docker.io
+      storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    architecture: standalone
+    primary:
+      livenessProbe:
+        initialDelaySeconds: 120
+    auth:
+      database: roundcube
+      username: roundcube
+      existingSecret: roundcube-secrets
+      secretKeys:
+        adminPasswordKey: postgresql-admin-password
+        userPasswordKey: postgresql-user-password
+      usePasswordFiles: true
+    backup:
+      #TODO this isn't working anywhere
+      enabled: true
+      storage:
+        storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    metrics:
+      enabled: false
+      image:
+        registry: registry.lab.reisman.org/proxy.docker.io
+

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: roundcube
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "roundcube"
+    app.kubernetes.io/instance: "roundcube"
+    app.kubernetes.io/component: "server"
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - "mail.${vals_info_cluster_domain}"
+      secretName: mail-server-tls
+  rules:
+    - host: "mail.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: roundcube-server
+                port:
+                  name: http
