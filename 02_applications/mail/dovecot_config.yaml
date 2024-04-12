@@ -28,10 +28,10 @@ stringData:
     mail_uid = vmail
     mail_gid = vmail
     mail_privileged_group = vmail
-    namespace inbox {
-      inbox = yes
-      # See 15-mailboxes.conf for definitions of special mailboxes.
-    }
+    #namespace inbox {
+    #  inbox = yes
+    #  # See 15-mailboxes.conf for definitions of special mailboxes.
+    #}
   10-ssl.conf: |
     ssl = required
     ssl_cert = </var/certificate/tls.crt
