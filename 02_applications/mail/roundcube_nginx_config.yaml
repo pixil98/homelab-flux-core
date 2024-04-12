@@ -28,9 +28,7 @@ data:
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        #fastcgi_param DOCUMENT_ROOT $realpath_root;
-        #fastcgi_param REDIRECT_SCRIPT_URL $http_x_forwarded_prefix$request_uri;
-        #fastcgi_param SERVER_PORT 443;
+        fastcgi_param SERVER_PORT 443;
         #internal;
       }
 
