@@ -76,4 +76,4 @@ stringData:
     active_attribute = active
     active_value = true
     username_attribute = email
-    tls_ca_cert_file = /var/certificate/tls.crt
+    tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
