@@ -36,6 +36,7 @@ stringData:
     ssl = required
     ssl_cert = </var/certificate/tls.crt
     ssl_key = </var/certificate/tls.key
+    ssl_client_ca_file = /etc/ssl/certs/ca-certificates.crt
   15-mailboxes.conf: |    
     # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
@@ -59,6 +60,13 @@ stringData:
         special_use = \Sent
       }
     }
+  40-logging.conf: |
+    auth_verbose = yes
+    auth_verbose_passwords = no
+    auth_debug = yes
+    auth_debug_passwords = no
+    mail_debug = yes
+    verbose_ssl = no
   50-health.conf: |
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
@@ -74,4 +82,5 @@ stringData:
     active_attribute = active
     active_value = true
     username_attribute = email
+    #TODO this doesn't support self signed certs
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
