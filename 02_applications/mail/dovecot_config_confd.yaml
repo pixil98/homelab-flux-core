@@ -11,7 +11,7 @@ stringData:
     passdb {
       driver = oauth2
       mechanisms = oauthbearer xoauth2
-      args = dovecot-oauth2.conf.ext
+      args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
     }
     userdb {
       driver = static
@@ -59,7 +59,6 @@ stringData:
         special_use = \Sent
       }
     }
-  #TODO maybe remove this and related config
   50-health.conf: |
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
@@ -75,4 +74,4 @@ stringData:
     active_attribute = active
     active_value = true
     username_attribute = email
-    tls_ca_cert_file = /var/certificate/tls.crt
+    tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
