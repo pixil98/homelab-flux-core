@@ -84,8 +84,8 @@ spec:
         persistentVolumeClaim:
           claimName: dovecot-mailboxes
       - name: config
-        secret:
-          secretName: dovecot-config
+        configMap:
+          name: dovecot-config
       - name: config-confd
         secret:
           secretName: dovecot-config-confd
