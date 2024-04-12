@@ -95,4 +95,4 @@ spec:
           defaultMode: 0777
       - name: certificate
         secret:
-          secretName: mail-cert-tls
+          secretName: mail-server-tls

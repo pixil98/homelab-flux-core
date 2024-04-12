@@ -7,8 +7,6 @@ metadata:
     app.kubernetes.io/name: "roundcube"
     app.kubernetes.io/instance: "roundcube"
     app.kubernetes.io/component: "server"
-  annotations:
-    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
 spec:
   ingressClassName: nginx
   tls:

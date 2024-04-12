@@ -1,12 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: mail-cert-tls
+  name: mail-server-tls
   namespace: mail
 spec:
-  secretName: mail-cert-tls
+  secretName: mail-server-tls
   dnsNames:
-  - mail.${vals_info_cluster_domain}
+    - mail.${vals_info_cluster_domain}
+    - webmail.${vals_info_cluster_domain}
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
