@@ -79,8 +79,8 @@ stringData:
     introspection_url = https://${secrets_apps_auth_applications_dovecot_clientId}:${secrets_apps_auth_applications_dovecot_clientSecret}@auth.${vals_info_cluster_domain}/application/o/introspect/
     introspection_mode = post
     force_introspection = yes
-    active_attribute = aud
-    active_value = ${secrets_apps_auth_applications_dovecot_clientId}
+    #active_attribute = aud
+    #active_value = ${secrets_apps_auth_applications_dovecot_clientId}
     username_attribute = email
     #TODO this doesn't support self signed certs
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
