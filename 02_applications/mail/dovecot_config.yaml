@@ -60,7 +60,6 @@ stringData:
         special_use = \Sent
       }
     }
-  #TODO maybe remove this and related config
   50-health.conf: |
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
@@ -76,4 +75,5 @@ stringData:
     active_attribute = active
     active_value = true
     username_attribute = email
+    #TODO this doesn't support self signed certs
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt

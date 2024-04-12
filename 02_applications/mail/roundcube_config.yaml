@@ -7,6 +7,7 @@ type: Opaque
 stringData:
   connections.php: |
     <?php
+      $_SERVER['HTTPS'] = 'on';
       $config['imap_conn_options'] = array(
               'ssl' => array(
                 'peer_name' => 'mail.${vals_info_cluster_domain}',
