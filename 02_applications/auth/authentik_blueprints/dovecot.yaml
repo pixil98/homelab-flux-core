@@ -27,6 +27,7 @@ stringData:
                 "family_name": "",
                 "preferred_username": request.user.username,
                 "nickname": request.user.username,
+                "active": request.user.is_active,
                 #DO NOT INCLUDE groups
             }
 
