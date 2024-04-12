@@ -25,7 +25,7 @@ data:
             fastcgi_param DOCUMENT_ROOT $realpath_root;
             #fastcgi_param REDIRECT_SCRIPT_URL $http_x_forwarded_prefix$request_uri;
             #fastcgi_param SERVER_PORT 443;
-            internal;
+            #internal;
         }
 
         client_max_body_size 6m;
