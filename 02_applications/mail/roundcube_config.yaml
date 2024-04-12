@@ -45,7 +45,7 @@ stringData:
       $config['log_logins'] = true;
 
       // Log session debug information/authentication errors to <log_dir>/session.log or to syslog
-      $config['session_debug'] = false;
+      $config['session_debug'] = true;
 
       // Log SQL queries to <log_dir>/sql.log or to syslog
       $config['sql_debug'] = false;
