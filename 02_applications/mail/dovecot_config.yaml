@@ -36,6 +36,7 @@ stringData:
     ssl = required
     ssl_cert = </var/certificate/tls.crt
     ssl_key = </var/certificate/tls.key
+    ssl_client_ca_file = /etc/ssl/certs/ca-certificates.crt
   15-mailboxes.conf: |    
     # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
