@@ -71,6 +71,9 @@ spec:
             - name: mailboxes
               mountPath: /var/vmail
             - name: config
+              mountPath: /etc/dovecot/dovecot.conf
+              subPath: dovecot.conf
+            - name: config-confd
               mountPath: /etc/dovecot/conf.d
             - name: certificate
               mountPath: /var/certificate
@@ -83,6 +86,9 @@ spec:
       - name: config
         secret:
           secretName: dovecot-config
+      - name: config-confd
+        secret:
+          secretName: dovecot-config-confd
       - name: scripts
         configMap:
           name: dovecot-config-scripts
