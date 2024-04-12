@@ -81,5 +81,5 @@ stringData:
       $config['oauth_scope'] = "email openid dovecot-profile";
       $config['oauth_auth_parameters'] = [];
       $config['oauth_identity_fields'] = ['email'];
-      #$config['oauth_login_redirect'] = true;
+      $config['oauth_login_redirect'] = true;
     ?>
