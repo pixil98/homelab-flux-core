@@ -156,17 +156,19 @@ spec:
               value: "true"
 
             - name: OCIS_OIDC_CLIENT_ID
-              #TODO: move this to secrets
-              value: "rpxotWdhDpx02JYqv6i5SagU1Xs1KKWS2eB6K5mw"
+              valueFrom:
+                secretKeyRef:
+                  name: "ocis-secrets"
+                  key: oidc-client-id
             - name: OCIS_OIDC_ISSUER
               value: "https://auth.${vals_info_cluster_domain}/application/o/owncloud-web/"
 
             # TODO: EMAIL
-            # - name: NOTIFICATIONS_SMTP_HOST
-            #   value: "mail.reisman.org"
-            # - name: NOTIFICATIONS_SMTP_PORT
-            #   value: "587"
-            # - name: NOTIFICATIONS_SMTP_USERNAME
+            - name: NOTIFICATIONS_SMTP_HOST
+              value: "mail.${vals_info_cluster_domain}"
+            - name: NOTIFICATIONS_SMTP_PORT
+              value: "587"
+            - name: NOTIFICATIONS_SMTP_USERNAME
             #   value: "cloud@${vals_info_cluster_domain}"
             # - name: NOTIFICATIONS_SMTP_PASSWORD
             #   value: "REDACTED"
