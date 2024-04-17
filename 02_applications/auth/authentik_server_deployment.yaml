@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: server
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2024.2.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2024.2.3
           imagePullPolicy: IfNotPresent
           args:
             - server
