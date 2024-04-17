@@ -36,6 +36,4 @@ chat    CNAME   xcoolgroup.no-ip.org.
                         "frG00mM8wUrbGPIv8BieSLEsFd9kcpoDXgg0ufs01I5QcmPlPvs4wtduAxHCQTDB"
                         "LwIDAQAB" )  ; ----- DKIM key 20220424 for xcoolgroup.org
 
-
 _dmarc  TXT     "v=DMARC1; p=reject; rua=mailto:dmarc-rua@xcoolgroup.org; ruf=mailto:dmarc-ruf@xcoolgroup.org; sp=reject; fo=1;"
-

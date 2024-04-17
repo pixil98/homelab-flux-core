@@ -21,4 +21,3 @@ www     CNAME   www.pressenter.com.
 @       TXT     "v=spf1 -all"
 
 _dmarc  TXT     "v=DMARC1; p=reject; rua=mailto:dmarc-rua@pressenter.org; ruf=mailto:dmarc-ruf@pressenter.org; sp=reject; fo=1;"
-

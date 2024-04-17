@@ -16,7 +16,6 @@ configMapGenerator:
     namespace: dns
     files:
       - zones/db.hobolife.org
-      - zones/db.monoceros.best
       - zones/db.pressenter.com
       - zones/db.pressenter.net
       - zones/db.pressenter.org

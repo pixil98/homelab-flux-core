@@ -2,7 +2,7 @@ $ORIGIN reisman.org.
 $TTL    6h
 
 @       SOA     ns1.reisman.org. hostmaster.reisman.org. (
-                2024040601      ; serial
+                2024041701      ; serial
                 3h              ; refresh
                 15m             ; retry
                 4w              ; expire
@@ -21,27 +21,18 @@ ns2             A       216.165.140.134
 madison         A       216.165.140.134
 www             A       216.165.140.134
 
+; Cloud
+auth            A       216.165.140.134
+cloud           A       216.165.140.134
+paperless       A       216.165.140.134
+photos          A       216.165.140.134
+
 mail            A       216.165.140.134
 webmail         A       216.165.140.134
 postfixadmin    A       216.165.140.134
 
-paperless       A       216.165.140.134
-pihole          A       216.165.140.134
-prometheus      A       216.165.140.134
-alertmanager    A       216.165.140.134
-
-tubesync        A       216.165.140.134
-
-; Cloud
-auth            A       216.165.140.134
-cloud           A       216.165.140.134
-paperles        A       216.165.140.134
-photos          A       216.165.140.134
-
-
 ; Afton
 webscan         A       192.168.1.31
-
 
 ; Mail Exchange - explicitly prefer AAAA (mail2) over A (mail)
 @               MX      10 mail.reisman.org.

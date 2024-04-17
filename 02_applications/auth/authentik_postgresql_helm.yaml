@@ -38,4 +38,3 @@ spec:
       enabled: false
       image:
         registry: registry.lab.reisman.org/proxy.docker.io
-
