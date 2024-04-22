@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name:  postfix
-          image: registry.lab.reisman.org/proxy.docker.io/dboky/postfix:4.1.0
+          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.1.0
           imagePullPolicy: IfNotPresent
           env: []
           ports:
