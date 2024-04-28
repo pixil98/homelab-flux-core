@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: immich-microservices
-          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.101.0
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.102.3
           imagePullPolicy: IfNotPresent
           command: [ "./start.sh", "microservices" ]
           env:
