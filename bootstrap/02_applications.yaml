@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 5m
   retryInterval: 1m
-  timeout: 30m
+  timeout: 6h
   dependsOn:
     - name: flux-core-infrastructure-configs
   sourceRef:
