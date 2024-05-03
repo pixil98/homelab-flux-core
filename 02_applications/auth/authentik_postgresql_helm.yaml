@@ -28,7 +28,7 @@ spec:
       secretKeys:
         adminPasswordKey: postgresql-admin-password
         userPasswordKey: postgresql-user-password
-      usePasswordFiles: true
+      usePasswordFiles: false
     backup:
       #TODO this isn't working anywhere
       enabled: true
