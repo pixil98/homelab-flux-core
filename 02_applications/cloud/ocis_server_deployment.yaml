@@ -11,7 +11,8 @@ spec:
     matchLabels:
       app.kubernetes.io/name: server
       app.kubernetes.io/instance: ocis
-  replicas: 1
+  #TODO get this working
+  replicas: 0
   strategy:
     type: Recreate
   template:
