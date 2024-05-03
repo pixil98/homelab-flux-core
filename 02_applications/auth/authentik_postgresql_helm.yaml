@@ -16,7 +16,7 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
-      storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+      storageClass: nfs-client-nobackup
     architecture: standalone
     primary:
       livenessProbe:
