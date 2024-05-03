@@ -34,8 +34,7 @@ spec:
         rfc2136:
           #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
-          #TODO rename this to letsencrypt
-          tsigKeyName: letsencrypt-dev
+          tsigKeyName: letsencrypt
           tsigAlgorithm: HMACSHA512
           tsigSecretSecretRef:
             name: letsencrypt-dns
