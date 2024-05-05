@@ -31,7 +31,7 @@ spec:
           image: "internetsystemsconsortium/bind9:9.18"
           imagePullPolicy: Always
           command: [ "/usr/sbin/named" ]
-          args: [ "-g", "-c /etc/bind/named.conf", "-u bind" ]
+          args: [ "-g", "-c", "/etc/bind/named.conf", "-u", "bind" ]
           ports:
           - name: dns-tcp
             containerPort: 53
