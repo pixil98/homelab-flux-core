@@ -14,7 +14,7 @@ spec:
           #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
           tsigKeyName: letsencrypt
-          tsigAlgorithm: HMACSHA512
+          tsigAlgorithm: HMACSHA256
           tsigSecretSecretRef:
             name: letsencrypt-dns
             key: key
@@ -35,7 +35,7 @@ spec:
           #TODO Should we template in the nameserver?
           nameserver: ns1.reisman.org
           tsigKeyName: letsencrypt
-          tsigAlgorithm: HMACSHA512
+          tsigAlgorithm: HMACSHA256
           tsigSecretSecretRef:
             name: letsencrypt-dns
             key: key
