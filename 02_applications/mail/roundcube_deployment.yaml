@@ -40,7 +40,10 @@ spec:
                   name: roundcube-secrets
                   key: postgresql-user-password
             - name: ROUNDCUBEMAIL_DES_KEY
-              value: "TODO CHANGE THIS KEY TO A SECRET"
+              valueFrom:
+                secretKeyRef:
+                  name: roundcube-secrets
+                  key: des-key
             - name: ROUNDCUBEMAIL_DEFAULT_HOST
               value: "tls://dovecot-server"
             - name: ROUNDCUBEMAIL_SMTP_SERVER
