@@ -55,6 +55,7 @@ stringData:
   oauth.php: |
     #TODO Token refresh seems to not be working
     # https://github.com/roundcube/roundcubemail/issues/8388
+    # https://github.com/roundcube/roundcubemail/issues/9364
     <?php
       $config['oauth_provider'] = 'generic';
       $config['oauth_provider_name'] = 'Authentik';
