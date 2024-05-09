@@ -7,8 +7,11 @@ metadata:
     app.kubernetes.io/name: "dovecot"
     app.kubernetes.io/instance: "dovecot"
     app.kubernetes.io/component: "server"
+  annotations:
+    metallb.universe.tf/allow-shared-ip: mail
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: ${vals_apps_mail_ipAddress}
   ports:
     - name: pop3
       protocol: TCP

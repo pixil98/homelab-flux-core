@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postfix-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "postfix"
+    app.kubernetes.io/instance: "postfix"
+    app.kubernetes.io/component: "server"
+  annotations:
+    metallb.universe.tf/allow-shared-ip: mail
+spec:
+  type: LoadBalancer
+  loadBalancerIP: ${vals_apps_mail_ipAddress}
+  ports:
+    - name: smtp
+      protocol: TCP
+      port: 25
+      targetPort: smtp
+    - name: submission
+      protocol: TCP
+      port: 587
+      targetPort: submission
+  selector:
+    app.kubernetes.io/name: "postfix"
+    app.kubernetes.io/instance: "postfix"
+    app.kubernetes.io/component: "server"
