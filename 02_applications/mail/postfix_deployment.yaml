@@ -32,32 +32,9 @@ spec:
               value: "1"
             - name: LOG_FORMAT
               value: "plain"  # or JSON
-
-            - name: ALLOWED_SENDER_DOMAINS
-              value: "${vals_info_cluster_domain} ${vals_apps_mail_postfix_virtualDomains}"
-
-            # Relay
-            - name: RELAYHOST
-              value: "${vals_apps_mail_postfix_relayHost}"
-            - name: RELAYHOST_USERNAME
-              value: "${secrets_apps_mail_postfix_relayUser}"
-            - name: RELAYHOST_PASSWORD
-              value: "${secrets_apps_mail_postfix_relayPassword}"
-
-            # Postfix
-            - name: POSTFIX_myhostname
-              value: "mail.${vals_info_cluster_domain}"
-
-            # Postfix Auth
-            - name: POSTFIX_smtpd_relay_restrictions
-              value: "permit_sasl_authenticated, reject"
-            - name: POSTFIX_smtpd_sasl_type
-              value: "dovecot"
-            - name: POSTFIX_smtpd_sasl_path
-              value: "private/auth"
-            - name: POSTFIX_smtpd_sasl_auth_enable
-              value: "yes"
-             
+          envFrom:
+            - secretRef:
+                name: postfix-env
           ports:
             - name: smtp
               containerPort: 25
