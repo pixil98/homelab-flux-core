@@ -23,22 +23,10 @@ stringData:
   RELAYHOST_USERNAME: "${secrets_apps_mail_postfix_relayUser}"
   RELAYHOST_PASSWORD: "${secrets_apps_mail_postfix_relayPassword}"
   POSTFIX_smtpd_helo_required: "yes"
-  POSTFIX_smtpd_helo_restrictions: |
-    permit_mynetworks
-    reject_non_fqdn_helo_hostname
-    reject_invalid_helo_hostname
-    reject_unknown_helo_hostname
-  POSTFIX_smtpd_relay_restrictions: |
-    reject_non_fqdn_recipient
-    reject_unknown_recipient_domain
-    permit_mynetworks
-    permit_sasl_authenticated
-    reject_unauth_destination
-  POSTFIX_smtpd_recipient_restrictions: |
-    reject_unverified_recipient
-  POSTFIX_smtpd_data_restrictions: |
-    reject_unauth_pipelining
-    reject_multi_recipient_bounce
+  POSTFIX_smtpd_helo_restrictions: "permit_mynetworks reject_non_fqdn_helo_hostname reject_invalid_helo_hostname reject_unknown_helo_hostname"
+  POSTFIX_smtpd_relay_restrictions: "reject_non_fqdn_recipient reject_unknown_recipient_domain permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
+  POSTFIX_smtpd_recipient_restrictions: "reject_unverified_recipient"
+  POSTFIX_smtpd_data_restrictions: "reject_unauth_pipelining reject_multi_recipient_bounce"
   POSTFIX_unverified_recipient_reject_reason: "Address lookup failed"
 
   # Postfix SASL Auth
