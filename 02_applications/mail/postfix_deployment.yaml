@@ -25,7 +25,35 @@ spec:
         - name:  postfix
           image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.1.0
           imagePullPolicy: IfNotPresent
-          env: []
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: FORCE_COLOR
+              value: "1"
+            - name: LOG_FORMAT
+              value: "plain"  # or JSON
+
+            - name: ALLOWED_SENDER_DOMAINS
+              value: "${vals_info_cluster_domain} ${vals_apps_mail_virtualDomains}"
+
+            # Relay
+            - name: RELAYHOST
+              value: "${vals_apps_mail_relayHost}"
+
+            # Postfix
+            - name: POSTFIX_myhostname
+              value: "mail.${vals_info_cluster_domain}"
+
+            # Postfix Auth
+            - name: POSTFIX_smtpd_relay_restrictions
+              value: "permit_sasl_authenticated, reject"
+            - name: POSTFIX_smtpd_sasl_type
+              value: "dovecot"
+            - name: POSTFIX_smtpd_sasl_path
+              value: "private/auth"
+            - name: POSTFIX_smtpd_sasl_auth_enable
+              value: "yes"
+             
           ports:
             - name: smtp
               containerPort: 25
