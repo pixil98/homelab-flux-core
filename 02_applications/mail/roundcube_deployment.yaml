@@ -45,7 +45,7 @@ spec:
                   name: roundcube-secrets
                   key: des-key
             - name: ROUNDCUBEMAIL_DEFAULT_HOST
-              value: "tls://dovecot-server"
+              value: "tls://dovecot-server-internal"
             - name: ROUNDCUBEMAIL_SMTP_SERVER
               value: "tls://postfix-server"
             - name: ROUNDCUBEMAIL_SKIN
