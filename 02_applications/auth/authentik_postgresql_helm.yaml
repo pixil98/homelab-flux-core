@@ -30,7 +30,6 @@ spec:
         userPasswordKey: postgresql-user-password
       usePasswordFiles: false
     backup:
-      #TODO this isn't working anywhere
       enabled: true
       storage:
         storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
