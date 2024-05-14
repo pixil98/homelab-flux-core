@@ -34,6 +34,8 @@ spec:
                   key: token
             - name: AUTHENTIK_INSECURE
               value: "true"
+            - name: AUTHENTIK_DEBUG
+              value: "true"
           ports:
             - containerPort: 9000
               name: http

@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-ldap
+  namespace: auth
+type: Opaque
+stringData:
+  ldap.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: ldap
+    entries:
+      - model: authentik_core.group
+        state: present
+        identifiers:
+          name: ldapsearch
+
+      - model: authentik_core.user
+        state: present
+        identifiers:
+          username: ldapservice
+        attrs:
+          name: ldapservice
+          type: service_account
+          groups:
+            - !Find [authentik_core.group, [name, ldapsearch]]
+          path: goauthentik.io/service-accounts
+          attributes:
+            goauthentik.io/user/token-expires: false
+
+      - model: authentik_providers_ldap.ldapprovider
+        state: present
+        identifiers:
+          name: ldap-provider
+        attrs:
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
+          search_group: !Find [authentik_core.group, [name, ldapsearch]]
+          base_dn: DC=ldap,DC=example,DC=com
+
+      - model: authentik_core.application
+        state: present
+        identifiers:
+          slug: ldap
+        attrs:
+          name: ldap
+          provider: !Find [authentik_providers_ldap.ldapprovider, [name, ldap-provider]]
+          icon: openldap.svg
+
+      - model: authentik_outposts.outpost
+        state: present
+        identifiers:
+          name:  LDAP Outpost
+        attrs:
+          type: ldap
+          providers:
+            - !Find [authentik_providers_ldap.ldapprovider, [name, ldap-provider]]
+          config: {}
