@@ -10,7 +10,7 @@ stringData:
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
-        name: Custom - Dovecot
+      name: Custom - Dovecot
     entries:
       - model: authentik_providers_oauth2.scopemapping
         identifiers:

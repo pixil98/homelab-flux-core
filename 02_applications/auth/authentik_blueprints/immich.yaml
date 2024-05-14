@@ -9,7 +9,7 @@ stringData:
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
-        name: Custom - Immich
+      name: Custom - Immich
     entries:
       - model: authentik_providers_oauth2.oauth2provider
         id: immich
