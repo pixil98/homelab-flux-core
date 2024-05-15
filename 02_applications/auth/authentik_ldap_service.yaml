@@ -10,14 +10,14 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http
-      port: 9000
+    - name: ldap
+      port: 389
       protocol: TCP
-      targetPort: http
-    - name: https
-      port: 9443
+      targetPort: ldap
+    - name: ldaps
+      port: 636
       protocol: TCP
-      targetPort: https
+      targetPort: ldaps
   selector:
     app.kubernetes.io/name: "authentik"
     app.kubernetes.io/instance: "authentik"

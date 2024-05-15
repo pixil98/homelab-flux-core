@@ -37,9 +37,15 @@ spec:
             - name: AUTHENTIK_DEBUG
               value: "true"
           ports:
-            - containerPort: 9000
-              name: http
+            - name: ldap
+              containerPort: 3389
               protocol: TCP
-            - containerPort: 9443
-              name: https
+            - name: ldaps
+              containerPort: 6636
+              protocol: TCP
+            - name: metrics
+              containerPort: 9300
+              protocol: TCP
+            - name: debug
+              containerPort: 9900
               protocol: TCP
