@@ -13,9 +13,13 @@ stringData:
       mechanisms = oauthbearer xoauth2
       args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
     }
+    #userdb {
+    #  driver = static
+    #  args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+    #}
     userdb {
-      driver = static
-      args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+      driver = ldap
+      args = /etc/dovecot/conf.d/dovecot-userdb-ldap.conf.ext
     }
   10-mail.conf: |
     mail_home = /var/vmail/%d/%n
@@ -85,3 +89,19 @@ stringData:
     username_attribute = email
     #TODO this doesn't support self signed certs
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
+  dovecot-userdb-ldap.conf.ext: |
+    uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
+    tls = no  #TODO set to yes
+    dn = uid=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
+    dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
+    base = dc=ldap,dc=example,dc=com
+
+    user_attrs = \
+      =uid=vmail, \
+      =gid=vmail, \
+      =home=/var/vmail/%d/%n
+    user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
+
+    # For using doveadm -A:
+    iterate_attrs = =user=%{ldap:uid}
+    iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
