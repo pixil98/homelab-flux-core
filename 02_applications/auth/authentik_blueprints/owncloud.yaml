@@ -5,7 +5,7 @@ metadata:
   namespace: auth
 type: Opaque
 stringData:
-  owncloud-web.yaml: |
+  owncloud.yaml: |
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
