@@ -38,6 +38,8 @@ stringData:
           authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           search_group: !Find [authentik_core.group, [name, ldapsearch]]
           base_dn: DC=ldap,DC=example,DC=com
+          search_mode: "cached"
+          bind_mode: "cached"
 
       - model: authentik_core.application
         state: present
