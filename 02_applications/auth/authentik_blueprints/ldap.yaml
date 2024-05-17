@@ -19,9 +19,9 @@ stringData:
       - model: authentik_core.user
         state: present
         identifiers:
-          username: ldapservice
+          username: ${secrets_apps_auth_authentik_outpost_ldap_username}
         attrs:
-          name: ldapservice
+          name: ${secrets_apps_auth_authentik_outpost_ldap_username}
           type: service_account
           groups:
             - !Find [authentik_core.group, [name, ldapsearch]]
