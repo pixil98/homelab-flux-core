@@ -103,5 +103,5 @@ stringData:
     user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
 
     # For using doveadm -A:
-    iterate_attrs = =user=%{ldap:uid}
+    iterate_attrs = =user=%{ldap:mail}
     iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
