@@ -92,7 +92,7 @@ stringData:
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
     tls = no  #TODO set to yes
-    dn = uid=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
+    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
     base = dc=ldap,dc=example,dc=com
 
