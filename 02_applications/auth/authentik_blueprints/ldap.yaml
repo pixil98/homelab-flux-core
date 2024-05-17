@@ -26,6 +26,7 @@ stringData:
           groups:
             - !Find [authentik_core.group, [name, ldapsearch]]
           path: goauthentik.io/service-accounts
+          password: ${secrets_apps_auth_authentik_outpost_ldap_password}
           attributes:
             goauthentik.io/user/token-expires: false
 
@@ -34,7 +35,7 @@ stringData:
         identifiers:
           name: ldap-provider
         attrs:
-          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           search_group: !Find [authentik_core.group, [name, ldapsearch]]
           base_dn: DC=ldap,DC=example,DC=com
 
@@ -45,7 +46,6 @@ stringData:
         attrs:
           name: ldap
           provider: !Find [authentik_providers_ldap.ldapprovider, [name, ldap-provider]]
-          icon: openldap.svg
 
       - model: authentik_outposts.outpost
         state: present
