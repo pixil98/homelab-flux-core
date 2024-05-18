@@ -13,10 +13,10 @@ stringData:
       mechanisms = oauthbearer xoauth2
       args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
     }
-    #userdb {
-    #  driver = static
-    #  args = uid=vmail gid=vmail home=/var/vmail/%d/%n
-    #}
+    userdb {
+      driver = static
+      args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+    }
     userdb {
       driver = ldap
       args = /etc/dovecot/conf.d/dovecot-userdb-ldap.conf.ext
