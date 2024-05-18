@@ -23,6 +23,7 @@ spec:
     spec:
       containers:
         - name: ldap
+          #TODO add image tag
           image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/ldap
           env:
             - name: AUTHENTIK_HOST
