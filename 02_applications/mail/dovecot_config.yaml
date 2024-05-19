@@ -12,6 +12,11 @@ data:
         port = 24
       }
     }
+    service auth {
+      inet_listener {
+        port = 12345
+      }
+    }
     listen = *
 
     log_path=/dev/stdout

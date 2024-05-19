@@ -36,6 +36,10 @@ spec:
       protocol: TCP
       port: 4190
       targetPort: sieve
+    - name: auth
+      protocol: TCP
+      port: 12345
+      targetPort: auth
   selector:
     app.kubernetes.io/name: "dovecot"
     app.kubernetes.io/instance: "dovecot"

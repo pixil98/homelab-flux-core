@@ -55,6 +55,9 @@ spec:
             - name: health
               containerPort: 5001
               protocol: TCP
+            - name: auth
+              containerPort: 12345
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /
