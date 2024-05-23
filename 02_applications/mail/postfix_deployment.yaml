@@ -54,5 +54,10 @@ spec:
           #     port: health
           #   initialDelaySeconds: 5
           #   periodSeconds: 10
-          volumeMounts: []
-      volumes: []
+          volumeMounts:
+            - name: certificate
+              mountPath: /etc/postfix/tls
+      volumes:
+        - name: certificate
+          secret:
+            secretName: mail-server-tls

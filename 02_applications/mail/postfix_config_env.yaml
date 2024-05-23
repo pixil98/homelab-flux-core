@@ -19,6 +19,8 @@ stringData:
   POSTFIX_smtpd_tls_auth_only: "yes"
   POSTFIX_smtpd_tls_protocols: "!SSLv2, !SSLv3"
   POSTFIX_smtpd_tls_cipher: "high"
+  POSTFIX_smtpd_tls_cert_file: "/etc/postfix/tls/tls.crt"
+  POSTFIX_smtpd_tls_key_file: "/etc/postfix/tls/tls.key"
   RELAYHOST: "${vals_apps_mail_postfix_relayHost}"
   RELAYHOST_USERNAME: "${secrets_apps_mail_postfix_relayUser}"
   RELAYHOST_PASSWORD: "${secrets_apps_mail_postfix_relayPassword}"
