@@ -39,12 +39,11 @@ stringData:
     ?>
   logging.php: |
     <?php
-      #TODO disable debugging
       $config['smtp_log'] = false;
       $config['log_logins'] = true;
-      $config['session_debug'] = true;
+      $config['session_debug'] = false;
       $config['sql_debug'] = false;
-      $config['imap_debug'] = true;
+      $config['imap_debug'] = false;
       $config['ldap_debug'] = false;
       $config['smtp_debug'] = false;
       $config['memcache_debug'] = false;

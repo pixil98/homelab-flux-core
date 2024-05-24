@@ -71,12 +71,11 @@ stringData:
       }
     }
   40-logging.conf: |
-    #TODO turn off verbose logging
-    auth_verbose = yes
+    auth_verbose = no
     auth_verbose_passwords = no
-    auth_debug = yes
+    auth_debug = no
     auth_debug_passwords = no
-    mail_debug = yes
+    mail_debug = no
     verbose_ssl = no
   50-health.conf: |
     service health-check {
