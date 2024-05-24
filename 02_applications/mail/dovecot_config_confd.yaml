@@ -6,12 +6,18 @@ metadata:
 type: Opaque
 stringData:
   10-auth.conf: |
+    auth_username_format = %Lu
     disable_plaintext_auth = yes
-    auth_mechanisms = oauthbearer xoauth2
+    auth_mechanisms = oauthbearer xoauth2 plain cram-md5
     passdb {
       driver = oauth2
       mechanisms = oauthbearer xoauth2
       args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
+    }
+    passdb {
+      driver = ldap
+      mechanisms = plain cram-md5
+      args = /etc/dovecot/conf.d/dovecot-passdb-ldap.conf.ext
     }
     userdb {
       driver = static
@@ -89,6 +95,15 @@ stringData:
     username_attribute = email
     #TODO this doesn't support self signed certs
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
+  dovecot-passdb-ldap.conf.ext: |
+    uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
+    tls = no  #TODO set to yes
+    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
+    dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
+    base = dc=ldap,dc=example,dc=com
+
+    auth_bind = yes
+    pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
     tls = no  #TODO set to yes
