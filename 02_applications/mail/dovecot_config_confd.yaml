@@ -8,7 +8,7 @@ stringData:
   10-auth.conf: |
     auth_username_format = %Lu
     disable_plaintext_auth = yes
-    auth_mechanisms = oauthbearer xoauth2 plain cram-md5
+    auth_mechanisms = oauthbearer xoauth2 plain login cram-md5
     passdb {
       driver = oauth2
       mechanisms = oauthbearer xoauth2
@@ -16,7 +16,7 @@ stringData:
     }
     passdb {
       driver = ldap
-      mechanisms = plain cram-md5
+      mechanisms = plain login cram-md5
       args = /etc/dovecot/conf.d/dovecot-passdb-ldap.conf.ext
     }
     userdb {
