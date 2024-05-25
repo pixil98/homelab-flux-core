@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name:  postfix
-          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.1.0
+          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.2.1
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
@@ -42,18 +42,39 @@ spec:
             - name: submission
               containerPort: 587
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: health
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: health
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            failureThreshold: 6
+            timeoutSeconds: 8
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/healthcheck.sh
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 2
+            exec:
+              command:
+                - sh
+                - -c
+                - >-
+                  ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
+                  ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master'
+          startupProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12
+            exec:
+              command:
+                - sh
+                - -c
+                - >-
+                  ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
+                  ps axf | fgrep -v grep | fgrep -q "postfix-script" &&
+                  ps axf | fgrep -v grep | fgrep -q 'opendkim'
           volumeMounts:
             - name: certificate
               mountPath: /etc/postfix/tls
