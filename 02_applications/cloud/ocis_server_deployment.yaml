@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: server
       app.kubernetes.io/instance: ocis
   #TODO get this working
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   template:
@@ -27,7 +27,7 @@ spec:
           fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: ocis
-          image: "registry.lab.reisman.org/proxy.docker.io/owncloud/ocis:5.0.4"
+          image: "registry.lab.reisman.org/proxy.docker.io/owncloud/ocis:5.0.5"
           command: ["ocis"]
           args: ["server"]
           securityContext:
