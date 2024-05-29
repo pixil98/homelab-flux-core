@@ -5,6 +5,7 @@ metadata:
   namespace: cloud
 spec:
   interval: 5m
+  timeout: 30m
   chart:
     spec:
       chart: bitnamicharts/redis
