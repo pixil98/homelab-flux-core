@@ -27,7 +27,7 @@ spec:
           fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: ocis
-          image: "registry.lab.reisman.org/proxy.docker.io/owncloud/ocis:5.0.5"
+          image: "registry.lab.reisman.org/proxy.docker.io/owncloud/ocis:4.0.7"
           command: ["ocis"]
           args: ["server"]
           securityContext:
