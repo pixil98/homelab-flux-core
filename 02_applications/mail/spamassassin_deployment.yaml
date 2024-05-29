@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spamassassin-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "spamassassin"
+    app.kubernetes.io/instance: "spamassassin"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "spamassassin"
+      app.kubernetes.io/instance: "spamassassin"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "spamassassin"
+        app.kubernetes.io/instance: "spamassassin"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  dovecot
+          image: registry.lab.reisman.org/proxy.docker.io/tiredofit/spamassassin:2.0.12
+          imagePullPolicy: IfNotPresent
+          env: []
+          ports:
+            - name: scan
+              containerPort: 783
+              protocol: TCP
+          #TODO Add probes
+          volumeMounts: []
+      volumes: []
