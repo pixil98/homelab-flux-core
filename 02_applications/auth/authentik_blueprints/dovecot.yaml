@@ -14,11 +14,11 @@ stringData:
     entries:
       - model: authentik_providers_oauth2.scopemapping
         identifiers:
-          name: "custom OAuth Mapping: OpenID 'dovecot-profile'"
+          name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
         model: authentik_providers_oauth2.scopemapping
         attrs:
-          name: "custom OAuth Mapping: OpenID 'dovecot-profile'"
-          scope_name: dovecot-profile
+          name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
+          scope_name: dovecot_profile
           description: "Dovecot Profile Information"
           expression: |
             return {
@@ -51,7 +51,8 @@ stringData:
           property_mappings:
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, dovecot-profile]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, dovecot_profile]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
 
       - model: authentik_core.application
         id: dovecot
