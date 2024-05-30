@@ -29,10 +29,10 @@ spec:
             - name: CLAMAV_NO_MILTERD
               value: "false"
           ports:
-            - name: milter
+            - name: clamd
               containerPort: 3310
               protocol: TCP
-            - name: clamd
+            - name: milter
               containerPort: 7357
               protocol: TCP
           livenessProbe:

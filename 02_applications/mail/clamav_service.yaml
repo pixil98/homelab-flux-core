@@ -12,7 +12,7 @@ spec:
   ports:
     - name: milter
       protocol: TCP
-      port: 3310
+      port: 7357
       targetPort: milter
   selector:
     app.kubernetes.io/name: "clamav"
