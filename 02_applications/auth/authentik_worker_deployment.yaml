@@ -36,7 +36,7 @@ spec:
             - name: blueprints
               mountPath: /blueprints/custom
             - name: certificate
-              mountPath: /certs/auth.${vals_info_cluster_domain}
+              mountPath: "/certs/auth.${vals_info_cluster_domain}"
       volumes:
         - name: certificate
           secret:
