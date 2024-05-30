@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rspamd-config-confd
+  namespace: mail
+type: Opaque
+stringData:
+  redis.conf: |
+    servers = "rspamd-redis-master";
+    password = "${secrets_apps_mail_rspamd_redisPassword}";

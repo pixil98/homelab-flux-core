@@ -37,5 +37,10 @@ spec:
               containerPort: 11334
               protocol: TCP
           #TODO figure out probes
-          volumeMounts: []
-      volumes: []
+          volumeMounts:
+            - name: config-confd
+              mountPath: /etc/rspamd/local.d
+      volumes:
+        - name: config-confd
+          secret:
+            secretName: rspamd-config-confd
