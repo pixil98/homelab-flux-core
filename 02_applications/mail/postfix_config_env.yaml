@@ -34,7 +34,7 @@ stringData:
   # Postfix SASL Auth
   POSTFIX_smtpd_sasl_auth_enable: "yes"
   POSTFIX_smtpd_sasl_type: "dovecot"
-  POSTFIX_smtpd_sasl_path: "inet:dovecot-server-internal:12345"
+  POSTFIX_smtpd_sasl_path: "inet:dovecot-server-internal.mail.svc.cluster.local:12345"
   POSTFIX_smtpd_sasl_security_options: "noanonymous, noplaintext"
   POSTFIX_smtpd_sasl_tls_security_options: "noanonymous"
 
