@@ -82,6 +82,9 @@ spec:
             - name: certificate
               mountPath: /certs/auth.${vals_info_cluster_domain}
       volumes:
+        - name: certificate
+          secret:
+            secretName: authentik-server-tls
         - name: blueprints
           projected:
             sources:
@@ -95,6 +98,3 @@ spec:
                   name: authentik-blueprint-owncloud
               - secret:
                   name: authentik-blueprint-paperless
-        - name: certificate
-          secret:
-            secretName: authentik-server-tls
