@@ -25,7 +25,9 @@ spec:
         - name:  clamav
           image: registry.lab.reisman.org/proxy.docker.io/clamav/clamav:1.3.1-53
           imagePullPolicy: IfNotPresent
-          env: []
+          env:
+            - name: CLAMAV_NO_MILTERD
+              value: "false"
           ports:
             - name: milter
               containerPort: 3310
