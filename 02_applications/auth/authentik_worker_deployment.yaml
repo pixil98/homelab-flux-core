@@ -36,11 +36,16 @@ spec:
             - name: blueprints
               mountPath: /blueprints/custom
             - name: certificate
-              mountPath: "/certs/auth.${vals_info_cluster_domain}"
+              mountPath: /certs/auth.${vals_info_cluster_domain}
       volumes:
         - name: certificate
           secret:
             secretName: authentik-server-tls
+            items:
+              - key: tls.crt
+                path: auth.${vals_info_cluster_domain}.crt
+              - key: tls.key
+                path: auth.${vals_info_cluster_domain}.key
         - name: blueprints
           projected:
             sources:
