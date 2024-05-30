@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clamav-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "clamav"
+    app.kubernetes.io/instance: "clamav"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "clamav"
+      app.kubernetes.io/instance: "clamav"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "clamav"
+        app.kubernetes.io/instance: "clamav"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  clamav
+          image: registry.lab.reisman.org/proxy.docker.io/clamav/clamav:1.3.1-53
+          imagePullPolicy: IfNotPresent
+          env: []
+          ports:
+            - name: milter
+              containerPort: 3310
+              protocol: TCP
+            - name: clamd
+              containerPort: 7357
+              protocol: TCP
+          #TODO figure out probes
+          volumeMounts: []
+      volumes: []

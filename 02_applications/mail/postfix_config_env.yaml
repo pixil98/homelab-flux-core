@@ -45,5 +45,5 @@ stringData:
 
   # Spam filter
   #TODO finish this
-  POSTFIX_smtpd_milters: "inet:rspamd-server.mail.svc.cluster.local:11332"
-  POSTFIX_non_smtpd_milters: "inet:rspamd-server.mail.svc.cluster.local:11332"
+  POSTFIX_smtpd_milters: "inet:rspamd-server.mail.svc.cluster.local:11332,inet:clamav-server.mail.svc.cluster.local:3310"
+  POSTFIX_non_smtpd_milters: "inet:rspamd-server.mail.svc.cluster.local:11332,inet:clamav-server.mail.svc.cluster.local:3310"
