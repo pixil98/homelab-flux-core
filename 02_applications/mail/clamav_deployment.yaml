@@ -39,7 +39,8 @@ spec:
                 - sh
                 - -c
                 - /scripts/healthcheck.sh
-            initialDelaySeconds: 5
+            failureThreshold: 3
+            initialDelaySeconds: 60
             periodSeconds: 10
           readinessProbe:
             exec:
@@ -47,7 +48,8 @@ spec:
                 - sh
                 - -c
                 - /scripts/healthcheck.sh
-            initialDelaySeconds: 5
+            failureThreshold: 3
+            initialDelaySeconds: 60
             periodSeconds: 10
           volumeMounts:
             - name: scripts
