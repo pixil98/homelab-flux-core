@@ -33,7 +33,7 @@ spec:
                   name: authentik-outpost-ldap
                   key: token
             - name: AUTHENTIK_INSECURE
-              value: "true"
+              value: "false"
             - name: AUTHENTIK_DEBUG
               value: "true"
           ports:
