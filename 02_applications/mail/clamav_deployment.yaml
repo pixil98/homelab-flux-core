@@ -33,6 +33,27 @@ spec:
             - name: clamd
               containerPort: 7357
               protocol: TCP
-          #TODO figure out probes
-          volumeMounts: []
-      volumes: []
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/healthcheck.sh
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/healthcheck.sh
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: scripts
+          configMap:
+            name: dovecot-config-scripts
+            defaultMode: 0777

@@ -83,19 +83,19 @@ spec:
             - name: scripts
               mountPath: /opt/dovecot/bin
       volumes:
-      - name: mailboxes
-        persistentVolumeClaim:
-          claimName: dovecot-mailboxes
-      - name: config
-        configMap:
-          name: dovecot-config
-      - name: config-confd
-        secret:
-          secretName: dovecot-config-confd
-      - name: scripts
-        configMap:
-          name: dovecot-config-scripts
-          defaultMode: 0777
-      - name: certificate
-        secret:
-          secretName: mail-server-tls
+        - name: mailboxes
+          persistentVolumeClaim:
+            claimName: dovecot-mailboxes
+        - name: config
+          configMap:
+            name: dovecot-config
+        - name: config-confd
+          secret:
+            secretName: dovecot-config-confd
+        - name: scripts
+          configMap:
+            name: dovecot-config-scripts
+            defaultMode: 0777
+        - name: certificate
+          secret:
+            secretName: mail-server-tls
