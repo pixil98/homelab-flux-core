@@ -15,7 +15,6 @@ stringData:
       - model: authentik_providers_oauth2.scopemapping
         identifiers:
           name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
-        model: authentik_providers_oauth2.scopemapping
         attrs:
           name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
           scope_name: dovecot_profile
