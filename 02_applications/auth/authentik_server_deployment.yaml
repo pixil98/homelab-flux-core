@@ -97,4 +97,4 @@ spec:
                   name: authentik-blueprint-paperless
         - name: certificate
           secret:
-          secretName: authentik-server-tls
+            secretName: authentik-server-tls
