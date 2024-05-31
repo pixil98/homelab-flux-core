@@ -5,6 +5,16 @@ metadata:
   namespace: mail
 type: Opaque
 stringData:
+  classifier-bayes.conf: |
+    backend = "redis";
+  milter_headers.conf: |
+    use = ["x-spamd-bar", "x-spam-level", "authentication-results"];
   redis.conf: |
     servers = "rspamd-redis-master";
     password = "${secrets_apps_mail_rspamd_redisPassword}";
+  worker-proxy.inc: |
+    milter = yes;
+    upstream "local" {
+      default = yes;
+      self_scan = yes;
+    }
