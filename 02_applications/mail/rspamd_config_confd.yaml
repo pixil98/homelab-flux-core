@@ -9,6 +9,9 @@ stringData:
     backend = "redis";
   milter_headers.conf: |
     use = ["x-spamd-bar", "x-spam-level", "authentication-results"];
+    extended_spam_headers = true;
+    skip_local = false;
+    skip_authenticated = false;
   redis.conf: |
     servers = "rspamd-redis-master";
     password = "${secrets_apps_mail_rspamd_redisPassword}";
