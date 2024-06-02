@@ -2,7 +2,7 @@ $ORIGIN zingde.com.
 $TTL    6h
 
 @       SOA     ns1.reisman.org. hostmaster.zingde.com. (
-                2022042402      ; serial
+                2024060201      ; serial
                 3h              ; refresh
                 15m             ; retry
                 4w              ; expire
@@ -12,11 +12,8 @@ $TTL    6h
         NS      ns1.reisman.org.
         NS      ns2.reisman.org.
 
-@       A       216.165.140.134
-
-www     A       216.165.140.134
-
-mail    A       216.165.140.134
+www     CNAME   madison.reisman.org.
+mail    CNAME   madison.reisman.org.
 
 ; Mail
 @       MX      10 mail.zingde.com.
