@@ -56,6 +56,4 @@ spec:
               - secret:
                   name: authentik-blueprint-ldap
               - secret:
-                  name: authentik-blueprint-owncloud
-              - secret:
                   name: authentik-blueprint-paperless
