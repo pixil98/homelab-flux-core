@@ -19,7 +19,6 @@ configMapGenerator:
       - zones/db.pressenter.com
       - zones/db.pressenter.net
       - zones/db.pressenter.org
-      - zones/db.reisman.org
       - zones/db.lab.reisman.org
       - zones/db.scobie.org
       - zones/db.xcoolgroup.org
