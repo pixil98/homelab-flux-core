@@ -96,7 +96,7 @@ stringData:
     tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
   dovecot-passdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
-    tls = yes
+    tls = no  #TODO use tls
     dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
     base = dc=ldap,dc=example,dc=com
@@ -106,7 +106,7 @@ stringData:
     pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
-    tls = yes
+    tls = no  #TODO use tls
     dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
     base = dc=ldap,dc=example,dc=com
