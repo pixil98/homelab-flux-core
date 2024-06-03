@@ -33,10 +33,11 @@ stringData:
       - model: authentik_providers_ldap.ldapprovider
         state: present
         identifiers:
-          name: ldap-provider
+          name: ldap
         attrs:
           authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           search_group: !Find [authentik_core.group, [name, ldapsearch]]
+          certificate: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
           base_dn: DC=ldap,DC=example,DC=com
           search_mode: "cached"
           bind_mode: "cached"
@@ -47,7 +48,7 @@ stringData:
           slug: ldap
         attrs:
           name: ldap
-          provider: !Find [authentik_providers_ldap.ldapprovider, [name, ldap-provider]]
+          provider: !Find [authentik_providers_ldap.ldapprovider, [name, ldap]]
 
       - model: authentik_outposts.outpost
         state: present
@@ -56,5 +57,5 @@ stringData:
         attrs:
           type: ldap
           providers:
-            - !Find [authentik_providers_ldap.ldapprovider, [name, ldap-provider]]
+            - !Find [authentik_providers_ldap.ldapprovider, [name, ldap]]
           config: {}
