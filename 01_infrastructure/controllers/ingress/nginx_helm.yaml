@@ -19,7 +19,8 @@ spec:
       retries: 3
   values:
     controller:
-      #TODO: Setup registry/image tags
+      image:
+        registry: registry.lab.reisman.org/proxy.registry.k8s.io
       kind: DaemonSet
       service:
         externalTrafficPolicy: Local
@@ -30,3 +31,14 @@ spec:
         annotations:
           prometheus.io/scrape: true
           prometheus.io/port: 10254
+    opentelemetry:
+      enabled: false
+      image:
+        registry: registry.lab.reisman.org/proxy.registry.k8s.io
+    admissionWebhooks:
+      patch:
+        image:
+          registry: registry.lab.reisman.org/proxy.registry.k8s.io
+    defaultBackend:
+      image:
+        registry: registry.lab.reisman.org/proxy.registry.k8s.io
