@@ -97,26 +97,26 @@ stringData:
   dovecot-passdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
     tls = no  #TODO use tls
-    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
+    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
-    base = dc=ldap,dc=example,dc=com
+    base = dc=ldap,dc=goauthentik,dc=io
 
     auth_bind = yes
-    #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=example,dc=com
-    pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
+    #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=goauthentik,dc=io
+    pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
     tls = no  #TODO use tls
-    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=example,dc=com
+    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
-    base = dc=ldap,dc=example,dc=com
+    base = dc=ldap,dc=goauthentik,dc=io
 
     user_attrs = \
       =uid=vmail, \
       =gid=vmail, \
       =home=/var/vmail/%d/%n
-    user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
+    user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
 
     # For using doveadm -A:
     iterate_attrs = =user=%{ldap:mail}
-    iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=example,dc=com)(ak-active=true))
+    iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))

@@ -39,7 +39,7 @@ stringData:
           search_group: !Find [authentik_core.group, [name, ldapsearch]]
           certificate: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
           tls_server_name: auth.${vals_info_cluster_domain}
-          base_dn: DC=ldap,DC=example,DC=com
+          base_dn: DC=ldap,DC=goauthentik,DC=io
           search_mode: "cached"
           bind_mode: "cached"
 
