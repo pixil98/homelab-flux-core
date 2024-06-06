@@ -85,7 +85,7 @@ spec:
               value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
               #value: "true"
-              value: "true"
+              value: "false"
           ports:
             - name: http
               containerPort: 8000
