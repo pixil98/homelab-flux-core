@@ -84,8 +84,7 @@ spec:
             - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
               value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
-              #value: "true"
-              value: "false"
+              value: "true"
           ports:
             - name: http
               containerPort: 8000
