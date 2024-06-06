@@ -14,7 +14,8 @@ spec:
         namespace: csi
   interval: 1h0m0s
   values:
-    #TODO set image.repository
+    image:
+      repository: registry.lab.reisman.org/proxy.registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
     nfs:
       server: 192.168.1.10
       path: /mnt/main/kubernetes-nobackup
