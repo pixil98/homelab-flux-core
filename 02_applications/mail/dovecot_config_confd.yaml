@@ -103,6 +103,8 @@ stringData:
 
     auth_bind = yes
     #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=goauthentik,dc=io
+    pass_attrs = \
+      =uid=mail,
     pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
