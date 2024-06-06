@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-server
+  namespace: paperless
+  labels:
+    app.kubernetes.io/name: "paperless"
+    app.kubernetes.io/instance: "paperless"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "paperless"
+      app.kubernetes.io/instance: "paperless"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "paperless"
+        app.kubernetes.io/instance: "paperless"
+        app.kubernetes.io/component: "server"
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: paperless
+          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.8.6
+          imagePullPolicy: IfNotPresent
+          env:
+            # Redis
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: paperless-secrets
+            - name: PAPERLESS_REDIS
+              value: "redis://:$(REDIS_PASSWORD)@paperless-redis-master:6379"
+
+            # Postgresql
+            - name: PAPERLESS_DBENGINE
+              value: "postgresql"
+            - name: PAPERLESS_DBHOST
+              value: "paperless-postgresql"
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-user-password
+                  name: paperless-secrets
+
+            # Tika
+            - name: PAPERLESS_TIKA_ENABLED
+              value: "true"
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: "http://paperless-tika:9998"
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: "http://paperless-gotenberg:3000"
+
+            # Paperless
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret-key
+                  name: paperless-secrets
+            - name: PAPERLESS_URL
+              value: "https://paperless.${vals_info_cluster_domain}"
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: "eng"
+
+            # OIDC
+            # TODO figure out permissions
+            # https://github.com/paperless-ngx/paperless-ngx/pull/5190
+            # https://github.com/paperless-ngx/paperless-ngx/discussions/5869
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              valueFrom:
+                secretKeyRef:
+                  key: oidc-config
+                  name: paperless-secrets
+            - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
+              value: "true"
+            - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
+              value: "true"
+            - name: PAPERLESS_DISABLE_REGULAR_LOGIN
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: http
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: http
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+            timeoutSeconds: 1
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+            - name: export
+              mountPath: /usr/src/paperless/export
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-server-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-server-media
+        - name: consume
+          emptyDir: {}
+        - name: export
+          emptyDir: {}
+        - name: tmp-volume
+          emptyDir: {}

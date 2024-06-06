@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-paperless
+  namespace: auth
+type: Opaque
+stringData:
+  paperless.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Paperless
+    entries:
+      - model: authentik_providers_oauth2.oauth2provider
+        id: paperless
+        identifiers:
+          name: paperless
+        state: present
+        attrs:
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          client_type: confidential
+          client_id: ${secrets_apps_auth_applications_paperless_clientId}
+          client_secret: ${secrets_apps_auth_applications_paperless_clientSecret}
+          redirect_uris: |
+            https://paperless.${vals_info_cluster_domain}/accounts/oidc/authentik/login/callback/
+          access_code_validity: minutes=1
+          access_token_validity: minutes=5
+          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          property_mappings:
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
+
+      - model: authentik_core.application
+        id: paperless
+        identifiers:
+          slug: paperless
+        state: present
+        attrs:
+          name: paperless
+          slug: paperless
+          provider: !KeyOf paperless
+          meta_launch_url: https://paperless.${vals_info_cluster_domain}/
+          policy_engine_mode: any
+
+      - model: authentik_core.group
+        id: paperless
+        identifiers:
+          name: paperless
+        state: present
+        attrs:
+          name: paperless
+      
+      - model: authentik_policies.PolicyBinding
+        id: paperless-policy-binding
+        identifiers:
+          order: 10
+          group: !Find [authentik_core.group, [name, paperless]]
+          target: !Find [authentik_core.Application, [slug, paperless]]
+        attrs:
+          order: 10
+          group: !Find [authentik_core.group, [name, paperless]]
+          target: !Find [authentik_core.Application, [slug, paperless]]

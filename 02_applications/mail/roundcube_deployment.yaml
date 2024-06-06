@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roundcube-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "roundcube"
+    app.kubernetes.io/instance: "roundcube"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "roundcube"
+      app.kubernetes.io/instance: "roundcube"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "roundcube"
+        app.kubernetes.io/instance: "roundcube"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  roundcube
+          image: registry.lab.reisman.org/proxy.docker.io/roundcube/roundcubemail:1.6.7-apache
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ROUNDCUBEMAIL_DB_TYPE
+              value: "pgsql"
+            - name: ROUNDCUBEMAIL_DB_HOST
+              value: "roundcube-postgresql"
+            - name: ROUNDCUBEMAIL_DB_NAME
+              value: "roundcube"
+            - name: ROUNDCUBEMAIL_DB_USER
+              value: "roundcube"
+            - name: ROUNDCUBEMAIL_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: roundcube-secrets
+                  key: postgresql-user-password
+            - name: ROUNDCUBEMAIL_DES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: roundcube-secrets
+                  key: des-key
+            - name: ROUNDCUBEMAIL_DEFAULT_HOST
+              value: "tls://dovecot-server-internal"
+            - name: ROUNDCUBEMAIL_SMTP_SERVER
+              value: "tls://postfix-server"
+            - name: ROUNDCUBEMAIL_SKIN
+              value: "elastic"
+            - name: ROUNDCUBEMAIL_PLUGINS
+              value: "archive,zipdownload,newmail_notifier"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+            - name: www-data
+              mountPath: /var/www/html
+            - name: roundcube-temp
+              mountPath: /tmp/roundcube-temp
+            - name: roundcube-config
+              mountPath: /var/roundcube/config
+      volumes:
+        - name: www-data
+          emptydir: {}
+        - name: roundcube-temp
+          emptydir: {}
+        - name: roundcube-config
+          secret:
+            secretName: roundcube-server-config

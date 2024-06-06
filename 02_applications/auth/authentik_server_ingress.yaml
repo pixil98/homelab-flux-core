@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: authentik
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "server"
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - "auth.${vals_info_cluster_domain}"
+      secretName: authentik-server-tls
+  rules:
+    - host: "auth.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: authentik-server
+                port:
+                  name: http

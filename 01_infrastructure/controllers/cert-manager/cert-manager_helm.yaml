@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: cert-manager
+      version: '1.14.x'
+      sourceRef:
+        kind: HelmRepository
+        name: cert-manager
+        namespace: cert-manager
+      interval: 1h
+  values:
+    installCRDs: true
+    replicaCount: 2
+    podDisruptionBudget:
+      enabled: true
+    image:
+      repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-controller
+    webhook:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-webhook
+      replicaCount: 2
+      podDisruptionBudget:
+        enabled: true
+    cainjector:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-cainjector
+      replicaCount: 2
+      podDisruptionBudget:
+        enabled: true
+    acmesolver:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-acmesolver
+    startupapicheck:
+      image:
+        repository: registry.lab.reisman.org/proxy.quay.io/jetstack/cert-manager-startupapicheck

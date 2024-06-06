@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: pixil98
+  namespace: flux-system
+spec:
+  interval: 1h0m0s
+  url: https://pixil98.github.io/helm-charts/

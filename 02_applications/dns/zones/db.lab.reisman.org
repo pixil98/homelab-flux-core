@@ -1,0 +1,16 @@
+$ORIGIN lab.reisman.org. 
+$TTL    6h
+
+@       SOA     ns1.reisman.org. hostmaster.reisman.org. (
+                2024042501      ; serial
+                3h              ; refresh
+                15m             ; retry
+                4w              ; expire
+                15m             ; negttl
+                )
+
+        NS      ns1.reisman.org.
+        NS      ns2.reisman.org.
+
+_dmarc.hobbes       TXT     "v=DMARC1; p=none; sp=reject;"
+_dmarc.luke         TXT     "v=DMARC1; p=none; sp=reject;"

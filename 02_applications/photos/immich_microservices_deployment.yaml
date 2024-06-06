@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-microservices
+  namespace: photos
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: microservices
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: microservices
+      app.kubernetes.io/instance: immich
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: microservices
+        app.kubernetes.io/instance: immich
+    spec:
+      containers:
+        - name: immich-microservices
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.105.1
+          imagePullPolicy: IfNotPresent
+          command: [ "./start.sh", "microservices" ]
+          env:
+            - name: DB_DATABASE_NAME
+              value: "immich"
+            - name: DB_HOSTNAME
+              value: "immich-postgresql"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets 
+                  key: postgresql-user-password
+                  optional: false
+            - name: DB_USERNAME
+              value: "immich"
+            - name: REDIS_HOSTNAME
+              value: "immich-redis-master"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets 
+                  key: redis-password
+                  optional: false
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload/library
+            - name: upload
+              mountPath: /usr/src/app/upload/upload
+            - name: encoded-video
+              mountPath: /usr/src/app/upload/encoded-video
+            - name: profile
+              mountPath: /usr/src/app/upload/profile
+            - name: thumbs
+              mountPath: /usr/src/app/upload/thumbs
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library
+        - name: upload
+          persistentVolumeClaim:
+            claimName: immich-upload
+        - name: encoded-video
+          persistentVolumeClaim:
+            claimName: immich-encoded-video
+        - name: profile
+          persistentVolumeClaim:
+            claimName: immich-profile
+        - name: thumbs
+          persistentVolumeClaim:
+            claimName: immich-thumbs

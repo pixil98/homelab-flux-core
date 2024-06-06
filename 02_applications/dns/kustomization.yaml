@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - authoritative_bind_deployment.yaml
+  - authoritative_bind_secrets.yaml
+  - authoritative_bind_service.yaml
+
+configMapGenerator:
+  - name: authoritative-bind-config
+    namespace: dns
+    files:
+      - authoritative-bind-config/named.conf
+  - name: authoritative-bind-zones
+    namespace: dns
+    files:
+      - zones/db.hobolife.org
+      - zones/db.pressenter.com
+      - zones/db.pressenter.net
+      - zones/db.pressenter.org
+      - zones/db.lab.reisman.org
+      - zones/db.scobie.org
+      - zones/db.xcoolgroup.org
+      - zones/db.zingde.com

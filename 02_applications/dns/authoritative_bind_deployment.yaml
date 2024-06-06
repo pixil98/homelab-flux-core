@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authoritative-dns
+  namespace: dns
+  labels:
+    app: authoritative-dns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: authoritative-dns
+  template:
+    metadata:
+      labels:
+        app: authoritative-dns
+    spec:
+      initContainers:
+          - name: init-zones
+            image: alpine:latest
+            command: [ "/bin/sh", "-c" ]
+            args: [ "cp /configtmp/* /config" ]
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: zones
+              mountPath: /configtmp
+            - name: var-lib-bind
+              mountPath: /config
+      containers:
+        - name: bind9
+          image: "internetsystemsconsortium/bind9:9.18"
+          imagePullPolicy: Always
+          command: [ "/usr/sbin/named" ]
+          args: [ "-g", "-c", "/etc/bind/named.conf", "-u", "bind" ]
+          ports:
+          - name: dns-tcp
+            containerPort: 53
+            protocol: TCP
+          - name: dns-udp
+            containerPort: 53
+            protocol: UDP
+          - name: dns-rndc
+            containerPort: 953
+            protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: dns-tcp
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: dns-tcp
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources: {}
+          volumeMounts:
+          - name: config
+            mountPath: /etc/bind
+          - name: var-lib-bind
+            mountPath: /var/lib/bind
+          - name: working-dir
+            mountPath: /var/cache/bind
+          - name: logs
+            mountPath: /var/log
+      volumes:
+      - name: config
+        projected:
+          sources:
+          - secret:
+              name: authoritative-bind-letsencrypt-keys
+          - configMap:
+              name: authoritative-bind-config
+      - name: zones
+        configMap:
+          name: authoritative-bind-zones
+      - name: var-lib-bind
+        emptyDir: {}
+      - name: working-dir
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}

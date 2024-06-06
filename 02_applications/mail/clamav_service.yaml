@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "clamav"
+    app.kubernetes.io/instance: "clamav"
+    app.kubernetes.io/component: "server"
+spec:
+  type: ClusterIP
+  ports:
+    - name: milter
+      protocol: TCP
+      port: 7357
+      targetPort: milter
+  selector:
+    app.kubernetes.io/name: "clamav"
+    app.kubernetes.io/instance: "clamav"
+    app.kubernetes.io/component: "server"

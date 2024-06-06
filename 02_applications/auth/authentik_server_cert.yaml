@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: authentik-server-tls
+  namespace: auth
+spec:
+  secretName: authentik-server-tls
+  dnsNames:
+    - auth.${vals_info_cluster_domain}
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: ${vals_infra_certManager_issuer}

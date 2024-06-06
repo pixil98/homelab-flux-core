@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clamav-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "clamav"
+    app.kubernetes.io/instance: "clamav"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "clamav"
+      app.kubernetes.io/instance: "clamav"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "clamav"
+        app.kubernetes.io/instance: "clamav"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  clamav
+          image: registry.lab.reisman.org/proxy.docker.io/clamav/clamav:1.3.1-53
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: CLAMAV_NO_MILTERD
+              value: "false"
+          ports:
+            - name: clamd
+              containerPort: 3310
+              protocol: TCP
+            - name: milter
+              containerPort: 7357
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/healthcheck.sh
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/healthcheck.sh
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: scripts
+          configMap:
+            name: clamav-config-scripts
+            defaultMode: 0777

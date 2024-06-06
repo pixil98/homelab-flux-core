@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dovecot-mailboxes
+  namespace: mail
+spec:
+  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
