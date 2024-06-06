@@ -78,14 +78,9 @@ spec:
           volumeMounts:
             - name: certificate
               mountPath: /etc/postfix/tls
-            - name: mailboxes
-              mountPath: /var/vmail
             - name: spool
               mountPath: /var/spool/postfix
       volumes:
-        - name: mailboxes
-          persistentVolumeClaim:
-            claimName: postfix-mailboxes
         - name: spool
           persistentVolumeClaim:
             claimName: postfix-spool
