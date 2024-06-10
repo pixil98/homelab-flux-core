@@ -64,7 +64,7 @@ spec:
         userPasswordKey: postgresql-user-password
       usePasswordFiles: false
     backup:
-      enabled: true
+      enabled: false
       cronjob:
         storage:
           storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
