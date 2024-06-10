@@ -17,9 +17,10 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
-      storageClass: nfs-client-nobackup
     architecture: standalone
     primary:
+      persistence:
+        storageClass: nfs-client-nobackup
       livenessProbe:
         initialDelaySeconds: 120
     auth:
@@ -31,7 +32,7 @@ spec:
         userPasswordKey: postgresql-user-password
       usePasswordFiles: false
     backup:
-      enabled: true
+      enabled: false
       cronjob:
         storage:
           storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
