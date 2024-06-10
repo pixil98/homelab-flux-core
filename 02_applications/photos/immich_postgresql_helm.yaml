@@ -65,8 +65,9 @@ spec:
       usePasswordFiles: false
     backup:
       enabled: true
-      storage:
-        storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+      cronjob:
+        storage:
+          storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: false
       image:
