@@ -22,10 +22,11 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.105.1
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.106.1
           imagePullPolicy: IfNotPresent
-          command: [ "./start.sh", "immich" ]
           env:
+            - name: TZ
+              value: "America/Chicago"
             - name: DB_DATABASE_NAME
               value: "immich"
             - name: DB_HOSTNAME
