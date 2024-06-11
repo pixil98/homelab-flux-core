@@ -71,7 +71,7 @@ spec:
             httpGet:
               path: /api/server-info/ping
               port: http
-            initialDelaySeconds: 0
+            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 1
           readinessProbe:
@@ -79,7 +79,7 @@ spec:
             httpGet:
               path: /api/server-info/ping
               port: http
-            initialDelaySeconds: 0
+            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 1
       volumes:
