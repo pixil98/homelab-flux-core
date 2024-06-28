@@ -9,6 +9,15 @@ stringData:
     backend = "redis";
   milter_headers.conf: |
     use = ["x-spamd-bar", "x-spam-level", "authentication-results"];
+  phishing.conf: |
+    phishing {
+      symbol = "R_PHISHING"; # Default symbol
+
+      # Enable openphish support (default disabled)
+      openphish_enabled = true;
+      # URL of feed, default is public url:
+      openphish_map = "https://www.openphish.com/feed.txt";
+    }
   redis.conf: |
     servers = "rspamd-redis-master";
     password = "${secrets_apps_mail_rspamd_redisPassword}";
