@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postfix-config-confd
+  namespace: mail
+type: Opaque
+stringData:
+  ldap-aliases.cf: |
+    server_host = ldap://authentik-outpost-ldap.auth.svc.cluster.local
+    search_base = dc=ldap,dc=goauthentik,dc=io
+    #bind_dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
+    #bind_pw = ${secrets_apps_auth_authentik_outpost_ldap_password}
+
+    query_filter = (&(objectClass=user)(cn=%s))
+    result_attribute = mailAlias
