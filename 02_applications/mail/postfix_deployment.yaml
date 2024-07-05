@@ -53,7 +53,6 @@ spec:
                 - -c
                 - /scripts/healthcheck.sh
           livenessProbe:
-            initialDelaySeconds: 120
             periodSeconds: 5
             failureThreshold: 2
             exec:
@@ -64,9 +63,8 @@ spec:
                   ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
                   ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master'
           startupProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 12
+            periodSeconds: 10
+            failureThreshold: 30
             exec:
               command:
                 - sh
