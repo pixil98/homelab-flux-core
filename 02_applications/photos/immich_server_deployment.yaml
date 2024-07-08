@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.107.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.106.4
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
