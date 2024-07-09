@@ -20,38 +20,27 @@ spec:
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
+      command:
+        - /scripts/install-extensions.sh
+        - /opt/bitnami/scripts/postgresql/run.sh
+      containerSecurityContext:
+        runAsUser: 0
       persistence:
         storageClass: nfs-client-nobackup
       extraVolumes:
-        - name: postgresql-lib
+        - name: tmp
           emptyDir: {}
-        - name: postgresql-extension
-          emptyDir: {}
+        - name: custom-scripts
+          configMap:
+            name: immich-postgresql-custom-scripts
         - name: init-container-scripts
           configMap:
             name: immich-postgresql-init-container-scripts
       extraVolumeMounts:
-        - name: postgresql-lib
-          mountPath: /opt/bitnami/postgresql/lib
-        - name: postgresql-extension
-          mountPath: /opt/bitnami/postgresql/share/extension
-      initContainers:
-        - name: init-extensions
-          image: bitnami/postgresql:16
-          imagePullPolicy: Always 
-          command: [ "/bin/sh", "/scripts/init-extensions.sh"]
-          env:
-            - name: PGVECTORS_VERSION
-              value: "0.2.0"
-          volumeMounts:
-            - name: postgresql-lib
-              mountPath: /postgresql-lib
-            - name: postgresql-extension
-              mountPath: /postgresql-extension
-            - name: init-container-scripts
-              mountPath: /scripts
-          securityContext:
-            runAsUser: 0
+        - name: tmp
+          mountPath: /tmp
+        - name: custom-scripts
+          mountPath: /scripts
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
       livenessProbe:
