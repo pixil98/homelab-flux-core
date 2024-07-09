@@ -25,7 +25,9 @@ spec:
         - /opt/bitnami/scripts/postgresql/run.sh
       containerSecurityContext:
         runAsUser: 0
+        runAsGroup: 0
         runAsNonRoot: false
+        readOnlyRootFilesystem: false
       persistence:
         storageClass: nfs-client-nobackup
       extraVolumes:
