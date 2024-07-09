@@ -1,0 +1,68 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: immich-postgresql
+  namespace: photos
+spec:
+  interval: 5m
+  timeout: 30m
+  chart:
+    spec:
+      chart: bitnamicharts/postgresql
+      version: '15.x'
+      sourceRef:
+        kind: HelmRepository
+        name: registry-lab
+        namespace: flux-system
+  upgrade:
+    force: true
+  values:
+    global:
+      imageRegistry: registry.lab.reisman.org/proxy.docker.io
+    architecture: standalone
+    postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
+    primary:
+      command:
+        - /scripts/install-extensions.sh
+        - /opt/bitnami/scripts/postgresql/run.sh
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
+        readOnlyRootFilesystem: false
+        privileged: true
+        allowPrivilegeEscalation: true
+      persistence:
+        storageClass: nfs-client-nobackup
+      extraVolumes:
+        - name: custom-scripts
+          configMap:
+            name: immich-postgresql-custom-scripts
+            defaultMode: 0777
+        - name: init-container-scripts
+          configMap:
+            name: immich-postgresql-init-container-scripts
+      extraVolumeMounts:
+        - name: custom-scripts
+          mountPath: /scripts
+      initdb:
+        scriptsConfigMap: immich-postgresql-initdb
+      livenessProbe:
+        initialDelaySeconds: 120
+    auth:
+      database: immich
+      username: immich
+      existingSecret: immich-secrets
+      secretKeys:
+        adminPasswordKey: postgresql-admin-password
+        userPasswordKey: postgresql-user-password
+      usePasswordFiles: false
+    backup:
+      enabled: true
+      cronjob:
+        storage:
+          storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+    metrics:
+      enabled: false
+      image:
+        registry: registry.lab.reisman.org/proxy.docker.io
