@@ -48,7 +48,8 @@ spec:
           mountPath: /scripts
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
-      livenessProbe:
+      startupProbe:
+        enabled: true
         initialDelaySeconds: 120
     auth:
       database: immich
