@@ -22,9 +22,9 @@ spec:
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
-      #command:
-        #- /scripts/install-extensions.sh
-        #- /opt/bitnami/scripts/postgresql/run.sh
+      command:
+        - /scripts/install-extensions.sh
+        - /opt/bitnami/scripts/postgresql/run.sh
       containerSecurityContext:
         runAsUser: 0
         runAsGroup: 0
