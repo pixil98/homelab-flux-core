@@ -63,6 +63,7 @@ stringData:
       },
       "logging": {
         "enabled": true,
+        "level": "${vals_apps_photos_immich_logLevel:=log}"
       },
       "machineLearning": {
         "enabled": true,
