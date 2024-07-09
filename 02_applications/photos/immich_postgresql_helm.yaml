@@ -14,8 +14,6 @@ spec:
         kind: HelmRepository
         name: registry-lab
         namespace: flux-system
-  upgrade:
-    force: true
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
