@@ -29,6 +29,7 @@ spec:
         runAsNonRoot: false
         readOnlyRootFilesystem: false
         privileged: true
+        allowPrivilegeEscalation: true
       persistence:
         storageClass: nfs-client-nobackup
       extraVolumes:
