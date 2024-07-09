@@ -21,7 +21,7 @@ spec:
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
       command:
-        - /scripts/install-extensions.sh
+        #- /scripts/install-extensions.sh
         - /opt/bitnami/scripts/postgresql/run.sh
       containerSecurityContext:
         runAsUser: 0
@@ -29,8 +29,6 @@ spec:
       persistence:
         storageClass: nfs-client-nobackup
       extraVolumes:
-        - name: tmp
-          emptyDir: {}
         - name: custom-scripts
           configMap:
             name: immich-postgresql-custom-scripts
@@ -39,8 +37,6 @@ spec:
           configMap:
             name: immich-postgresql-init-container-scripts
       extraVolumeMounts:
-        - name: tmp
-          mountPath: /tmp
         - name: custom-scripts
           mountPath: /scripts
       initdb:
