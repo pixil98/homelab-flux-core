@@ -27,7 +27,7 @@ spec:
         - /opt/bitnami/scripts/postgresql/run.sh
       extraEnvVars:
         - name: PGVECTORS_VERSION
-          value: 0.2.0
+          value: "0.2.0"
       containerSecurityContext:
         runAsUser: 0
         runAsGroup: 0
