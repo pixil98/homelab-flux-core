@@ -34,6 +34,7 @@ spec:
         - name: custom-scripts
           configMap:
             name: immich-postgresql-custom-scripts
+            defaultMode: 0777
         - name: init-container-scripts
           configMap:
             name: immich-postgresql-init-container-scripts
