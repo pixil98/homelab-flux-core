@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/instance: immich
     app.kubernetes.io/name: postgresql
 data:
-  install-extensions.sh: |
+  run-with-extensions.sh: |
     #!/bin/sh
     apt-get update && apt-get install --yes wget
 
@@ -16,6 +16,8 @@ data:
     #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}-v$${PGVECTORS_VERSION}-x86_64-unknown-linux-gnu.deb
     wget https://github.com/tensorchord/pgvecto.rs/releases/download/v$${PGVECTORS_VERSION}/$${PGVECTORS_DEB}
     apt install ./$${PGVECTORS_DEB}
+
+    /opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh
 ---
 apiVersion: v1
 kind: ConfigMap
