@@ -20,9 +20,11 @@ spec:
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
-      command:
-        - /scripts/install-extensions.sh
-        - /opt/bitnami/scripts/postgresql/run.sh
+      command: [ "/bin/sh", "-c" ]
+      args:
+        - |
+          /scripts/run-with-extensions.sh
+          /opt/bitnami/scripts/postgresql/run.sh
       extraEnvVars:
         - name: PGVECTORS_VERSION
           value: "0.2.0"
