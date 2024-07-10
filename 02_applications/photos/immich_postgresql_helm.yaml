@@ -24,7 +24,7 @@ spec:
       args:
         - |
           "/scripts/install-extensions.sh"
-          "/opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh"
+          "'/opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh'"
       extraEnvVars:
         - name: PGVECTORS_VERSION
           value: "0.2.0"
