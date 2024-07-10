@@ -23,7 +23,7 @@ spec:
       command: [ "/bin/sh", "-c" ]
       args:
         - |
-          /scripts/run-with-extensions.sh
+          /scripts/install-extensions.sh
           /opt/bitnami/scripts/postgresql/run.sh
       extraEnvVars:
         - name: PGVECTORS_VERSION
