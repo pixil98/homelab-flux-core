@@ -18,7 +18,7 @@ data:
     apt-get install ./$${PGVECTORS_DEB}
 
     cp -rv /usr/lib/postgresql/$${POSTGRESQL_MAJOR}/lib/* /opt/bitnami/postgresql/lib/
-    cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* cp -rv /opt/bitnami/postgresql/share/extension/
+    cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* /opt/bitnami/postgresql/share/extension/
 
     /opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh
 ---

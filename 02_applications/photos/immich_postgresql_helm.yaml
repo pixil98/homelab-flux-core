@@ -16,7 +16,7 @@ spec:
         namespace: flux-system
   values:
     image:
-      debug: true
+      debug: false
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
     architecture: standalone
