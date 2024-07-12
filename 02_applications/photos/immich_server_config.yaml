@@ -31,31 +31,31 @@ stringData:
       },
       "job": {
         "backgroundTask": {
-          "concurrency": ${vals_apps_photos_immich_jobs_backgroundTask_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_backgroundTask_concurrency:=1}
         },
         "smartSearch": {
-          "concurrency": ${vals_apps_photos_immich_jobs_smartSearch_concurrency:=2}
+          "concurrency": ${vals_apps_photos_immich_jobs_smartSearch_concurrency:=1}
         },
         "metadataExtraction": {
-          "concurrency": ${vals_apps_photos_immich_jobs_metadataExtraction_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_metadataExtraction_concurrency:=1}
         },
         "faceDetection": {
-          "concurrency": ${vals_apps_photos_immich_jobs_faceDetection_concurrency:=2}
+          "concurrency": ${vals_apps_photos_immich_jobs_faceDetection_concurrency:=1}
         },
         "search": {
-          "concurrency": ${vals_apps_photos_immich_jobs_search_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_search_concurrency:=1}
         },
         "sidecar": {
-          "concurrency": ${vals_apps_photos_immich_jobs_sidecar_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_sidecar_concurrency:=1}
         },
         "library": {
-          "concurrency": ${vals_apps_photos_immich_jobs_library_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_library_concurrency:=1}
         },
         "migration": {
-          "concurrency": ${vals_apps_photos_immich_jobs_migration_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_migration_concurrency:=1}
         },
         "thumbnailGeneration": {
-          "concurrency": ${vals_apps_photos_immich_jobs_thumbnailGeneration_concurrency:=5}
+          "concurrency": ${vals_apps_photos_immich_jobs_thumbnailGeneration_concurrency:=1}
         },
         "videoConversion": {
           "concurrency": ${vals_apps_photos_immich_jobs_videoConversion_concurrency:=1}
@@ -112,11 +112,14 @@ stringData:
         "hashVerificationEnabled": true,
         "template": "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
       },
-      "thumbnail": {
-        "webpSize": 250,
-        "jpegSize": 1440,
+      "image": {
+        "thumbnailFormat": "webp",
+        "thumbnailSize": 250,
+        "previewFormat": "jpeg",
+        "previewSize": 1440,
         "quality": 80,
-        "colorspace": "p3"
+        "colorspace": "p3",
+        "extractEmbedded": false
       },
       "newVersionCheck": {
         "enabled": true
@@ -134,9 +137,7 @@ stringData:
           "cronExpression": "0 0 * * *"
         },
         "watch": {
-          "enabled": false,
-          "usePolling": false,
-          "interval": 10000
+          "enabled": false
         }
       },
       "server": {
