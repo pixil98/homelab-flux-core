@@ -9,16 +9,22 @@ metadata:
 data:
   run-with-extensions.sh: |
     #!/bin/sh
-    apt-get update && apt-get install --yes wget
+    apt-get update && apt-get install --yes wget unzip
 
     POSTGRESQL_MAJOR=$${APP_VERSION%%.*}
-    PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}_$${PGVECTORS_VERSION}_$${OS_ARCH}.deb
+    PGVECTORS_DEB=vectors-pg16_x86_64-unknown-linux-gnu_0.2.1.zip
+    #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}_$${PGVECTORS_VERSION}_$${OS_ARCH}.deb
     #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}-v$${PGVECTORS_VERSION}-x86_64-unknown-linux-gnu.deb
     wget https://github.com/tensorchord/pgvecto.rs/releases/download/v$${PGVECTORS_VERSION}/$${PGVECTORS_DEB}
-    dpkg -i ./$${PGVECTORS_DEB}
+    #dpkg -i ./$${PGVECTORS_DEB}
+    unzip $${PGVECTORS_DEB} -d /tmp
 
-    cp -rv /usr/lib/postgresql/$${POSTGRESQL_MAJOR}/lib/* /opt/bitnami/postgresql/lib/
-    cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* /opt/bitnami/postgresql/share/extension/
+    cp -rv /tmp/vectors.so /opt/bitnami/postgresql/lib/
+    cp -rv /tmp/vectors.control /opt/bitnami/postgresql/share/extension/
+    cp -rv /tmp/vectors-*.sql /opt/bitnami/postgresql/share/extension/
+
+    #cp -rv /usr/lib/postgresql/$${POSTGRESQL_MAJOR}/lib/* /opt/bitnami/postgresql/lib/
+    #cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* /opt/bitnami/postgresql/share/extension/
 
     /opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh
 ---
