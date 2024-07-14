@@ -16,6 +16,7 @@ spec:
         namespace: flux-system
   values:
     image:
+      tag: 16.3.0-debian-12-r10
       debug: false
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
