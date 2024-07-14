@@ -16,13 +16,13 @@ spec:
         namespace: flux-system
   values:
     image:
-      tag: 16.2.0-debian-12-r20
       debug: false
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
+      resourcesPreset: "medium"
       command: [ "/bin/sh", "-c" ]
       args: [ "/scripts/run-with-extensions.sh" ]
       extraEnvVars:
