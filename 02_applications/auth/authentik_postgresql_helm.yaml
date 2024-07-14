@@ -21,8 +21,9 @@ spec:
     primary:
       persistence:
         storageClass: nfs-client-nobackup
-      livenessProbe:
-        initialDelaySeconds: 120
+      resourcesPreset: "${vals_apps_auth_authentik_postgresql_resourcesPreset:=nano}"
+      startupProbe:
+        enabled: true
     auth:
       database: authentik
       username: authentik

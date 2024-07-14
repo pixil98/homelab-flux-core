@@ -15,14 +15,17 @@ spec:
         name: registry-lab
         namespace: flux-system
   values:
-    image:
-      debug: false
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
-      resourcesPreset: "medium"
+      persistence:
+        storageClass: nfs-client-nobackup
+      resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
+      startupProbe:
+        enabled: true
+        initialDelaySeconds: 120
       command: [ "/bin/sh", "-c" ]
       args: [ "/scripts/run-with-extensions.sh" ]
       extraEnvVars:
@@ -35,8 +38,6 @@ spec:
         readOnlyRootFilesystem: false
         privileged: true
         allowPrivilegeEscalation: true
-      persistence:
-        storageClass: nfs-client-nobackup
       extraVolumes:
         - name: custom-scripts
           configMap:
@@ -50,9 +51,6 @@ spec:
           mountPath: /scripts
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
-      startupProbe:
-        enabled: true
-        initialDelaySeconds: 120
     auth:
       database: immich
       username: immich
