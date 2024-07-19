@@ -141,7 +141,7 @@ stringData:
         }
       },
       "server": {
-        "externalDomain": "photos.${vals_info_cluster_domain}",
+        "externalDomain": "https://photos.${vals_info_cluster_domain}",
         "loginPageMessage": ""
       },
       "user": {
