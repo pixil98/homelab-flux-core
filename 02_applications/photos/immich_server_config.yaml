@@ -72,6 +72,9 @@ stringData:
           "enabled": true,
           "modelName": "ViT-B-32__openai"
         },
+        "duplicateDetection": {
+          "enabled": true
+        },
         "facialRecognition": {
           "enabled": true,
           "modelName": "buffalo_l",
@@ -139,6 +142,20 @@ stringData:
         "watch": {
           "enabled": false
         }
+      },
+      "notifications": {
+        "smtp": {
+          "enabled": true,
+          "from": "immich@${vals_info_cluster_domain}",
+          "replyTo": "immich@${vals_info_cluster_domain}",
+          "transport": {
+            "ignoreCert": false,
+            "host": "mail.${vals_info_cluster_domain}",
+            "port": 587,
+            "username": "immich@service",
+            "password": "TODO: FILL THIS IN",
+          },
+        },
       },
       "server": {
         "externalDomain": "https://photos.${vals_info_cluster_domain}",
