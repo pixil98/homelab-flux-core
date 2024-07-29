@@ -6,7 +6,7 @@ metadata:
   labels:
     app: authoritative-dns
 spec:
-  replicas: 2
+  replicas: ${vals_apps_dns_authoritative_replicas:=1}
   selector:
     matchLabels:
       app: authoritative-dns
