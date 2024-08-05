@@ -25,7 +25,7 @@ spec:
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
       startupProbe:
         enabled: true
-        initialDelaySeconds: 120
+        initialDelaySeconds: 60
       command: [ "/bin/sh", "-c" ]
       args: [ "/scripts/run-with-extensions.sh" ]
       extraEnvVars:
