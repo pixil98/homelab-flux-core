@@ -13,7 +13,7 @@ $TTL    6h
         NS      ns2.reisman.org.
 
 www     CNAME   madison.reisman.org.
-;mail    CNAME   madison.reisman.org.
+;mail    CNAME   mail.reisman.org.
 
 ; Mail
 ; @       MX      10 mail.pressenter.com.
