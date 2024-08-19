@@ -7,19 +7,17 @@ metadata:
     app.kubernetes.io/name: "rssreader"
     app.kubernetes.io/instance: "rssreader"
     app.kubernetes.io/component: "server"
-  annotations:
-    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "rssreader.${vals_info_cluster_domain}"
-      secretName: rssreader-server-tls
+        - "${vals_info_cluster_domain}"
+      secretName: mail-server-tls
   rules:
-    - host: "rssreader.${vals_info_cluster_domain}"
+    - host: "${vals_info_cluster_domain}"
       http:
         paths:
-          - path: /
+          - path: "/jmehler/rss"
             pathType: Prefix
             backend:
               service:
