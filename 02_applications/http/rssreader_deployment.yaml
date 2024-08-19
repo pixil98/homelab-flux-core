@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rssreader-server
+  namespace: http
+  labels:
+    app.kubernetes.io/name: "rssreader"
+    app.kubernetes.io/instance: "rssreader"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "rssreader"
+      app.kubernetes.io/instance: "rssreader"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "rssreader"
+        app.kubernetes.io/instance: "rssreader"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  rssreader
+          image: registry.lab.reisman.org/proxy.docker.io/jmehler/rss-reader:0.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP

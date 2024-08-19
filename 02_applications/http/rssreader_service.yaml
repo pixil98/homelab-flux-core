@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rssreader-server
+  namespace: http
+  labels:
+    app.kubernetes.io/name: "rssreader"
+    app.kubernetes.io/instance: "rssreader"
+    app.kubernetes.io/component: "server"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: "rssreader"
+    app.kubernetes.io/instance: "rssreader"
+    app.kubernetes.io/component: "server"
