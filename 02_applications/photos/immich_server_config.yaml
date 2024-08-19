@@ -70,7 +70,7 @@ stringData:
         "url": "http://immich-machine-learning:3003",
         "clip": {
           "enabled": true,
-          "modelName": "ViT-B-32__openai"
+          "modelName": "ViT-B-16-SigLIP-384__webli"
         },
         "duplicateDetection": {
           "enabled": true
@@ -118,7 +118,7 @@ stringData:
       "image": {
         "thumbnailFormat": "webp",
         "thumbnailSize": 250,
-        "previewFormat": "jpeg",
+        "previewFormat": "webp",
         "previewSize": 1440,
         "quality": 80,
         "colorspace": "p3",
