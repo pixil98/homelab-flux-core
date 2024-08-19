@@ -7,6 +7,9 @@ metadata:
     app.kubernetes.io/name: "rssreader"
     app.kubernetes.io/instance: "rssreader"
     app.kubernetes.io/component: "server"
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   tls:
@@ -17,7 +20,7 @@ spec:
     - host: "${vals_info_cluster_domain}"
       http:
         paths:
-          - path: "/jmehler/rss"
+          - path: "/jmehler/rss(/|$)(.*)"
             pathType: Prefix
             backend:
               service:
