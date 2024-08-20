@@ -25,6 +25,9 @@ spec:
         - name:  rssreader
           image: registry.lab.reisman.org/proxy.docker.io/pixil/rss-reader:0.0.1
           imagePullPolicy: IfNotPresent
+          env:
+            - name: FLASK_PROXY
+              value: "true"
           ports:
             - name: http
               containerPort: 5000
