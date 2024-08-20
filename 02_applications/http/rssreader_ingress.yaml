@@ -15,7 +15,6 @@ spec:
   tls:
     - hosts:
         - "${vals_info_cluster_domain}"
-      secretName: mail-server-tls
   rules:
     - host: "${vals_info_cluster_domain}"
       http:
