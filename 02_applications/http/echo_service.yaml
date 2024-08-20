@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-server
+  namespace: http
+  labels:
+    app.kubernetes.io/name: "echo"
+    app.kubernetes.io/instance: "echo"
+    app.kubernetes.io/component: "server"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: "echo"
+    app.kubernetes.io/instance: "echo"
+    app.kubernetes.io/component: "server"
