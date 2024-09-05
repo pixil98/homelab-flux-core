@@ -25,7 +25,7 @@ stringData:
           redirect_uris: |
             https://photos.${vals_info_cluster_domain}/auth/login
             https://photos.${vals_info_cluster_domain}/user-settings
-            app.immich:/
+            app.immich:///oauth-callback
           access_code_validity: minutes=1
           access_token_validity: minutes=5
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
