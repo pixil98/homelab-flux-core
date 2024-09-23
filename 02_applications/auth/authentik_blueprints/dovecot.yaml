@@ -62,7 +62,8 @@ stringData:
           name: dovecot
           slug: dovecot
           provider: !KeyOf dovecot
-          meta_launch_url: blank://blank
+          meta_launch_url: https://webmail.${vals_info_cluster_domain}/
+          icon: /media/public/icons/roundcube.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
