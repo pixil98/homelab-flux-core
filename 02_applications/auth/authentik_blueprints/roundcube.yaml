@@ -13,7 +13,7 @@ stringData:
       name: Custom - Roundcube
     entries:
       # Roundcube depends on Dovecot to have made the "dovecot" group available
-      - model: authentik_blueprints.metapplyblueprint
+      - model: authentik_blueprints.metaapplyblueprint
         attrs:
           identifiers:
             name: Custom - Dovecot
