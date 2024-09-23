@@ -78,7 +78,7 @@ spec:
             timeoutSeconds: 1
           volumeMounts:
             - name: icons
-              mountPath: /authentik/icons
+              mountPath: /media/public/icons
       volumes:
         - name: icons
           configMap:
