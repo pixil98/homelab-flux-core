@@ -57,3 +57,5 @@ spec:
                   name: authentik-blueprint-ldap
               - secret:
                   name: authentik-blueprint-paperless
+              - secret:
+                  name: authentik-blueprint-roundcube
