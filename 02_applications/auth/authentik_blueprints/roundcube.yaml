@@ -2,45 +2,33 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik-blueprint-dovecot
+  name: authentik-blueprint-roundcube
   namespace: auth
 type: Opaque
 stringData:
-  dovecot.yaml: |
+  roundcube.yaml: |
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
-      name: Custom - Dovecot
+      name: Custom - Roundcube
     entries:
-      - model: authentik_providers_oauth2.scopemapping
-        identifiers:
-          name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
+      # Roundcube depends on Dovecot to have made the "dovecot" group available
+      - model: authentik_blueprints.metapplyblueprint
         attrs:
-          name: "custom OAuth Mapping: OpenID 'dovecot_profile'"
-          scope_name: dovecot_profile
-          description: "Dovecot Profile Information"
-          expression: |
-            return {
-                "name": request.user.name,
-                "given_name": request.user.name,
-                "family_name": "",
-                "preferred_username": request.user.username,
-                "nickname": request.user.username,
-                "active": request.user.is_active,
-                #DO NOT INCLUDE groups
-            }
+          identifiers:
+            name: Custom - Dovecot
 
       - model: authentik_providers_oauth2.oauth2provider
-        id: dovecot
+        id: roundcube
         identifiers:
-          name: dovecot
+          name: roundcube
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
           client_type: confidential
-          client_id: ${secrets_apps_auth_applications_dovecot_clientId}
-          client_secret: ${secrets_apps_auth_applications_dovecot_clientSecret}
+          client_id: ${secrets_apps_auth_applications_roundcube_clientId}
+          client_secret: ${secrets_apps_auth_applications_roundcube_clientSecret}
           redirect_uris: |
             https://mail.${vals_info_cluster_domain}/index.php/login/oauth
             https://webmail.${vals_info_cluster_domain}/index.php/login/oauth
@@ -50,37 +38,29 @@ stringData:
           property_mappings:
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, dovecot_profile]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
 
       - model: authentik_core.application
-        id: dovecot
+        id: roundcube
         identifiers:
-          slug: dovecot
+          slug: roundcube
         state: present
         attrs:
-          name: dovecot
-          slug: dovecot
-          provider: !KeyOf dovecot
-          meta_launch_url: blank://blank
-          icon: /icons/dovecot.svg
+          name: roundcube
+          slug: roundcube
+          provider: !KeyOf roundcube
+          meta_launch_url: https://webmail.${vals_info_cluster_domain}/
+          icon: /icons/roundcube.svg
           policy_engine_mode: any
 
-      - model: authentik_core.group
-        id: dovecot
-        identifiers:
-          name: dovecot
-        state: present
-        attrs:
-          name: dovecot
-      
       - model: authentik_policies.PolicyBinding
-        id: dovecot-policy-binding
+        id: roundcube-policy-binding
         identifiers:
           order: 10
           group: !Find [authentik_core.group, [name, dovecot]]
-          target: !Find [authentik_core.Application, [slug, dovecot]]
+          target: !Find [authentik_core.Application, [slug, roundcube]]
         attrs:
           order: 10
           group: !Find [authentik_core.group, [name, dovecot]]
-          target: !Find [authentik_core.Application, [slug, dovecot]]
+          target: !Find [authentik_core.Application, [slug, roundcube]]

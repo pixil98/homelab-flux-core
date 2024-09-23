@@ -55,12 +55,12 @@ stringData:
     <?php
       $config['oauth_provider'] = 'generic';
       $config['oauth_provider_name'] = 'Authentik';
-      $config['oauth_client_id'] = '${secrets_apps_auth_applications_dovecot_clientId}';
-      $config['oauth_client_secret'] = '${secrets_apps_auth_applications_dovecot_clientSecret}';
+      $config['oauth_client_id'] = '${secrets_apps_auth_applications_roundcube_clientId}';
+      $config['oauth_client_secret'] = '${secrets_apps_auth_applications_roundcube_clientSecret}';
       $config['oauth_auth_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/authorize/';
       $config['oauth_token_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/token/';
       $config['oauth_identity_uri'] = 'https://auth.${vals_info_cluster_domain}/application/o/userinfo/';
-      $config['oauth_scope'] = "email openid dovecot_profile offline_access";
+      $config['oauth_scope'] = "email openid profile offline_access";
       $config['oauth_auth_parameters'] = [];
       $config['oauth_identity_fields'] = ['email'];
       $config['oauth_login_redirect'] = true;
