@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: victoria-metrics-cluster
+  namespace: metrics
+spec:
+  chart:
+    spec:
+      chart: victoria-metrics-cluster
+      sourceRef:
+        kind: HelmRepository
+        name: victoria-metrics
+        namespace: metrics
+      version: '0.13.x'
+  interval: 1h0m0s
+  install:
+    remediation:
+      retries: 3
+  values:
+    global:
+      image:
+        registry: registry.lab.reisman.org/proxy.docker.io
+    vmselect: {}
+    vminsert: {}
+    vmstorage:
+      persistentVolume:
+        enabled: true
+        storageClassName: nfs-client-nobackup
