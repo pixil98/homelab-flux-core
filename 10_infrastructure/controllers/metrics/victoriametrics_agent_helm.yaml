@@ -20,4 +20,4 @@ spec:
     image:
       registry: registry.lab.reisman.org/proxy.docker.io
     remoteWriteUrls:
-      - http://victoria-metrics-cluster-vminsert:8480/api/v1/write
+      - http://victoria-metrics-cluster-vminsert:8480/insert/0/prometheus/api/v1/write
