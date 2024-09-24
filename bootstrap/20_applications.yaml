@@ -19,6 +19,6 @@ spec:
         name: flux-values
       - kind: Secret
         name: flux-secrets
-  path: ./02_applications
+  path: ./20_applications
   prune: true
   wait: true
