@@ -26,6 +26,8 @@ spec:
         externalTrafficPolicy: Local
         loadBalancerIP: ${vals_infra_ingress_ipAddress}
         type: LoadBalancer
+      extraArgs:
+        default-ssl-certificate: "ingress/nginx-default-cert"
       metrics:
         enabled: false
         annotations:

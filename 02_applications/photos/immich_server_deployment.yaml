@@ -22,10 +22,11 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.105.1
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-server:v1.115.0
           imagePullPolicy: IfNotPresent
-          command: [ "./start.sh", "immich" ]
           env:
+            - name: TZ
+              value: "America/Chicago"
             - name: DB_DATABASE_NAME
               value: "immich"
             - name: DB_HOSTNAME
@@ -65,21 +66,18 @@ spec:
               mountPath: /usr/src/app/upload/profile
             - name: thumbs
               mountPath: /usr/src/app/upload/thumbs
+          startupProbe:
+            httpGet:
+              path: /api/server-info/ping
+              port: http
+            failureThreshold: 60
+            periodSeconds: 5
           livenessProbe:
-            failureThreshold: 3
+            failureThreshold: 30
             httpGet:
               path: /api/server-info/ping
               port: http
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 1
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /api/server-info/ping
-              port: http
-            initialDelaySeconds: 0
-            periodSeconds: 10
+            periodSeconds: 60
             timeoutSeconds: 1
       volumes:
         - name: config

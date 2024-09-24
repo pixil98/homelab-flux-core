@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginx-default-cert
+  namespace: ingress
+spec:
+  secretName: nginx-default-cert
+  dnsNames:
+    - "${vals_info_cluster_domain}"
+    #- "*.${vals_info_cluster_domain}"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: ${vals_infra_certManager_issuer}

@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name:  roundcube
-          image: registry.lab.reisman.org/proxy.docker.io/roundcube/roundcubemail:1.6.7-apache
+          image: registry.lab.reisman.org/proxy.docker.io/roundcube/roundcubemail:1.6.9-apache
           imagePullPolicy: IfNotPresent
           env:
             - name: ROUNDCUBEMAIL_DB_TYPE

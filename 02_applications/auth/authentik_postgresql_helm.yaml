@@ -17,11 +17,13 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
-      storageClass: nfs-client-nobackup
     architecture: standalone
     primary:
-      livenessProbe:
-        initialDelaySeconds: 120
+      persistence:
+        storageClass: nfs-client-nobackup
+      resourcesPreset: "${vals_apps_auth_authentik_postgresql_resourcesPreset:=nano}"
+      startupProbe:
+        enabled: true
     auth:
       database: authentik
       username: authentik
@@ -32,8 +34,9 @@ spec:
       usePasswordFiles: false
     backup:
       enabled: true
-      storage:
-        storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+      cronjob:
+        storage:
+          storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: false
       image:

@@ -70,7 +70,10 @@ stringData:
         "url": "http://immich-machine-learning:3003",
         "clip": {
           "enabled": true,
-          "modelName": "ViT-B-32__openai"
+          "modelName": "ViT-B-16-SigLIP-384__webli"
+        },
+        "duplicateDetection": {
+          "enabled": true
         },
         "facialRecognition": {
           "enabled": true,
@@ -112,11 +115,14 @@ stringData:
         "hashVerificationEnabled": true,
         "template": "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
       },
-      "thumbnail": {
-        "webpSize": 250,
-        "jpegSize": 1440,
+      "image": {
+        "thumbnailFormat": "webp",
+        "thumbnailSize": 250,
+        "previewFormat": "webp",
+        "previewSize": 1440,
         "quality": 80,
-        "colorspace": "p3"
+        "colorspace": "p3",
+        "extractEmbedded": false
       },
       "newVersionCheck": {
         "enabled": true
@@ -134,13 +140,25 @@ stringData:
           "cronExpression": "0 0 * * *"
         },
         "watch": {
-          "enabled": false,
-          "usePolling": false,
-          "interval": 10000
+          "enabled": false
         }
       },
+      "notifications": {
+        "smtp": {
+          "enabled": true,
+          "from": "immich@${vals_info_cluster_domain}",
+          "replyTo": "immich@${vals_info_cluster_domain}",
+          "transport": {
+            "ignoreCert": false,
+            "host": "mail.${vals_info_cluster_domain}",
+            "port": 587,
+            "username": "immich@service",
+            "password": "TODO: FILL THIS IN",
+          },
+        },
+      },
       "server": {
-        "externalDomain": "photos.${vals_info_cluster_domain}",
+        "externalDomain": "https://photos.${vals_info_cluster_domain}",
         "loginPageMessage": ""
       },
       "user": {

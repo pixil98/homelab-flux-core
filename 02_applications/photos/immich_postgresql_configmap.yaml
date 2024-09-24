@@ -1,27 +1,32 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: immich-postgresql-init-container-scripts
+  name: immich-postgresql-custom-scripts
   namespace: photos
   labels:
     app.kubernetes.io/instance: immich
     app.kubernetes.io/name: postgresql
 data:
-  init-extensions.sh: |
+  run-with-extensions.sh: |
     #!/bin/sh
-    apt-get update && apt-get install --yes wget
+    apt-get update && apt-get install --yes wget unzip
 
     POSTGRESQL_MAJOR=$${APP_VERSION%%.*}
-    PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}_$${PGVECTORS_VERSION}_$${OS_ARCH}.deb
+    PGVECTORS_DEB=vectors-pg16_x86_64-unknown-linux-gnu_0.2.1.zip
+    #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}_$${PGVECTORS_VERSION}_$${OS_ARCH}.deb
     #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}-v$${PGVECTORS_VERSION}-x86_64-unknown-linux-gnu.deb
     wget https://github.com/tensorchord/pgvecto.rs/releases/download/v$${PGVECTORS_VERSION}/$${PGVECTORS_DEB}
-    apt install ./$${PGVECTORS_DEB}
+    #dpkg -i ./$${PGVECTORS_DEB}
+    unzip $${PGVECTORS_DEB} -d /tmp
 
-    cp -rv /opt/bitnami/postgresql/lib/* /postgresql-lib
-    cp -rv /opt/bitnami/postgresql/share/extension/* /postgresql-extension
+    cp -rv /tmp/vectors.so /opt/bitnami/postgresql/lib/
+    cp -rv /tmp/vectors.control /opt/bitnami/postgresql/share/extension/
+    cp -rv /tmp/vectors-*.sql /opt/bitnami/postgresql/share/extension/
 
-    cp -rv /usr/lib/postgresql/$${POSTGRESQL_MAJOR}/lib/* /postgresql-lib
-    cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* /postgresql-extension
+    #cp -rv /usr/lib/postgresql/$${POSTGRESQL_MAJOR}/lib/* /opt/bitnami/postgresql/lib/
+    #cp -rv /usr/share/postgresql/$${POSTGRESQL_MAJOR}/extension/* /opt/bitnami/postgresql/share/extension/
+
+    /opt/bitnami/scripts/postgresql/entrypoint.sh /opt/bitnami/scripts/postgresql/run.sh
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -32,7 +37,7 @@ metadata:
     app.kubernetes.io/instance: immich
     app.kubernetes.io/name: postgresql
 data:
-  00_init_extensions.sh: |
+  10_init_extensions.sh: |
     #!/bin/sh
     psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'CREATE EXTENSION IF NOT EXISTS cube'
     psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'CREATE EXTENSION IF NOT EXISTS earthdistance'

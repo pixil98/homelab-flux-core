@@ -52,6 +52,10 @@ stringData:
     namespace inbox {
       inbox = yes
 
+      mailbox Archive {
+        auto = subscribe
+        special_use = \Archive
+      }
       mailbox Drafts {
         auto = subscribe
         special_use = \Drafts
@@ -64,7 +68,6 @@ stringData:
         auto = subscribe
         special_use = \Trash
       }
-
       mailbox Sent {
         auto = subscribe
         special_use = \Sent
@@ -103,6 +106,7 @@ stringData:
 
     auth_bind = yes
     #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=goauthentik,dc=io
+    pass_attrs = =uid=mail,
     pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
@@ -111,10 +115,7 @@ stringData:
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
     base = dc=ldap,dc=goauthentik,dc=io
 
-    user_attrs = \
-      =uid=vmail, \
-      =gid=vmail, \
-      =home=/var/vmail/%d/%n
+    user_attrs = =home=/var/vmail/%d/%n
     user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
 
     # For using doveadm -A:

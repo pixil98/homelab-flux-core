@@ -17,44 +17,40 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
-      storageClass: nfs-client-nobackup
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
+      persistence:
+        storageClass: nfs-client-nobackup
+      resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
+      startupProbe:
+        enabled: true
+        initialDelaySeconds: 60
+      command: [ "/bin/sh", "-c" ]
+      args: [ "/scripts/run-with-extensions.sh" ]
+      extraEnvVars:
+        - name: PGVECTORS_VERSION
+          value: "0.2.1"
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
+        readOnlyRootFilesystem: false
+        privileged: true
+        allowPrivilegeEscalation: true
       extraVolumes:
-        - name: postgresql-lib
-          emptyDir: {}
-        - name: postgresql-extension
-          emptyDir: {}
+        - name: custom-scripts
+          configMap:
+            name: immich-postgresql-custom-scripts
+            defaultMode: 0777
         - name: init-container-scripts
           configMap:
             name: immich-postgresql-init-container-scripts
       extraVolumeMounts:
-        - name: postgresql-lib
-          mountPath: /opt/bitnami/postgresql/lib
-        - name: postgresql-extension
-          mountPath: /opt/bitnami/postgresql/share/extension
-      initContainers:
-        - name: init-extensions
-          image: bitnami/postgresql:16
-          imagePullPolicy: Always 
-          command: [ "/bin/sh", "/scripts/init-extensions.sh"]
-          env:
-            - name: PGVECTORS_VERSION
-              value: "0.2.0"
-          volumeMounts:
-            - name: postgresql-lib
-              mountPath: /postgresql-lib
-            - name: postgresql-extension
-              mountPath: /postgresql-extension
-            - name: init-container-scripts
-              mountPath: /scripts
-          securityContext:
-            runAsUser: 0
+        - name: custom-scripts
+          mountPath: /scripts
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
-      livenessProbe:
-        initialDelaySeconds: 120
     auth:
       database: immich
       username: immich
@@ -65,8 +61,9 @@ spec:
       usePasswordFiles: false
     backup:
       enabled: true
-      storage:
-        storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+      cronjob:
+        storage:
+          storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: false
       image:

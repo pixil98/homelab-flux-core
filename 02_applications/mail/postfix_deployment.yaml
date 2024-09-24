@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/component: "server"
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: "postfix"
@@ -23,7 +25,7 @@ spec:
     spec:
       containers:
         - name:  postfix
-          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.2.1
+          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.3.0
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
@@ -53,7 +55,6 @@ spec:
                 - -c
                 - /scripts/healthcheck.sh
           livenessProbe:
-            initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 2
             exec:
@@ -64,9 +65,8 @@ spec:
                   ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
                   ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master'
           startupProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 12
+            periodSeconds: 10
+            failureThreshold: 30
             exec:
               command:
                 - sh
@@ -78,7 +78,17 @@ spec:
           volumeMounts:
             - name: certificate
               mountPath: /etc/postfix/tls
+            - name: spool
+              mountPath: /var/spool/postfix
+            - name: config-confd
+              mountPath: /etc/postfix/conf
       volumes:
+        - name: spool
+          persistentVolumeClaim:
+            claimName: postfix-spool
         - name: certificate
           secret:
             secretName: mail-server-tls
+        - name: config-confd
+          secret:
+            secretName: postfix-config-confd
