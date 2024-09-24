@@ -24,4 +24,5 @@ spec:
     vminsert: {}
     vmstorage:
       persistentVolume:
+        enabled: true
         storageClassName: nfs-client-nobackup
