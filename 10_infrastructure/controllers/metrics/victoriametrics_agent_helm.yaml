@@ -17,6 +17,7 @@ spec:
     remediation:
       retries: 3
   values:
+    configMap: victoriametrics-agent-config
     image:
       registry: registry.lab.reisman.org/proxy.docker.io
     remoteWriteUrls:
