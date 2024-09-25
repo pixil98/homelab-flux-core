@@ -20,6 +20,9 @@ spec:
         app.kubernetes.io/name: "authentik"
         app.kubernetes.io/instance: "authentik"
         app.kubernetes.io/component: "outpost-ldap"
+      annotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: 9300
     spec:
       containers:
         - name: ldap
