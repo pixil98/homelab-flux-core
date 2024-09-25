@@ -21,4 +21,5 @@ spec:
       image:
         repository: registry.lab.reisman.org/proxy.quay.io/metallb/speaker
     prometheus:
-      scrapeAnnotations: true
+      podMonitor: 
+        enabled: true
