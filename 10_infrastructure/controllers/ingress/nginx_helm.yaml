@@ -30,13 +30,9 @@ spec:
         default-ssl-certificate: "ingress/nginx-default-cert"
       metrics:
         enabled: true
-        annotations:
-          prometheus.io/scrape: true
-          prometheus.io/port: 10254
-      opentelemetry:
-        enabled: false
-        image:
-          registry: registry.lab.reisman.org/proxy.registry.k8s.io
+      podAnnotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: 10254
     admissionWebhooks:
       patch:
         image:
