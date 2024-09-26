@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: victoria-metrics-cluster
-  namespace: metrics
+  namespace: monitoring
 spec:
   chart:
     spec:
@@ -10,7 +10,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: victoria-metrics
-        namespace: metrics
+        namespace: monitoring
       version: '0.13.x'
   interval: 1h0m0s
   install:
