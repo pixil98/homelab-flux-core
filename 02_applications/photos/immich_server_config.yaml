@@ -84,9 +84,7 @@ stringData:
         }
       },
       "map": {
-        "enabled": true,
-        "lightStyle": "",
-        "darkStyle": ""
+        "enabled": true
       },
       "reverseGeocoding": {
         "enabled": true
