@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/ldap:2024.8.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/ldap:2024.8.3
           env:
             - name: AUTHENTIK_HOST
               value: "http://authentik-server"
