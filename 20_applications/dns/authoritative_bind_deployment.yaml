@@ -14,6 +14,9 @@ spec:
     metadata:
       labels:
         app: authoritative-dns
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9119"
     spec:
       initContainers:
           - name: init-zones
@@ -28,20 +31,20 @@ spec:
               mountPath: /config
       containers:
         - name: bind9
-          image: "internetsystemsconsortium/bind9:9.18"
+          image: "registry.lab.reisman.org/proxy.docker.io/internetsystemsconsortium/bind9:9.20"
           imagePullPolicy: Always
           command: [ "/usr/sbin/named" ]
           args: [ "-g", "-c", "/etc/bind/named.conf", "-u", "bind" ]
           ports:
-          - name: dns-tcp
-            containerPort: 53
-            protocol: TCP
-          - name: dns-udp
-            containerPort: 53
-            protocol: UDP
-          - name: dns-rndc
-            containerPort: 953
-            protocol: TCP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-rndc
+              containerPort: 953
+              protocol: TCP
           readinessProbe:
             tcpSocket:
               port: dns-tcp
@@ -54,28 +57,35 @@ spec:
             periodSeconds: 10
           resources: {}
           volumeMounts:
-          - name: config
-            mountPath: /etc/bind
-          - name: var-lib-bind
-            mountPath: /var/lib/bind
-          - name: working-dir
-            mountPath: /var/cache/bind
-          - name: logs
-            mountPath: /var/log
+            - name: config
+              mountPath: /etc/bind
+            - name: var-lib-bind
+              mountPath: /var/lib/bind
+            - name: working-dir
+              mountPath: /var/cache/bind
+            - name: logs
+              mountPath: /var/log
+        - name: metrics-exporter
+          image: registry.lab.reisman.org/proxy.docker.io/prometheuscommunity/bind-exporter:v0.7.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: monitoring
+              containerPort: 9119
+              protocol: TCP
       volumes:
-      - name: config
-        projected:
-          sources:
-          - secret:
-              name: authoritative-bind-letsencrypt-keys
-          - configMap:
-              name: authoritative-bind-config
-      - name: zones
-        configMap:
-          name: authoritative-bind-zones
-      - name: var-lib-bind
-        emptyDir: {}
-      - name: working-dir
-        emptyDir: {}
-      - name: logs
-        emptyDir: {}
+        - name: config
+          projected:
+            sources:
+            - secret:
+                name: authoritative-bind-letsencrypt-keys
+            - configMap:
+                name: authoritative-bind-config
+        - name: zones
+          configMap:
+            name: authoritative-bind-zones
+        - name: var-lib-bind
+          emptyDir: {}
+        - name: working-dir
+          emptyDir: {}
+        - name: logs
+          emptyDir: {}
