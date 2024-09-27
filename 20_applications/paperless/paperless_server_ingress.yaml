@@ -14,7 +14,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "paperless.${vals_info_cluster_domain}"
+        - "paperless.${vals_info_cluster_domain}"
       secretName: paperless-server-tls
   rules:
     - host: "paperless.${vals_info_cluster_domain}"

@@ -13,7 +13,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "photos.${vals_info_cluster_domain}"
+        - "photos.${vals_info_cluster_domain}"
       secretName: immich-server-tls
   rules:
     - host: "photos.${vals_info_cluster_domain}"
