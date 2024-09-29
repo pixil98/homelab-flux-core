@@ -70,7 +70,7 @@ spec:
           imagePullPolicy: IfNotPresent
           command: [ "/bin/bind_exporter" ]
           args: 
-            - "--bind.stats-url http://127.0.0.1:8053"
+            - "--bind.stats-url=http://127.0.0.1:8053"
             - "--bind.stats-groups=server,view"
           ports:
             - name: monitoring
