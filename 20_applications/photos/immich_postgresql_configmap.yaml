@@ -17,7 +17,7 @@ data:
     #PGVECTORS_DEB=vectors-pg$${POSTGRESQL_MAJOR}-v$${PGVECTORS_VERSION}-x86_64-unknown-linux-gnu.deb
     wget https://github.com/tensorchord/pgvecto.rs/releases/download/v$${PGVECTORS_VERSION}/$${PGVECTORS_DEB}
     #dpkg -i ./$${PGVECTORS_DEB}
-    unzip $${PGVECTORS_DEB} -d /tmp
+    unzip -o $${PGVECTORS_DEB} -d /tmp
 
     cp -rv /tmp/vectors.so /opt/bitnami/postgresql/lib/
     cp -rv /tmp/vectors.control /opt/bitnami/postgresql/share/extension/

@@ -26,6 +26,7 @@ spec:
       startupProbe:
         enabled: true
         initialDelaySeconds: 60
+        failureThreshold: 45
       command: [ "/bin/sh", "-c" ]
       args: [ "/scripts/run-with-extensions.sh" ]
       extraEnvVars:
