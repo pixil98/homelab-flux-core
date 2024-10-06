@@ -20,6 +20,9 @@ spec:
         app.kubernetes.io/name: "dovecot"
         app.kubernetes.io/instance: "dovecot"
         app.kubernetes.io/component: "server"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9900"
     spec:
       containers:
         - name:  dovecot
@@ -54,6 +57,9 @@ spec:
               protocol: TCP
             - name: health
               containerPort: 5001
+              protocol: TCP
+            - name: monitoring
+              containerPort: 9900
               protocol: TCP
             - name: auth
               containerPort: 12345

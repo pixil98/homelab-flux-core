@@ -87,6 +87,35 @@ stringData:
           port = 5001
       }
     }
+  60-monitoring.conf: |
+    service stats {
+      inet_listener http {
+        port = 9900
+      }
+    }
+    
+    metric auth_success {
+      filter = event=auth_request_finished AND success=yes
+    }
+
+    metric auth_failures {
+      filter = event=auth_request_finished AND NOT success=yes
+    }
+
+    metric imap_command {
+      filter = event=imap_command_finished
+      group_by = cmd_name tagged_reply_state
+    }
+
+    metric smtp_command {
+      filter = event=smtp_server_command_finished
+      group_by = cmd_name status_code duration:exponential:1:5:10
+    }
+
+    metric mail_delivery {
+      filter = event=mail_delivery_finished
+      group_by = duration:exponential:1:5:10
+    }
   dovecot-oauth2.conf.ext: |
     tokeninfo_url = https://auth.${vals_info_cluster_domain}/application/o/userinfo/?access_token=
     introspection_url = https://${secrets_apps_auth_applications_dovecot_clientId}:${secrets_apps_auth_applications_dovecot_clientSecret}@auth.${vals_info_cluster_domain}/application/o/introspect/
