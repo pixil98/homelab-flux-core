@@ -57,7 +57,12 @@ spec:
           volumeMounts:
             - name: config-confd
               mountPath: /etc/rspamd/local.d
+            - name: rspamd-var
+              mountPath: /var/lib/rspamd
       volumes:
         - name: config-confd
           secret:
             secretName: rspamd-config-confd
+        - name: rspamd-var
+          persistentVolumeClaim:
+            claimName: rspamd-var
