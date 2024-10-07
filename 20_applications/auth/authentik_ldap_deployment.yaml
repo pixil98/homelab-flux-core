@@ -47,7 +47,7 @@ spec:
             - name: ldaps
               containerPort: 6636
               protocol: TCP
-            - name: metrics
+            - name: monitoring
               containerPort: 9300
               protocol: TCP
             - name: debug
