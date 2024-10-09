@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-grafana
+  namespace: auth
+type: Opaque
+stringData:
+  grafana.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Grafana
+    entries:
+      - model: authentik_providers_oauth2.oauth2provider
+        id: grafana
+        identifiers:
+          name: grafana
+        state: present
+        attrs:
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          client_type: confidential
+          client_id: ${secrets_apps_auth_applications_grafana_clientId}
+          client_secret: ${secrets_apps_auth_applications_grafana_clientSecret}
+          redirect_uris: |
+            https://grafana.${vals_info_cluster_domain}/login/generic_oauth
+          access_code_validity: minutes=1
+          access_token_validity: minutes=5
+          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          property_mappings:
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
+
+      - model: authentik_core.application
+        id: grafana
+        identifiers:
+          slug: grafana
+        state: present
+        attrs:
+          name: grafana
+          slug: grafana
+          provider: !KeyOf grafana
+          meta_launch_url: https://grafana.${vals_info_cluster_domain}/
+          icon: /icons/grafana.svg
+          policy_engine_mode: any
+
+      - model: authentik_core.group
+        id: grafana
+        identifiers:
+          name: grafana
+        state: present
+        attrs:
+          name: grafana
+
+      - model: authentik_core.group
+        id: grafana-admin
+        identifiers:
+          name: grafana-admin
+        state: present
+        attrs:
+          name: grafana-admin
+          parent: !Find [authentik_core.group, [name, grafana]]
+
+      - model: authentik_core.group
+        id: grafana-editor
+        identifiers:
+          name: grafana-editor
+        state: present
+        attrs:
+          name: grafana-editor
+          parent: !Find [authentik_core.group, [name, grafana]]
+
+      - model: authentik_core.group
+        id: grafana-viewer
+        identifiers:
+          name: grafana-viewer
+        state: present
+        attrs:
+          name: grafana-viewer
+          parent: !Find [authentik_core.group, [name, grafana]]
+      
+      - model: authentik_policies.PolicyBinding
+        id: grafana-policy-binding
+        identifiers:
+          order: 10
+          group: !Find [authentik_core.group, [name, grafana]]
+          target: !Find [authentik_core.Application, [slug, grafana]]
+        attrs:
+          order: 10
+          group: !Find [authentik_core.group, [name, grafana]]
+          target: !Find [authentik_core.Application, [slug, grafana]]
