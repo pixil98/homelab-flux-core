@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-oauth
+  namespace: monitoring
+stringData:
+  client_id: "${secrets_apps_auth_applications_grafana_clientId}"
+  client_secret: "${secrets_apps_auth_applications_grafana_clientSecret}"

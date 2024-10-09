@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rspamd-server
+  namespace: mail
+  labels:
+    app.kubernetes.io/name: "rspamd"
+    app.kubernetes.io/instance: "rspamd"
+    app.kubernetes.io/component: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "rspamd"
+      app.kubernetes.io/instance: "rspamd"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "rspamd"
+        app.kubernetes.io/instance: "rspamd"
+        app.kubernetes.io/component: "server"
+    spec:
+      containers:
+        - name:  rspamd
+          image: registry.lab.reisman.org/proxy.docker.io/rspamd/rspamd:3.10.0
+          imagePullPolicy: IfNotPresent
+          env: []
+          ports:
+            - name: proxy
+              containerPort: 11332
+              protocol: TCP
+            - name: normal
+              containerPort: 11333
+              protocol: TCP
+            - name: controller
+              containerPort: 11334
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: normal
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: normal
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+            - name: config-confd
+              mountPath: /etc/rspamd/local.d
+            - name: rspamd-var
+              mountPath: /var/lib/rspamd
+      volumes:
+        - name: config-confd
+          secret:
+            secretName: rspamd-config-confd
+        - name: rspamd-var
+          persistentVolumeClaim:
+            claimName: rspamd-var
