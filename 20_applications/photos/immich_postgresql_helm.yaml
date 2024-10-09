@@ -17,6 +17,8 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
+    image:
+      repository: pixil/bitnami-postgresql-immich
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
@@ -25,31 +27,6 @@ spec:
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
       startupProbe:
         enabled: true
-        initialDelaySeconds: 60
-        failureThreshold: 45
-      command: [ "/bin/sh", "-c" ]
-      args: [ "/scripts/run-with-extensions.sh" ]
-      extraEnvVars:
-        - name: PGVECTORS_VERSION
-          value: "0.2.1"
-      containerSecurityContext:
-        runAsUser: 0
-        runAsGroup: 0
-        runAsNonRoot: false
-        readOnlyRootFilesystem: false
-        privileged: true
-        allowPrivilegeEscalation: true
-      extraVolumes:
-        - name: custom-scripts
-          configMap:
-            name: immich-postgresql-custom-scripts
-            defaultMode: 0777
-        - name: init-container-scripts
-          configMap:
-            name: immich-postgresql-init-container-scripts
-      extraVolumeMounts:
-        - name: custom-scripts
-          mountPath: /scripts
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
     auth:
@@ -66,6 +43,6 @@ spec:
         storage:
           storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
-      enabled: true
+      enabled: false
       image:
         registry: registry.lab.reisman.org/proxy.docker.io
