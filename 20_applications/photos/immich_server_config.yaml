@@ -115,12 +115,12 @@ stringData:
       },
       "image": {
         "thumbnail": {
-          "format": "webp",
+          "format": "jpeg",
           "size": 250,
           "quality": 80
         },
         "preview": {
-          "format": "webp",
+          "format": "jpeg",
           "size": 1440,
           "quality": 80
         },
