@@ -18,7 +18,7 @@ spec:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
     image:
-      repository: pixil/bitnami-postgresql-immich
+      repository: pixil/bitnami-postgresql-pgvecto-rs
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
