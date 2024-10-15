@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: clamav-server
   namespace: mail
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "clamav"
     app.kubernetes.io/instance: "clamav"

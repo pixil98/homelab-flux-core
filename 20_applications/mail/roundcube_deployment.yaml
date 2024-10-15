@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: roundcube-server
   namespace: mail
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "roundcube"
     app.kubernetes.io/instance: "roundcube"

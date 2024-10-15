@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: immich-server
   namespace: photos
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/instance: immich
     app.kubernetes.io/name: server

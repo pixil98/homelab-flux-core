@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: paperless-server
   namespace: paperless
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "paperless"
     app.kubernetes.io/instance: "paperless"

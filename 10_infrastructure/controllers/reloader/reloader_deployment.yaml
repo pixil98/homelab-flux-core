@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reloader-reloader
+  namespace: reloader
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: reloader-reloader
+  template:
+    metadata:
+      labels:
+        app: reloader-reloader
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+        - name: reloader-reloader
+          image: "registry.lab.reisman.org/proxy.ghcr.io/stakater/reloader:v1.1.0"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.cpu
+                  divisor: '1'
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.memory
+                  divisor: '1'
+          ports:
+            - name: http
+              containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: http
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 10
+            successThreshold: 1
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 10
+            successThreshold: 1
+            initialDelaySeconds: 10
+          securityContext: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: reloader-reloader

@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: dovecot-server
   namespace: mail
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "dovecot"
     app.kubernetes.io/instance: "dovecot"
@@ -16,13 +18,13 @@ spec:
       app.kubernetes.io/component: "server"
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9900"
       labels:
         app.kubernetes.io/name: "dovecot"
         app.kubernetes.io/instance: "dovecot"
         app.kubernetes.io/component: "server"
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9900"
     spec:
       containers:
         - name:  dovecot

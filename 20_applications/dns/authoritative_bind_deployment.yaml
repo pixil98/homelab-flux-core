@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: authoritative-dns
   namespace: dns
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app: authoritative-dns
 spec:
@@ -12,11 +14,11 @@ spec:
       app: authoritative-dns
   template:
     metadata:
-      labels:
-        app: authoritative-dns
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9119"
+      labels:
+        app: authoritative-dns
     spec:
       initContainers:
           - name: init-zones

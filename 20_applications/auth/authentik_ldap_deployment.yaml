@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: authentik-outpost-ldap
   namespace: auth
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "authentik"
     app.kubernetes.io/instance: "authentik"
@@ -16,13 +18,13 @@ spec:
       app.kubernetes.io/component: "outpost-ldap"
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9300"
       labels:
         app.kubernetes.io/name: "authentik"
         app.kubernetes.io/instance: "authentik"
         app.kubernetes.io/component: "outpost-ldap"
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9300"
     spec:
       containers:
         - name: ldap

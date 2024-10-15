@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: postfix-server
   namespace: mail
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/name: "postfix"
     app.kubernetes.io/instance: "postfix"
