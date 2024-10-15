@@ -76,14 +76,14 @@ spec:
               mountPath: /usr/src/app/upload/thumbs
           startupProbe:
             httpGet:
-              path: /api/server-info/ping
+              path: /api/server/ping
               port: http
             failureThreshold: 60
             periodSeconds: 5
           livenessProbe:
             failureThreshold: 30
             httpGet:
-              path: /api/server-info/ping
+              path: /api/server/ping
               port: http
             periodSeconds: 60
             timeoutSeconds: 1
