@@ -18,7 +18,7 @@ spec:
             image: registry.lab.reisman.org/proxy.docker.io/alpine:3.20.3
             command: [ "/bin/sh", "-c" ]
             args: [ "cp /configtmp/* /config" ]
-            imagePullPolicy: PullIfNotPresent
+            imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: settings
               mountPath: /configtmp/Settings.json
