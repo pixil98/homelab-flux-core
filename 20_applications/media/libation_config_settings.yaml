@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: libation-settings
+  namespace: media
+data:
+  Settings.json: | 
+    {
+      "Books": "/data",
+      "InProgress": "/tmp",
+      "ShowImportedStats": false,
+      "ImportEpisodes": false,
+      "DownloadEpisodes": false,
+      "AllowLibationFixup": true,
+      "DecryptToLossy": false,
+      "SplitFilesByChapter": false,
+      "BadBook": "Retry",
+      "FolderTemplate": "<first author>/<if series-><series>/<series#> - <-if series><title short> [<id>]",
+      "FileTemplate": "<title> [<id>]",
+      "ChapterFileTemplate": "<title> [<id>] - <ch# 0> - <ch title>",
+      "Serilog": {
+        "MinimumLevel": "Information",
+        "WriteTo": [
+          {
+            "Name": "File",
+            "Args": {
+              "path": "/var/log/libation.log",
+              "rollingInterval": "Month",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] (at {Caller}) {Message:lj}{NewLine}{Exception} {Properties:j}"
+            }
+          }
+        ],
+        "Using": [
+          "Dinah.Core",
+          "Serilog.Exceptions"
+        ],
+        "Enrich": [
+          "WithCaller",
+          "WithExceptionDetails"
+        ]
+      },
+      "CreateCueSheet": true,
+      "RetainAaxFile": false,
+      "StripUnabridged": false,
+      "StripAudibleBrandAudio": false,
+      "LameTargetBitrate": false,
+      "LameDownsampleMono": true,
+      "LameBitrate": 64,
+      "LameConstantBitrate": false,
+      "LameMatchSourceBR": true,
+      "LameVBRQuality": 2,
+      "AutoScan": false,
+      "DownloadCoverArt": true,
+      "AutoDownloadEpisodes": false,
+      "SavePodcastsToParentFolder": false,
+      "ChapterTitleTemplate": "<ch#> - <title short>: <ch title>",
+      "ReplacementCharacters": {
+        "Replacement": [
+          {
+            "CharacterToReplace": "\u0000",
+            "ReplacementString": "_",
+            "Description": "All other invalid characters"
+          },
+          {
+            "CharacterToReplace": "/",
+            "ReplacementString": "_",
+            "Description": "Forward Slash (Filename Only)"
+          },
+          {
+            "CharacterToReplace": "\\",
+            "ReplacementString": "_",
+            "Description": "Back Slash (Filename Only)"
+          },
+          {
+            "CharacterToReplace": "\"",
+            "ReplacementString": "'",
+            "Description": "Open Quote"
+          },
+          {
+            "CharacterToReplace": "\"",
+            "ReplacementString": "'",
+            "Description": "Close Quote"
+          },
+          {
+            "CharacterToReplace": "\"",
+            "ReplacementString": "'",
+            "Description": "Other Quote"
+          },
+          {
+            "CharacterToReplace": "<",
+            "ReplacementString": "{",
+            "Description": "Open Angle Bracket"
+          },
+          {
+            "CharacterToReplace": ">",
+            "ReplacementString": "}",
+            "Description": "Close Angle Bracket"
+          },
+          {
+            "CharacterToReplace": ":",
+            "ReplacementString": "-",
+            "Description": "Colon"
+          },
+          {
+            "CharacterToReplace": "‘",
+            "ReplacementString": "'",
+            "Description": "opening single quote"
+          },
+          {
+            "CharacterToReplace": "’",
+            "ReplacementString": "'",
+            "Description": "closing single quote"
+          }
+        ]
+      },
+      "MergeOpeningAndEndCredits": false,
+      "BetaOptIn": false,
+      "FirstLaunch": false,
+      "MoveMoovToBeginning": true
+    }
+  
