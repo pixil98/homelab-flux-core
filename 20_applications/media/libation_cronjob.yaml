@@ -12,12 +12,15 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
           restartPolicy: Never
           initContainers:
           - name: init-config
             image: registry.lab.reisman.org/proxy.docker.io/alpine:3.20.3
             command: [ "/bin/sh", "-c" ]
-            args: [ "cp /configtmp/* /config ; chown -R 1001:1001 /config" ]
+            args: [ "cp /configtmp/* /config" ]
             imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: settings
