@@ -50,6 +50,8 @@ spec:
           projected:
             sources:
               - secret:
+                  name: authentik-blueprint-audiobookshelf
+              - secret:
                   name: authentik-blueprint-dovecot
               - secret:
                   name: authentik-blueprint-grafana
