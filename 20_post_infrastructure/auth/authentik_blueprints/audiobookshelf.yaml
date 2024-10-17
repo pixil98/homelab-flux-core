@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-audiobookshelf
+  namespace: auth
+type: Opaque
+stringData:
+  audiobookshelf.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Audiobookshelf
+    entries:
+      - model: authentik_providers_oauth2.scopemapping
+        identifiers:
+          name: "custom OAuth Mapping: OpenID 'abspermissions'"
+        attrs:
+          name: "custom OAuth Mapping: OpenID 'abspermissions'"
+          scope_name: abspermissions
+          description: "Audiobookshelf Advanced Permissions"
+          expression: |
+            return {
+              "canDownload": true,
+              "canUpload": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canAccessExplicitContent": true,
+              "canAccessAllLibraries": true,
+              "canAccessAllTags": true,
+              "tagsAreDenylist": false,
+            }
+
+      - model: authentik_providers_oauth2.oauth2provider
+        id: audiobookshelf
+        identifiers:
+          name: audiobookshelf
+        state: present
+        attrs:
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          client_type: confidential
+          client_id: ${secrets_apps_auth_applications_audiobookshelf_clientId}
+          client_secret: ${secrets_apps_auth_applications_audiobookshelf_clientSecret}
+          redirect_uris: |
+            - matching_mode: strict
+              url: https://books.${vals_info_cluster_domain}/auth/openid/callback 
+            - matching_mode: strict
+              url: https://books.${vals_info_cluster_domain}/auth/openid/mobile-redirect
+          access_code_validity: minutes=1
+          access_token_validity: minutes=5
+          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          property_mappings:
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, abspermissions]]
+
+      - model: authentik_core.application
+        id: audiobookshelf
+        identifiers:
+          slug: audiobookshelf
+        state: present
+        attrs:
+          name: audiobookshelf
+          slug: audiobookshelf
+          provider: !KeyOf audiobookshelf
+          meta_launch_url: blank://blank
+          icon: /icons/audiobookshelf.svg
+          policy_engine_mode: any
+
+      - model: authentik_core.group
+        id: audiobookshelf
+        identifiers:
+          name: audiobookshelf
+        state: present
+        attrs:
+          name: audiobookshelf
+      
+      - model: authentik_policies.PolicyBinding
+        id: audiobookshelf-policy-binding
+        identifiers:
+          order: 10
+          group: !Find [authentik_core.group, [name, audiobookshelf]]
+          target: !Find [authentik_core.Application, [slug, audiobookshelf]]
+        attrs:
+          order: 10
+          group: !Find [authentik_core.group, [name, audiobookshelf]]
+          target: !Find [authentik_core.Application, [slug, audiobookshelf]]
