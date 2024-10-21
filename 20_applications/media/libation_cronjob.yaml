@@ -16,38 +16,25 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
           restartPolicy: Never
-          initContainers:
-          - name: init-config
-            image: registry.lab.reisman.org/proxy.docker.io/alpine:3.20.3
-            command: [ "/bin/sh", "-c" ]
-            args: [ "cp /configtmp/* /config" ]
-            imagePullPolicy: IfNotPresent
-            volumeMounts:
-            - name: settings
-              mountPath: /configtmp/Settings.json
-              subPath: "Settings.json"
-            - name: accounts
-              mountPath: /configtmp/AccountsSettings.json
-              subPath: "AccountsSettings.json"
-            - name: config
-              mountPath: /config
           containers:
           - name: libation
             image: registry.lab.reisman.org/proxy.docker.io/pixil/libation:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             volumeMounts:
             - name: data
               mountPath: /data
-            - name: config
-              mountPath: /config
+            - name: settings
+              mountPath: /config/Settings.json
+              subPath: "Settings.json"
+            - name: accounts
+              mountPath: /config/AccountsSettings.json
+              subPath: "AccountsSettings.json"
             - name: db
               mountPath: /db
             env:
             - name: SLEEP_TIME
               value: "-1"
           volumes:
-          - name: config
-            emptyDir: {}
           - name: settings
             configMap:
               name: libation-settings
