@@ -20,8 +20,6 @@ spec:
           - name: libation
             image: registry.lab.reisman.org/proxy.docker.io/pixil/libation:1.0.4
             imagePullPolicy: Always
-            command: ["/bin/bash "]
-            args: ["-c", "/usr/bin/sleep 10000"]
             volumeMounts:
             - name: data
               mountPath: /data
