@@ -46,8 +46,8 @@ spec:
               value: "immich"
             - name: IMMICH_CONFIG_FILE
               value: "/config/immich.json"
-            - name: IMMICH_METRICS
-              value: "true"
+            - name: IMMICH_TELEMETRY_INCLUDE
+              value: "all"
             - name: REDIS_HOSTNAME
               value: "immich-redis-master"
             - name: REDIS_PASSWORD
