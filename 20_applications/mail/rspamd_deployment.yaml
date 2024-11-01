@@ -23,11 +23,19 @@ spec:
         app.kubernetes.io/instance: "rspamd"
         app.kubernetes.io/component: "server"
     spec:
+      serviceAccountName: rspamd
+      automountServiceAccountToken: false
       containers:
         - name:  rspamd
           image: registry.lab.reisman.org/proxy.docker.io/rspamd/rspamd:3.10.2
           imagePullPolicy: IfNotPresent
-          env: []
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
           ports:
             - name: proxy
               containerPort: 11332
@@ -38,6 +46,13 @@ spec:
             - name: controller
               containerPort: 11334
               protocol: TCP
+          resources:
+            requests:
+              memory: 275Mi
+              cpu: 100m
+            limits:
+              memory: 400Mi
+              cpu: 200m
           livenessProbe:
             failureThreshold: 3
             httpGet:
