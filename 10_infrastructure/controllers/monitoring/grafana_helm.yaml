@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: monitoring
-      version: '8.5.x'
+      version: "8.5.x"
   interval: 1h0m0s
   install:
     remediation:
@@ -67,9 +67,9 @@ spec:
       dashboardproviders.yaml:
         apiVersion: 1
         providers:
-          - name: 'default'
+          - name: "default"
             orgId: 1
-            folder: ''
+            folder: ""
             type: file
             disableDeletion: true
             editable: false
@@ -79,7 +79,7 @@ spec:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
-      hosts: 
+      hosts:
         - grafana.${vals_info_cluster_domain}
       tls:
         - hosts:

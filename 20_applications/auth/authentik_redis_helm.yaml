@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: bitnamicharts/redis
-      version: '18.x'
+      version: "18.x"
       sourceRef:
         kind: HelmRepository
         name: registry-lab
@@ -18,7 +18,7 @@ spec:
     architecture: standalone
     auth:
       existingSecret: authentik-secrets
-      existingSecretPasswordKey: redis-password 
+      existingSecretPasswordKey: redis-password
     image:
       registry: registry.lab.reisman.org/proxy.docker.io
     master:

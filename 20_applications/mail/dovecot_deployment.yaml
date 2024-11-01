@@ -27,7 +27,7 @@ spec:
         app.kubernetes.io/component: "server"
     spec:
       containers:
-        - name:  dovecot
+        - name: dovecot
           image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.3.21
           imagePullPolicy: IfNotPresent
           env:

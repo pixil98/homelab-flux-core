@@ -25,33 +25,33 @@ spec:
         - name: node-exporter
           image: registry.lab.reisman.org/proxy.quay.io/prometheus/node-exporter:v1.8.2
           args:
-          - --web.listen-address=0.0.0.0:9100
-          - --path.sysfs=/host/sys
-          - --path.rootfs=/host/root
-          - --path.udev.data=/host/root/run/udev/data
-          - --no-collector.wifi
-          - --no-collector.hwmon
-          - --no-collector.btrfs
-          - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run/k3s/containerd/.+|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
-          - --collector.netclass.ignored-devices=^(veth.*|[a-f0-9]{15})$
-          - --collector.netdev.device-exclude=^(veth.*|[a-f0-9]{15})$
+            - --web.listen-address=0.0.0.0:9100
+            - --path.sysfs=/host/sys
+            - --path.rootfs=/host/root
+            - --path.udev.data=/host/root/run/udev/data
+            - --no-collector.wifi
+            - --no-collector.hwmon
+            - --no-collector.btrfs
+            - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run/k3s/containerd/.+|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+            - --collector.netclass.ignored-devices=^(veth.*|[a-f0-9]{15})$
+            - --collector.netdev.device-exclude=^(veth.*|[a-f0-9]{15})$
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               add:
-              - SYS_TIME
+                - SYS_TIME
               drop:
-              - ALL
+                - ALL
             readOnlyRootFilesystem: true
           volumeMounts:
-          - mountPath: /host/sys
-            mountPropagation: HostToContainer
-            name: sys
-            readOnly: true
-          - mountPath: /host/root
-            mountPropagation: HostToContainer
-            name: root
-            readOnly: true
+            - mountPath: /host/sys
+              mountPropagation: HostToContainer
+              name: sys
+              readOnly: true
+            - mountPath: /host/root
+              mountPropagation: HostToContainer
+              name: root
+              readOnly: true
           ports:
             - name: monitoring
               containerPort: 9100
@@ -74,7 +74,7 @@ spec:
         runAsUser: 65534
       serviceAccountName: node-exporter
       tolerations:
-       - operator: Exists
+        - operator: Exists
       volumes:
         - hostPath:
             path: /sys

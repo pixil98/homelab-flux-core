@@ -9,15 +9,15 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-staging-dns
     solvers:
-    - dns01:
-        rfc2136:
-          #TODO Should we template in the nameserver?
-          nameserver: ns1.reisman.org
-          tsigKeyName: letsencrypt
-          tsigAlgorithm: HMACSHA256
-          tsigSecretSecretRef:
-            name: letsencrypt-dns
-            key: key
+      - dns01:
+          rfc2136:
+            #TODO Should we template in the nameserver?
+            nameserver: ns1.reisman.org
+            tsigKeyName: letsencrypt
+            tsigAlgorithm: HMACSHA256
+            tsigSecretSecretRef:
+              name: letsencrypt-dns
+              key: key
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -30,15 +30,15 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-production-dns
     solvers:
-    - dns01:
-        rfc2136:
-          #TODO Should we template in the nameserver?
-          nameserver: ns1.reisman.org
-          tsigKeyName: letsencrypt
-          tsigAlgorithm: HMACSHA256
-          tsigSecretSecretRef:
-            name: letsencrypt-dns
-            key: key
+      - dns01:
+          rfc2136:
+            #TODO Should we template in the nameserver?
+            nameserver: ns1.reisman.org
+            tsigKeyName: letsencrypt
+            tsigAlgorithm: HMACSHA256
+            tsigSecretSecretRef:
+              name: letsencrypt-dns
+              key: key
 ---
 apiVersion: v1
 kind: Secret

@@ -47,7 +47,7 @@ stringData:
     ssl_cert = </var/certificate/tls.crt
     ssl_key = </var/certificate/tls.key
     ssl_client_ca_file = /etc/ssl/certs/ca-certificates.crt
-  15-mailboxes.conf: |    
+  15-mailboxes.conf: |
     # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
       inbox = yes
@@ -93,7 +93,7 @@ stringData:
         port = 9900
       }
     }
-    
+
     metric auth_success {
       filter = event=auth_request_finished AND success=yes
     }

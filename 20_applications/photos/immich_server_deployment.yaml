@@ -39,7 +39,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich-secrets 
+                  name: immich-secrets
                   key: postgresql-user-password
                   optional: false
             - name: DB_USERNAME
@@ -53,7 +53,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich-secrets 
+                  name: immich-secrets
                   key: redis-password
                   optional: false
           ports:

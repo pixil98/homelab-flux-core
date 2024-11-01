@@ -24,7 +24,7 @@ spec:
         app.kubernetes.io/component: "server"
     spec:
       containers:
-        - name:  roundcube
+        - name: roundcube
           image: registry.lab.reisman.org/proxy.docker.io/roundcube/roundcubemail:1.6.9-apache
           imagePullPolicy: IfNotPresent
           env:

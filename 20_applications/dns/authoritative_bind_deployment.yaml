@@ -21,12 +21,12 @@ spec:
         app: authoritative-dns
     spec:
       initContainers:
-          - name: init-zones
-            image: alpine:latest
-            command: [ "/bin/sh", "-c" ]
-            args: [ "cp /configtmp/* /config" ]
-            imagePullPolicy: Always
-            volumeMounts:
+        - name: init-zones
+          image: alpine:latest
+          command: ["/bin/sh", "-c"]
+          args: ["cp /configtmp/* /config"]
+          imagePullPolicy: Always
+          volumeMounts:
             - name: zones
               mountPath: /configtmp
             - name: var-lib-bind
@@ -35,8 +35,8 @@ spec:
         - name: bind9
           image: "registry.lab.reisman.org/proxy.docker.io/internetsystemsconsortium/bind9:9.20"
           imagePullPolicy: Always
-          command: [ "/usr/sbin/named" ]
-          args: [ "-g", "-c", "/etc/bind/named.conf", "-u", "bind" ]
+          command: ["/usr/sbin/named"]
+          args: ["-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
           ports:
             - name: dns-tcp
               containerPort: 53
@@ -70,8 +70,8 @@ spec:
         - name: metrics-exporter
           image: registry.lab.reisman.org/proxy.docker.io/prometheuscommunity/bind-exporter:v0.7.0
           imagePullPolicy: IfNotPresent
-          command: [ "/bin/bind_exporter" ]
-          args: 
+          command: ["/bin/bind_exporter"]
+          args:
             - "--bind.stats-url=http://127.0.0.1:8053"
             - "--bind.stats-groups=server,view"
           ports:
@@ -82,10 +82,10 @@ spec:
         - name: config
           projected:
             sources:
-            - secret:
-                name: authoritative-bind-letsencrypt-keys
-            - configMap:
-                name: authoritative-bind-config
+              - secret:
+                  name: authoritative-bind-letsencrypt-keys
+              - configMap:
+                  name: authoritative-bind-config
         - name: zones
           configMap:
             name: authoritative-bind-zones

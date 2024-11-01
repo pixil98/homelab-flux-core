@@ -13,7 +13,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - "auth.${vals_info_cluster_domain}"
+        - "auth.${vals_info_cluster_domain}"
       secretName: authentik-server-tls
   rules:
     - host: "auth.${vals_info_cluster_domain}"

@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/component: "server"
     spec:
       containers:
-        - name:  postfix
+        - name: postfix
           image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.3.0
           imagePullPolicy: IfNotPresent
           env:
@@ -35,7 +35,7 @@ spec:
             - name: FORCE_COLOR
               value: "1"
             - name: LOG_FORMAT
-              value: "plain"  # or JSON
+              value: "plain" # or JSON
           envFrom:
             - secretRef:
                 name: postfix-env

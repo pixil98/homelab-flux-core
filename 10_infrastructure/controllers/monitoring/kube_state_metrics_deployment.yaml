@@ -33,7 +33,7 @@ spec:
           ports:
             - name: http-metrics
               containerPort: 8080
-            - name: telemetry 
+            - name: telemetry
               containerPort: 8081
           readinessProbe:
             httpGet:
