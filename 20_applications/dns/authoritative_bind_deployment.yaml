@@ -68,7 +68,7 @@ spec:
             - name: logs
               mountPath: /var/log
         - name: metrics-exporter
-          image: registry.lab.reisman.org/proxy.docker.io/prometheuscommunity/bind-exporter:v0.7.0
+          image: registry.lab.reisman.org/proxy.docker.io/prometheuscommunity/bind-exporter:v0.8.0
           imagePullPolicy: IfNotPresent
           command: ["/bin/bind_exporter"]
           args:
