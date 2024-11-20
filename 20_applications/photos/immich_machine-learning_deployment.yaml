@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: immich-machine-learning
-          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-machine-learning:v1.120.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/immich-app/immich-machine-learning:v1.121.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
