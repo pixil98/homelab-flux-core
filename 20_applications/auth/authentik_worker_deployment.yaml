@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: worker
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2024.10.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2024.10.3
           imagePullPolicy: IfNotPresent
           args:
             - worker
