@@ -46,6 +46,13 @@ spec:
             - name: submission
               containerPort: 587
               protocol: TCP
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "150Mi"
+              cpu: "150m"
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 60

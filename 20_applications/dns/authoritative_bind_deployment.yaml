@@ -57,7 +57,13 @@ spec:
               port: dns-tcp
             initialDelaySeconds: 5
             periodSeconds: 10
-          resources: {}
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "150m"
           volumeMounts:
             - name: config
               mountPath: /etc/bind
@@ -78,6 +84,13 @@ spec:
             - name: monitoring
               containerPort: 9119
               protocol: TCP
+          resources:
+            requests:
+              memory: "20Mi"
+              cpu: "150m"
+            limits:
+              memory: "50Mi"
+              cpu: "200m"
       volumes:
         - name: config
           projected:
