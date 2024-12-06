@@ -78,6 +78,13 @@ spec:
               port: health
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "100m"
+            limits:
+              memory: "150Mi"
+              cpu: "150m"
           volumeMounts:
             - name: mailboxes
               mountPath: /var/vmail
