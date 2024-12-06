@@ -39,36 +39,6 @@ spec:
             limits:
               memory: "750Mi"
               cpu: "250m"
-          livenessProbe:
-            failureThreshold: 3
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-            exec:
-              command:
-                - ak
-                - healthcheck
-          readinessProbe:
-            failureThreshold: 3
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-            exec:
-              command:
-                - ak
-                - healthcheck
-          startupProbe:
-            failureThreshold: 60
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-            exec:
-              command:
-                - ak
-                - healthcheck
           volumeMounts:
             - name: blueprints
               mountPath: /blueprints/custom
