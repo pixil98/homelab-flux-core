@@ -32,6 +32,13 @@ spec:
           envFrom:
             - secretRef:
                 name: authentik-env
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "100m"
+            limits:
+              memory: "750Mi"
+              cpu: "250m"
           volumeMounts:
             - name: blueprints
               mountPath: /blueprints/custom
