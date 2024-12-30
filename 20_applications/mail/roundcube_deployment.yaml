@@ -92,9 +92,9 @@ spec:
               mountPath: /var/roundcube/config
       volumes:
         - name: www-data
-          emptydir: {}
+          emptyDir: {}
         - name: roundcube-temp
-          emptydir: {}
+          emptyDir: {}
         - name: roundcube-config
           secret:
             secretName: roundcube-server-config
