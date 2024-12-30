@@ -7,11 +7,6 @@ type: Opaque
 stringData:
   immich.json: |
     {
-      "backup": {
-        "database": {
-          "enabled": false
-        }
-      },
       "ffmpeg": {
         "crf": 31,
         "threads": 0,
@@ -30,9 +25,14 @@ stringData:
         "twoPass": true,
         "preferredHwDevice": "auto",
         "transcode": "required",
+        "tonemap": "hable",
         "accel": "disabled",
-        "accelDecode": false,
-        "tonemap": "hable"
+        "accelDecode": false
+      },
+      "backup": {
+        "database": {
+          "enabled": false
+        }
       },
       "job": {
         "backgroundTask": {
@@ -72,13 +72,14 @@ stringData:
       },
       "machineLearning": {
         "enabled": true,
-        "url": ["http://immich-machine-learning:3003"],
+        "urls": ["http://immich-machine-learning:3003"],
         "clip": {
           "enabled": true,
           "modelName": "ViT-B-16-SigLIP-384__webli"
         },
         "duplicateDetection": {
-          "enabled": true
+          "enabled": true,
+          "maxDistance": 0.01
         },
         "facialRecognition": {
           "enabled": true,
@@ -133,7 +134,7 @@ stringData:
         "extractEmbedded": false
       },
       "newVersionCheck": {
-        "enabled": true
+        "enabled": false
       },
       "trash": {
         "enabled": true,
@@ -161,9 +162,9 @@ stringData:
             "host": "mail.${vals_info_cluster_domain}",
             "port": 587,
             "username": "immich@service",
-            "password": "TODO: FILL THIS IN",
-          },
-        },
+            "password": "TODO: FILL THIS IN"
+          }
+        }
       },
       "server": {
         "externalDomain": "https://photos.${vals_info_cluster_domain}",
