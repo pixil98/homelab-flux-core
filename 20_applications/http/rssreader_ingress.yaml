@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/component: "server"
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/x-forwarded-prefix: "/jmehler/rss"
 spec:
   ingressClassName: nginx
@@ -20,7 +20,7 @@ spec:
     - host: "${vals_info_cluster_domain}"
       http:
         paths:
-          - path: "/jmehler/rss(/|$)(.*)"
+          - path: "/jmehler/rss"
             pathType: Prefix
             backend:
               service:
