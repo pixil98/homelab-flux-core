@@ -65,6 +65,13 @@ spec:
             - name: monitoring
               containerPort: 8081
               protocol: TCP
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "3Gi"
+              cpu: "1.5"
           volumeMounts:
             - name: config
               mountPath: /config
