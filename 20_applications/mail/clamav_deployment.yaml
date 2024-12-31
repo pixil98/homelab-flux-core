@@ -69,10 +69,10 @@ spec:
           resources:
             requests:
               memory: "2000Mi"
-              cpu: "100m"
+              cpu: "500m"
             limits:
               memory: "2500Mi"
-              cpu: "250m"
+              cpu: "1"
           volumeMounts:
             - name: scripts
               mountPath: /scripts
