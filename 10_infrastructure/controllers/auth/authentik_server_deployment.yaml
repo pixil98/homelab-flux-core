@@ -79,6 +79,13 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "100m"
+            limits:
+              memory: "750Mi"
+              cpu: "250m"
           volumeMounts:
             - name: icons
               mountPath: /media/public/icons
