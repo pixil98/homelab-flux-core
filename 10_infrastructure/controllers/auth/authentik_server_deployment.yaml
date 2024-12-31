@@ -82,10 +82,10 @@ spec:
           resources:
             requests:
               memory: "600Mi"
-              cpu: "100m"
+              cpu: "500m"
             limits:
-              memory: "750Mi"
-              cpu: "250m"
+              memory: "1Gi"
+              cpu: "1"
           volumeMounts:
             - name: icons
               mountPath: /media/public/icons
