@@ -1,4 +1,0 @@
-quiet: true # Don't report passed checks in output
-skip-check:
-  - CKV_K8S_15 # Image Pull Policy should be Always
-  - CKV_K8S_43 # Image should use digest
