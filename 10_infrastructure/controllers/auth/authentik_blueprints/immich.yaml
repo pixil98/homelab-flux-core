@@ -22,10 +22,13 @@ stringData:
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_immich_clientId}
           client_secret: ${secrets_apps_auth_applications_immich_clientSecret}
-          redirect_uris: |
-            https://photos.${vals_info_cluster_domain}/auth/login
-            https://photos.${vals_info_cluster_domain}/user-settings
-            app.immich:///oauth-callback
+          redirect_uris:
+            - matching_mode: strict
+              url: https://photos.${vals_info_cluster_domain}/auth/login
+            - matching_mode: strict
+              url: https://photos.${vals_info_cluster_domain}/user-settings
+            - matching_mode: strict
+              url: app.immich:///oauth-callback
           access_code_validity: minutes=1
           access_token_validity: minutes=5
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]

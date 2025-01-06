@@ -22,8 +22,9 @@ stringData:
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_grafana_clientId}
           client_secret: ${secrets_apps_auth_applications_grafana_clientSecret}
-          redirect_uris: |
-            https://grafana.${vals_info_cluster_domain}/login/generic_oauth
+          redirect_uris:
+            - matching_mode: strict
+              url: https://grafana.${vals_info_cluster_domain}/login/generic_oauth
           access_code_validity: minutes=1
           access_token_validity: minutes=5
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
