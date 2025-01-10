@@ -29,12 +29,12 @@ spec:
               containerPort: 3003
               protocol: TCP
           resources:
-              requests:
-                memory: "800Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
+            requests:
+              memory: "800Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
           volumeMounts:
             - name: cache
               mountPath: /cache
