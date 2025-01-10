@@ -23,6 +23,8 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: kube-state-metrics
+          args:
+            - --custom-resource-state-config-file=/data/custom-resource-state-metrics.yaml
           image: registry.lab.reisman.org/proxy.registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.14.0
           livenessProbe:
             httpGet:
@@ -51,6 +53,13 @@ spec:
             runAsUser: 65534
             seccompProfile:
               type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /data
+              name: custom-resource-state-metrics
+      volumes:
+        - name: custom-resource-state-metrics
+          configMap:
+            name: kube-state-metrics-custom-resource-state-metrics
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: kube-state-metrics
