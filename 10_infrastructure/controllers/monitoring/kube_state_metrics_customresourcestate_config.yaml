@@ -19,9 +19,10 @@ data:
             target_api_version: [spec, targetRef, apiVersion]
             target_kind: [spec, targetRef, kind]
             target_name: [spec, targetRef, name]
+          metricNamePrefix: kube_vpa
           metrics:
             # Labels
-            - name: "verticalpodautoscaler_labels"
+            - name: "labels"
               help: "VPA container recommendations. Kubernetes labels converted to Prometheus labels"
               each:
                 type: Info
@@ -29,7 +30,7 @@ data:
                   labelsFromPath:
                     name: [metadata, name]
             # Memory Information
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_target"
+            - name: "status_recommendation_containerrecommendations_target"
               help: "VPA container recommendations for memory. Target resources the VerticalPodAutoscaler recommends for the container."
               each:
                 type: Gauge
@@ -53,7 +54,7 @@ data:
               commonLabels:
                 resource: "memory"
                 unit: "byte"
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_upperbound"
+            - name: "recommendations_upperbound"
               help: "VPA container recommendations for memory. Maximum resources the container can use before the VerticalPodAutoscaler updater evicts it"
               each:
                 type: Gauge
@@ -65,7 +66,7 @@ data:
               commonLabels:
                 resource: "memory"
                 unit: "byte"
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_uncappedtarget"
+            - name: "recommendations_uncappedtarget"
               help: "VPA container recommendations for memory. Target resources the VerticalPodAutoscaler recommends for the container ignoring bounds"
               each:
                 type: Gauge
@@ -78,7 +79,7 @@ data:
                 resource: "memory"
                 unit: "byte"
             # CPU Information
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_target"
+            - name: "recommendations_target"
               help: "VPA container recommendations for cpu. Target resources the VerticalPodAutoscaler recommends for the container."
               each:
                 type: Gauge
@@ -90,7 +91,7 @@ data:
               commonLabels:
                 resource: "cpu"
                 unit: "core"
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_lowerbound"
+            - name: "recommendations_lowerbound"
               help: "VPA container recommendations for cpu. Minimum resources the container can use before the VerticalPodAutoscaler updater evicts it"
               each:
                 type: Gauge
@@ -102,7 +103,7 @@ data:
               commonLabels:
                 resource: "cpu"
                 unit: "core"
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_upperbound"
+            - name: "recommendations_upperbound"
               help: "VPA container recommendations for cpu. Maximum resources the container can use before the VerticalPodAutoscaler updater evicts it"
               each:
                 type: Gauge
@@ -114,7 +115,7 @@ data:
               commonLabels:
                 resource: "cpu"
                 unit: "core"
-            - name: "verticalpodautoscaler_status_recommendation_containerrecommendations_uncappedtarget"
+            - name: "recommendations_uncappedtarget"
               help: "VPA container recommendations for cpu. Target resources the VerticalPodAutoscaler recommends for the container ignoring bounds"
               each:
                 type: Gauge
