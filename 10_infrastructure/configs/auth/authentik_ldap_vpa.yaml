@@ -1,12 +1,12 @@
 apiVersion: autoscaling.k8s.io/v1beta2
 kind: VerticalPodAutoscaler
 metadata:
-  name: authentik-ldap-vpa
+  name: authentik-outpost-ldap-vpa
   namespace: auth
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: authentik-ldap
+    name: authentik-outpost-ldap
   updatePolicy:
     updateMode: "Off"
