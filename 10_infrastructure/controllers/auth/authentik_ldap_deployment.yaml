@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/ldap:2024.12.1
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/ldap:2024.12.2
           imagePullPolicy: IfNotPresent
           env:
             - name: AUTHENTIK_HOST
