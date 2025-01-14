@@ -19,6 +19,7 @@ spec:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
     image:
       repository: pixil/bitnami-postgresql-pgvecto-rs
+      debug: true
     architecture: standalone
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
@@ -29,6 +30,9 @@ spec:
         enabled: true
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
+      extraEnvVars:
+        - name: POSTGRESQL_EXTRA_FLAGS
+          value: "-c log_statement=all"
     auth:
       database: immich
       username: immich
