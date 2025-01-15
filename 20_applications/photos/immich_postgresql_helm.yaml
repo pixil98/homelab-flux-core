@@ -26,6 +26,13 @@ spec:
       persistence:
         storageClass: nfs-client-nobackup
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
+      resources:
+        requests:
+          cpu: "${vals_apps_photos_immich_postgresql_cpuRequest:=500m}"
+          memory: "${vals_apps_photos_immich_postgresql_memoryRequest:=128Mi}"
+        limits:
+          cpu: "${vals_apps_photos_immich_postgresql_cpuLimit:=1000m}"
+          memory: "${vals_apps_photos_immich_postgresql_memoryLimit:=256Mi}"
       startupProbe:
         enabled: true
       initdb:
