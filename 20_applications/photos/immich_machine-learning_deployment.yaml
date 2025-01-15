@@ -30,10 +30,10 @@ spec:
               protocol: TCP
           resources:
             requests:
-              memory: "800Mi"
+              memory: "2.25Gi"
               cpu: "500m"
             limits:
-              memory: "1Gi"
+              memory: "4Gi"
               cpu: "1"
           volumeMounts:
             - name: cache

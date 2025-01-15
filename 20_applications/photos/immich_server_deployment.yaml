@@ -70,7 +70,7 @@ spec:
               memory: "2Gi"
               cpu: "2"
             limits:
-              memory: "3.5Gi"
+              memory: "8Gi"
               cpu: "8"
           volumeMounts:
             - name: config
