@@ -75,14 +75,14 @@ spec:
                   ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master'
           startupProbe:
             periodSeconds: 10
-            failureThreshold: 30
+            failureThreshold: 90
             exec:
               command:
                 - sh
                 - -c
                 - >-
                   ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
-                  ps axf | fgrep -v grep | fgrep -q "postfix-script" &&
+                  ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master' &&
                   ps axf | fgrep -v grep | fgrep -q 'opendkim'
           volumeMounts:
             - name: certificate

@@ -35,15 +35,19 @@ spec:
             - name: DB_DATABASE_NAME
               value: "immich"
             - name: DB_HOSTNAME
-              value: "immich-postgresql"
+              value: "immich-postgresql-rw"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich-secrets
-                  key: postgresql-user-password
+                  name: immich-postgresql-user
+                  key: password
                   optional: false
             - name: DB_USERNAME
-              value: "immich"
+              valueFrom:
+                secretKeyRef:
+                  name: immich-postgresql-user
+                  key: username
+                  optional: false
             - name: IMMICH_CONFIG_FILE
               value: "/config/immich.json"
             - name: IMMICH_TELEMETRY_INCLUDE
@@ -55,8 +59,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich-secrets
-                  key: redis-password
+                  name: immich-redis-password
+                  key: password
                   optional: false
           ports:
             - name: http

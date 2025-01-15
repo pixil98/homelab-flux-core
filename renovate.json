@@ -8,7 +8,8 @@
       "datasourceTemplate": "docker",
       "fileMatch": ["^.*\\.yaml$"],
       "matchStrings": [
-        "image: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)"
+        "image: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)",
+        "imageName: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)"
       ]
     }
   ]
