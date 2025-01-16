@@ -65,24 +65,24 @@ spec:
             limits:
               memory: "350Mi"
               cpu: "500m"
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+          # livenessProbe:
+          #   failureThreshold: 3
+          #   httpGet:
+          #     path: /
+          #     port: http
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          # readinessProbe:
+          #   failureThreshold: 3
+          #   httpGet:
+          #     path: /
+          #     port: http
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
           volumeMounts:
             - name: www-data
               mountPath: /var/www/html
