@@ -24,6 +24,13 @@ spec:
         - CREATE EXTENSION IF NOT EXISTS vectors
         - GRANT USAGE ON SCHEMA vectors TO immich
         - GRANT SELECT ON ALL TABLES IN SCHEMA vectors TO immich
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: 1
+    limits:
+      memory: "512Mi"
+      cpu: 1
   storage:
     storageClass: nfs-client-nobackup
     size: 1Gi
