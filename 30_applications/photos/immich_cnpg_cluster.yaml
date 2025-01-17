@@ -4,7 +4,7 @@ metadata:
   name: immich-postgresql
   namespace: photos
 spec:
-  instances: 3
+  instances: 1
   # https://github.com/tensorchord/cloudnative-pgvecto.rs
   imageName: registry.lab.reisman.org/proxy.ghcr.io/tensorchord/cloudnative-pgvecto.rs:16-v0.3.0
   postgresql:
