@@ -32,7 +32,7 @@ spec:
       memory: "512Mi"
       cpu: 1
   storage:
-    storageClass: nfs-client-nobackup
+    storageClass: this-is-unique
     size: 1Gi
 ---
 apiVersion: v1
