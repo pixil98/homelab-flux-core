@@ -19,6 +19,15 @@ spec:
     nfs:
       server: 192.168.1.10
       path: /mnt/main/kubernetes-nobackup
+      mountOptions:
+        - nfsvers=4.1
+        - rw
+        - hard
+        - nointr
+        - fg
+        - proto=tcp
+        - rsize=65536
+        - wsize=65536
       reclaimPolicy: Retain
     storageClass:
       name: nfs-client-nobackup
