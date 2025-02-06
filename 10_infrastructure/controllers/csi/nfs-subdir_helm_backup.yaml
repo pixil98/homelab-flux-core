@@ -19,6 +19,15 @@ spec:
     nfs:
       server: 192.168.1.10
       path: /mnt/main/kubernetes
+      mountOptions:
+        - nfsvers=4.2
+        - rw
+        - hard
+        - nointr
+        - fg
+        - proto=tcp
+        - rsize=1048576
+        - wsize=1048576
       reclaimPolicy: Retain
     storageClass:
       name: nfs-client-backup
