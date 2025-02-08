@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: init-zones
-          image: alpine:latest
+          image: registry.lab.reisman.org/proxy.docker.io/alpine:latest
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
