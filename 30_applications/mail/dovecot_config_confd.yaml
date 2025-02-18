@@ -6,30 +6,30 @@ metadata:
 type: Opaque
 stringData:
   10-auth.conf: |
-    auth_username_format = %Lu
+    auth_username_format = 	%{user | lower}
     disable_plaintext_auth = yes
     auth_mechanisms = oauthbearer xoauth2 plain login cram-md5
-    passdb {
+    passdb oauth {
       driver = oauth2
       mechanisms = oauthbearer xoauth2
       args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
     }
-    passdb {
+    passdb ldap {
       driver = ldap
       mechanisms = plain login cram-md5
       args = /etc/dovecot/conf.d/dovecot-passdb-ldap.conf.ext
     }
-    userdb {
+    userdb static {
       driver = static
-      args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+      args = uid=vmail gid=vmail home=/var/vmail/%{user | domain}/%{user | username}
     }
-    userdb {
+    userdb ldap {
       driver = ldap
       args = /etc/dovecot/conf.d/dovecot-userdb-ldap.conf.ext
     }
   10-mail.conf: |
-    mail_home = /var/vmail/%d/%n
-    mail_location = maildir:/var/vmail/%d/%n/:LAYOUT=fs
+    mail_home = /var/vmail/%{user | domain}/%{user | username}
+    mail_location = maildir:/var/vmail/%{user | domain}/%{user | username}/:LAYOUT=fs
     mail_uid = vmail
     mail_gid = vmail
     mail_privileged_group = vmail
@@ -38,6 +38,7 @@ stringData:
       # See 15-mailboxes.conf for definitions of special mailboxes.
     }
   10-nfs.conf: |
+    # https://doc.dovecot.org/main/core/config/nfs.html
     mail_nfs_index = no
     mail_nfs_storage = no
     mail_fsync = always
@@ -134,9 +135,9 @@ stringData:
     base = dc=ldap,dc=goauthentik,dc=io
 
     auth_bind = yes
-    #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=goauthentik,dc=io
+    #auth_bind_userdn = cn=%{user},ou=users,dc=ldap,dc=goauthentik,dc=io
     pass_attrs = =uid=mail,
-    pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
+    pass_filter = (&(objectClass=user)(mail=%{user})(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
   dovecot-userdb-ldap.conf.ext: |
     uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
     tls = no  #TODO use tls
@@ -144,8 +145,8 @@ stringData:
     dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
     base = dc=ldap,dc=goauthentik,dc=io
 
-    user_attrs = =home=/var/vmail/%d/%n
-    user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
+    user_attrs = =home=/var/vmail/%{user | domain}/%{user | username}
+    user_filter = (&(objectClass=user)(mail=%{user})(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
 
     # For using doveadm -A:
     iterate_attrs = =user=%{ldap:mail}
