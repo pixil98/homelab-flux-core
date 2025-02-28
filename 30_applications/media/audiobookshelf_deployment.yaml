@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiobookshelf-server
+  namespace: media
+  labels:
+    app: audiobookshelf-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audiobookshelf-server
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+        prometheus.io/port: "TODO"
+      labels:
+        app: audiobookshelf-server
+    spec:
+      containers:
+        - name: audiobookshelf
+          image: "registry.lab.reisman.org/proxy.ghcr.io/advplyr/audiobookshelf:2.15.0"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: "America/Chicago"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: metadata
+              mountPath: /metadata
+            - name: audiobooks
+              mountPath: /audiobooks
+              readOnly: true
+            - name: podcasts
+              mountPath: /podcasts
+              readOnly: true
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: audiobookshelf-config-pvc
+        - name: metadata
+          persistentVolumeClaim:
+            claimName: audiobookshelf-metadata-pvc
+        - name: audiobooks
+          persistentVolumeClaim:
+            claimName: libation-data-pvc
+        - name: podcasts
+          emptyDir: {}
