@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: audiobookshelf
+  name: audiobookshelf-server
   namespace: media
   labels:
     app: audiobookshelf-server
@@ -37,8 +37,10 @@ spec:
               mountPath: /metadata
             - name: audiobooks
               mountPath: /audiobooks
+              readOnly: true
             - name: podcasts
               mountPath: /podcasts
+              readOnly: true
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -68,9 +70,11 @@ spec:
             timeoutSeconds: 1
       volumes:
         - name: config
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: audiobookshelf-config-pvc
         - name: metadata
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: audiobookshelf-metadata-pvc
         - name: audiobooks
           persistentVolumeClaim:
             claimName: libation-data-pvc
