@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: libation
+  namespace: media
+spec:
+  schedule: "0 0 * * 0"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 5
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+          restartPolicy: Never
+          containers:
+          - name: libation
+            image: registry.lab.reisman.org/proxy.docker.io/rmcrackan/libation:12.0.0
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: settings
+              mountPath: /config/Settings.json
+              subPath: "Settings.json"
+            - name: accounts
+              mountPath: /config/AccountsSettings.json
+              subPath: "AccountsSettings.json"
+            - name: db
+              mountPath: /db
+            env:
+            - name: SLEEP_TIME
+              value: "-1"
+          volumes:
+          - name: settings
+            configMap:
+              name: libation-settings
+          - name: accounts
+            secret:
+              secretName: libation-accounts
+          - name: db
+            persistentVolumeClaim:
+              claimName: libation-db-pvc
+          - name: data
+            persistentVolumeClaim:
+              claimName: audiobooks-pvc
