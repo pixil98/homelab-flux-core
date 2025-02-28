@@ -36,6 +36,7 @@ stringData:
           name: ldap
         attrs:
           authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-invalidation-flow]]
           search_group: !Find [authentik_core.group, [name, ldapsearch]]
           certificate: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
           tls_server_name: auth.${vals_info_cluster_domain}

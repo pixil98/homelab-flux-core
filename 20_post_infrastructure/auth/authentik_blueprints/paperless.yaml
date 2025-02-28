@@ -19,6 +19,7 @@ stringData:
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_paperless_clientId}
           client_secret: ${secrets_apps_auth_applications_paperless_clientSecret}
