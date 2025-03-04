@@ -51,7 +51,7 @@ spec:
               memory: "100Mi"
               cpu: "100m"
             limits:
-              memory: "150Mi"
+              memory: "250Mi"
               cpu: "150m"
           readinessProbe:
             initialDelaySeconds: 10
