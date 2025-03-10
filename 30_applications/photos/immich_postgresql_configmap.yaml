@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-postgresql-initdb
+  namespace: photos
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: postgresql
+data:
+  10_init_extensions.sh: |
+    #!/bin/sh
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'ALTER SYSTEM SET search_path TO "$user", public, vectors;'
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'CREATE EXTENSION IF NOT EXISTS cube;'
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'CREATE EXTENSION IF NOT EXISTS earthdistance;'
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c 'CREATE EXTENSION IF NOT EXISTS vectors;'
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c "GRANT USAGE ON SCHEMA vectors TO immich;"
+    psql "postgresql://postgres:$${POSTGRES_POSTGRES_PASSWORD}@127.0.0.1/$${POSTGRES_DATABASE}" -c "GRANT SELECT ON ALL TABLES IN SCHEMA vectors TO immich;"
+    echo "00_init_extensions.sh complete"
