@@ -21,7 +21,7 @@ spec:
     primary:
       persistence:
         storageClass: nfs-client-nobackup
-      resourcesPreset: "${vals_apps_paperless_paperless_postgresql_resourcesPreset:=nano}"
+      resourcesPreset: "${vals_apps_paperless_paperless_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
     auth:
