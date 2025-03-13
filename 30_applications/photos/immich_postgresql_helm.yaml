@@ -25,7 +25,7 @@ spec:
     primary:
       persistence:
         storageClass: nfs-client-nobackup
-      resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=nano}"
+      resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
       initdb:
