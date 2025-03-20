@@ -18,7 +18,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: libation
-            image: registry.lab.reisman.org/proxy.docker.io/rmcrackan/libation:12.0.2
+            image: registry.lab.reisman.org/proxy.docker.io/rmcrackan/libation:12.0.4
             imagePullPolicy: Always
             volumeMounts:
             - name: data
