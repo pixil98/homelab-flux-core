@@ -37,25 +37,25 @@ spec:
               value: "/var/certificate/tls.key"
           ports:
             - name: pop3
-              containerPort: 110
+              containerPort: 31110
               protocol: TCP
             - name: pop3s
-              containerPort: 995
+              containerPort: 31990
               protocol: TCP
             - name: imap
-              containerPort: 143
+              containerPort: 31143
               protocol: TCP
             - name: imaps
-              containerPort: 993
+              containerPort: 31993
               protocol: TCP
             - name: submission
-              containerPort: 587
+              containerPort: 31587
               protocol: TCP
             - name: lmtp
-              containerPort: 24
+              containerPort: 31024
               protocol: TCP
             - name: sieve
-              containerPort: 4190
+              containerPort: 34190
               protocol: TCP
             - name: health
               containerPort: 5001

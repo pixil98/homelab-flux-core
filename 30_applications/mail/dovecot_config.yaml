@@ -17,13 +17,14 @@ data:
     }
 
     service lmtp {
-      inet_listener {
+      inet_listener lmtp {
         port = 24
       }
     }
 
     service auth {
-      inet_listener {
+      inet_listener auth-exim {
+        type = auth-legacy
         port = 12345
       }
     }
