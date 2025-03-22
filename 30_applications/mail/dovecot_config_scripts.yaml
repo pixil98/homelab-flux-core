@@ -7,9 +7,17 @@ data:
   health-check.sh: |
     #!/bin/sh
 
+    timeout=10
+    # timeout the read via trap for POSIX shell compatibility
+    trap "exit 0" QUIT
+    {
+      sleep $timeout
+      kill -3 $$ 2>/dev/null
+    } &
     read -r input
 
     echo "HTTP/1.1 204 No Content"
+    echo "Date: $(date)"
     echo ""
     # always exit successful
     exit 0

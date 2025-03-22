@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dovecot-config
+  namespace: mail
+data:
+  dovecot.conf: |
+    protocols = imap pop3 submission sieve lmtp
+
+    service lmtp {
+      inet_listener {
+        port = 24
+      }
+    }
+    service auth {
+      inet_listener {
+        port = 12345
+      }
+    }
+    listen = *
+
+    log_path=/dev/stdout
+    info_log_path=/dev/stdout
+    debug_log_path=/dev/stdout
+
+    # Most of the actual configuration gets included below. The filenames are
+    # first sorted by their ASCII value and parsed in that order. The 00-prefixes
+    # in filenames are intended to make it easier to understand the ordering.
+    !include conf.d/*.conf
