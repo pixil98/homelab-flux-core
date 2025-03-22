@@ -5,13 +5,16 @@ metadata:
   namespace: mail
 type: Opaque
 stringData:
-  05-ssl.conf: |
-    ssl = required
-    ssl_server_cert_file = /var/certificate/tls.crt
-    ssl_server_key_file = /var/certificate/tls.key
-    #TODO this doesn't support self signed certs
-    ssl_client_ca_file = /etc/ssl/certs/ca-certificates.crt
+  00-protocols.conf: |
+    protocols = imap pop3 submission lmtp sieve
   10-auth.conf: |
+    service auth {
+      inet_listener auth-exim {
+        type = auth-legacy
+        port = 12345
+      }
+    }
+
     auth_username_format = 	%{user|lower}
     auth_allow_cleartext = no
     auth_mechanisms = oauthbearer xoauth2 plain login cram-md5
@@ -76,15 +79,7 @@ stringData:
       }
     }
   10-mail.conf: |
-    mail_driver = maildir
-    mail_path = /var/vmail/%{user|domain}/%{user|username}
-    mail_uid = vmail
-    mail_gid = vmail
-    mail_privileged_group = vmail
-    namespace inbox {
-      inbox = yes
-      # See 15-mailboxes.conf for definitions of special mailboxes.
-    }
+    mail_path = /srv/vmail/%{user|domain}/%{user|username}
   10-nfs.conf: |
     # https://doc.dovecot.org/main/core/config/nfs.html
     mail_nfs_index = no
@@ -92,7 +87,6 @@ stringData:
     mail_fsync = always
     mmap_disable = yes
   15-mailboxes.conf: |
-    # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
       inbox = yes
 
@@ -131,52 +125,5 @@ stringData:
       executable = script -p /opt/dovecot/bin/health-check.sh
       inet_listener health-check {
           port = 5001
-      }
-    }
-  60-monitoring.conf: |
-    service stats {
-      inet_listener http {
-        port = 9900
-      }
-    }
-
-    metric auth_success {
-      filter = (event=auth_request_finished AND success=yes)
-    }
-
-    
-    metric auth_failures {
-      filter = (event=auth_request_finished AND NOT success=yes)
-    }
-
-    metric imap_command {
-      filter = event=imap_command_finished
-      group_by cmd_name {
-      }
-      group_by tagged_reply_state {
-      }
-    }
-
-    metric smtp_command {
-      filter = event=smtp_server_command_finished
-      group_by cmd_name {
-      }
-      group_by status_code {
-      }
-      group_by duration {
-        method exponential {
-          min_magnitude = 1
-          max_magnitude = 5
-        }
-      }
-    }
-
-    metric mail_delivery {
-      filter = event=mail_delivery_finished
-      group_by duration {
-        method exponential {
-          min_magnitude = 1
-          max_magnitude = 5
-        }
       }
     }

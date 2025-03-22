@@ -20,7 +20,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9900"
+        prometheus.io/port: "9090"
       labels:
         app.kubernetes.io/name: "dovecot"
         app.kubernetes.io/instance: "dovecot"
@@ -61,7 +61,7 @@ spec:
               containerPort: 5001
               protocol: TCP
             - name: monitoring
-              containerPort: 9900
+              containerPort: 9090
               protocol: TCP
             - name: auth
               containerPort: 12345
@@ -87,23 +87,17 @@ spec:
               cpu: "150m"
           volumeMounts:
             - name: mailboxes
-              mountPath: /var/vmail
-            - name: config
-              mountPath: /etc/dovecot/dovecot.conf
-              subPath: dovecot.conf
+              mountPath: /srv/vmail
             - name: config-confd
               mountPath: /etc/dovecot/conf.d
             - name: certificate
-              mountPath: /var/certificate
+              mountPath: /etc/dovecot/ssl
             - name: scripts
               mountPath: /opt/dovecot/bin
       volumes:
         - name: mailboxes
           persistentVolumeClaim:
             claimName: dovecot-mailboxes
-        - name: config
-          configMap:
-            name: dovecot-config
         - name: config-confd
           secret:
             secretName: dovecot-config-confd
