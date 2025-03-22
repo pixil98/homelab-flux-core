@@ -5,50 +5,17 @@ metadata:
   namespace: mail
 type: Opaque
 stringData:
-  10-auth.conf: |
-    auth_username_format = %Lu
-    disable_plaintext_auth = yes
-    auth_mechanisms = oauthbearer xoauth2 plain login cram-md5
-    passdb {
-      driver = oauth2
-      mechanisms = oauthbearer xoauth2
-      args = /etc/dovecot/conf.d/dovecot-oauth2.conf.ext
-    }
-    passdb {
-      driver = ldap
-      mechanisms = plain login cram-md5
-      args = /etc/dovecot/conf.d/dovecot-passdb-ldap.conf.ext
-    }
-    userdb {
-      driver = static
-      args = uid=vmail gid=vmail home=/var/vmail/%d/%n
-    }
-    userdb {
-      driver = ldap
-      args = /etc/dovecot/conf.d/dovecot-userdb-ldap.conf.ext
-    }
+  00-protocols.conf: |
+    protocols = imap pop3 submission lmtp sieve
   10-mail.conf: |
-    mail_home = /var/vmail/%d/%n
-    mail_location = maildir:/var/vmail/%d/%n/:LAYOUT=fs
-    mail_uid = vmail
-    mail_gid = vmail
-    mail_privileged_group = vmail
-    namespace inbox {
-      inbox = yes
-      # See 15-mailboxes.conf for definitions of special mailboxes.
-    }
+    mail_home = /srv/vmail/%{user|domain}/%{user|username}
   10-nfs.conf: |
+    # https://doc.dovecot.org/main/core/config/nfs.html
     mail_nfs_index = no
     mail_nfs_storage = no
     mail_fsync = always
     mmap_disable = yes
-  10-ssl.conf: |
-    ssl = required
-    ssl_cert = </var/certificate/tls.crt
-    ssl_key = </var/certificate/tls.key
-    ssl_client_ca_file = /etc/ssl/certs/ca-certificates.crt
   15-mailboxes.conf: |
-    # NOTE: Assumes "namespace inbox" has been defined in 10-mail.conf.
     namespace inbox {
       inbox = yes
 
@@ -73,13 +40,73 @@ stringData:
         special_use = \Sent
       }
     }
+  20-auth.conf: |
+    service auth {
+      inet_listener auth-exim {
+        type = auth-legacy
+        port = 12345
+      }
+    }
+
+    auth_username_format = 	%{user|lower}
+    auth_allow_cleartext = no
+    auth_mechanisms = oauthbearer xoauth2 plain login cram-md5
+
+    oauth2 {
+      tokeninfo_url = https://auth.${vals_info_cluster_domain}/application/o/userinfo/?access_token=
+      introspection_url = https://${secrets_apps_auth_applications_dovecot_clientId}:${secrets_apps_auth_applications_dovecot_clientSecret}@auth.${vals_info_cluster_domain}/application/o/introspect/
+      introspection_mode = post
+      force_introspection = yes
+      active_attribute = active
+      active_value = true
+      username_attribute = email
+    }
+    passdb oauth2 {
+      driver = oauth2
+      auth_mechanisms = oauthbearer xoauth2
+      use_worker = yes
+    }
+
+    userdb static {
+      driver = static
+    }
+
+    ldap_uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
+    #tls = no  #TODO use tls
+    ldap_auth_dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
+    ldap_auth_dn_password = ${secrets_apps_auth_authentik_outpost_ldap_password}
+    ldap_base = dc=ldap,dc=goauthentik,dc=io
+
+    passdb ldap {
+      driver = ldap
+      auth_mechanisms = plain login cram-md5
+      use_worker = yes
+
+      bind = yes
+      bind_userdn = cn=%{user},ou=users,dc=ldap,dc=goauthentik,dc=io
+      ldap_connection_group = passdb
+      filter = (&(objectClass=user)(mail=%{user})(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
+      fields {
+        user = %{ldap:mail}
+      }
+    }
+    userdb ldap {
+      driver = ldap
+      use_worker = yes
+
+      ldap_connection_group = userdb
+      filter = (&(objectClass=user)(mail=%{user})(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
+
+      # For using doveadm -A:
+      iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
+      ldap_iterate_fields {
+        user = %{ldap:mail}
+      }
+    }
   40-logging.conf: |
-    auth_verbose = no
-    auth_verbose_passwords = no
-    auth_debug = no
-    auth_debug_passwords = no
-    mail_debug = no
-    verbose_ssl = no
+    # TODO use 2.4.0 syntax if we need this in the future
+    # https://doc.dovecot.org/main/core/config/events/filter.html#global-filter-syntax
+    log_debug = category=*
   50-health.conf: |
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
@@ -87,66 +114,3 @@ stringData:
           port = 5001
       }
     }
-  60-monitoring.conf: |
-    service stats {
-      inet_listener http {
-        port = 9900
-      }
-    }
-
-    metric auth_success {
-      filter = event=auth_request_finished AND success=yes
-    }
-
-    metric auth_failures {
-      filter = event=auth_request_finished AND NOT success=yes
-    }
-
-    metric imap_command {
-      filter = event=imap_command_finished
-      group_by = cmd_name tagged_reply_state
-    }
-
-    metric smtp_command {
-      filter = event=smtp_server_command_finished
-      group_by = cmd_name status_code duration:exponential:1:5:10
-    }
-
-    metric mail_delivery {
-      filter = event=mail_delivery_finished
-      group_by = duration:exponential:1:5:10
-    }
-  dovecot-oauth2.conf.ext: |
-    tokeninfo_url = https://auth.${vals_info_cluster_domain}/application/o/userinfo/?access_token=
-    introspection_url = https://${secrets_apps_auth_applications_dovecot_clientId}:${secrets_apps_auth_applications_dovecot_clientSecret}@auth.${vals_info_cluster_domain}/application/o/introspect/
-    introspection_mode = post
-    force_introspection = yes
-    active_attribute = active
-    active_value = true
-    username_attribute = email
-    #TODO this doesn't support self signed certs
-    tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
-  dovecot-passdb-ldap.conf.ext: |
-    uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
-    tls = no  #TODO use tls
-    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
-    dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
-    base = dc=ldap,dc=goauthentik,dc=io
-
-    auth_bind = yes
-    #auth_bind_userdn = cn=%u,ou=users,dc=ldap,dc=goauthentik,dc=io
-    pass_attrs = =uid=mail,
-    pass_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
-  dovecot-userdb-ldap.conf.ext: |
-    uris = ldap://authentik-outpost-ldap.auth.svc.cluster.local
-    tls = no  #TODO use tls
-    dn = cn=${secrets_apps_auth_authentik_outpost_ldap_username},ou=users,dc=ldap,dc=goauthentik,dc=io
-    dnpass = ${secrets_apps_auth_authentik_outpost_ldap_password}
-    base = dc=ldap,dc=goauthentik,dc=io
-
-    user_attrs = =home=/var/vmail/%d/%n
-    user_filter = (&(objectClass=user)(mail=%u)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
-
-    # For using doveadm -A:
-    iterate_attrs = =user=%{ldap:mail}
-    iterate_filter = (&(objectClass=user)(memberOf=cn=dovecot,ou=groups,dc=ldap,dc=goauthentik,dc=io)(ak-active=true))
