@@ -20,7 +20,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9900"
+        prometheus.io/port: "9090"
       labels:
         app.kubernetes.io/name: "dovecot"
         app.kubernetes.io/instance: "dovecot"
@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: dovecot
-          image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.3.21
+          image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.4.0
           imagePullPolicy: IfNotPresent
           env:
             - name: DOVECOT_TLS_CERT_FILE
@@ -37,31 +37,31 @@ spec:
               value: "/var/certificate/tls.key"
           ports:
             - name: pop3
-              containerPort: 110
+              containerPort: 31110
               protocol: TCP
             - name: pop3s
-              containerPort: 995
+              containerPort: 31990
               protocol: TCP
             - name: imap
-              containerPort: 143
+              containerPort: 31143
               protocol: TCP
             - name: imaps
-              containerPort: 993
+              containerPort: 31993
               protocol: TCP
             - name: submission
-              containerPort: 587
+              containerPort: 31587
               protocol: TCP
             - name: lmtp
-              containerPort: 24
+              containerPort: 31024
               protocol: TCP
             - name: sieve
-              containerPort: 4190
+              containerPort: 34190
               protocol: TCP
             - name: health
               containerPort: 5001
               protocol: TCP
             - name: monitoring
-              containerPort: 9900
+              containerPort: 9090
               protocol: TCP
             - name: auth
               containerPort: 12345
@@ -87,23 +87,17 @@ spec:
               cpu: "150m"
           volumeMounts:
             - name: mailboxes
-              mountPath: /var/vmail
-            - name: config
-              mountPath: /etc/dovecot/dovecot.conf
-              subPath: dovecot.conf
+              mountPath: /srv/vmail
             - name: config-confd
               mountPath: /etc/dovecot/conf.d
             - name: certificate
-              mountPath: /var/certificate
+              mountPath: /etc/dovecot/ssl
             - name: scripts
               mountPath: /opt/dovecot/bin
       volumes:
         - name: mailboxes
           persistentVolumeClaim:
             claimName: dovecot-mailboxes
-        - name: config
-          configMap:
-            name: dovecot-config
         - name: config-confd
           secret:
             secretName: dovecot-config-confd
