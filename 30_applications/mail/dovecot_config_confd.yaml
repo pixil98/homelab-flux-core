@@ -106,7 +106,7 @@ stringData:
   40-logging.conf: |
     # TODO use 2.4.0 syntax if we need this in the future
     # https://doc.dovecot.org/main/core/config/events/filter.html#global-filter-syntax
-    log_debug = category=*
+    log_debug = event=*
   50-health.conf: |
     service health-check {
       executable = script -p /opt/dovecot/bin/health-check.sh
