@@ -42,7 +42,7 @@ stringData:
   #POSTFIX_alias_maps: ldap:/etc/postfix/conf/ldap-aliases.cf
   POSTFIX_mailbox_size_limit: "0"
   POSTFIX_virtual_mailbox_domains: "${vals_info_cluster_domain} ${vals_apps_mail_postfix_virtualDomains}"
-  POSTFIX_virtual_transport: "lmtp:dovecot-server-internal.mail.svc.cluster.local:24"
+  POSTFIX_virtual_transport: "lmtps:dovecot-server-internal.mail.svc.cluster.local:24"
 
   # Spam Filter
   POSTFIX_milter_default_action: "accept"
