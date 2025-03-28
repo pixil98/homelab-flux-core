@@ -28,7 +28,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: gotenberg
-          image: registry.lab.reisman.org/proxy.docker.io/gotenberg/gotenberg:8.18.0
+          image: registry.lab.reisman.org/proxy.docker.io/gotenberg/gotenberg:8.19.0
           imagePullPolicy: IfNotPresent
           command:
             - "gotenberg"
