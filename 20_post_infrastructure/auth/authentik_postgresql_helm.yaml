@@ -24,6 +24,8 @@ spec:
       resourcesPreset: "${vals_apps_auth_authentik_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
+      nodeSelector:
+        homelab.local/vm-host: hobbes
     auth:
       database: authentik
       username: authentik
