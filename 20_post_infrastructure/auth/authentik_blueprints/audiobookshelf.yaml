@@ -20,14 +20,16 @@ stringData:
           description: "Audiobookshelf Advanced Permissions"
           expression: |
             return {
-              "canDownload": True,
-              "canUpload": False,
-              "canDelete": False,
-              "canUpdate": False,
-              "canAccessExplicitContent": True,
-              "canAccessAllLibraries": True,
-              "canAccessAllTags": True,
-              "tagsAreDenylist": False,
+              "audiobookshelf_permissions": {
+                "canDownload": True,
+                "canUpload": False,
+                "canDelete": False,
+                "canUpdate": False,
+                "canAccessExplicitContent": True,
+                "canAccessAllLibraries": True,
+                "canAccessAllTags": True,
+                "tagsAreDenylist": False,
+              }
             }
 
       - model: authentik_providers_oauth2.oauth2provider
