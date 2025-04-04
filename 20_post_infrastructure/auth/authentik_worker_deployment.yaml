@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: worker
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2025.2.2
+          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2025.2.3
           imagePullPolicy: IfNotPresent
           args:
             - worker
@@ -38,7 +38,7 @@ spec:
               cpu: "500m"
             limits:
               memory: "750Mi"
-              cpu: "1"
+              cpu: "2"
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5

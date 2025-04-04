@@ -24,6 +24,8 @@ spec:
       resourcesPreset: "${vals_apps_paperless_paperless_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
+      nodeSelector:
+        homelab.local/vm-host: hobbes
     auth:
       database: paperless
       username: paperless

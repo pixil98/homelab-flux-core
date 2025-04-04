@@ -26,8 +26,16 @@ spec:
       persistence:
         storageClass: nfs-client-nobackup
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=small}"
+      livenessProbe:
+        timeoutSeconds: 60
+        failureThreshold: 10
+      readinessProbe:
+        timeoutSeconds: 60
+        failureThreshold: 10
       startupProbe:
         enabled: true
+      nodeSelector:
+        homelab.local/vm-host: hobbes
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
     auth:
