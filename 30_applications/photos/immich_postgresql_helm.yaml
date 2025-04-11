@@ -24,7 +24,7 @@ spec:
     postgresqlSharedPreloadLibraries: "pgaudit,vectors.so"
     primary:
       persistence:
-        storageClass: nfs-client-nobackup
+        storageClass: nfs-client-ssd
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=small}"
       livenessProbe:
         timeoutSeconds: 60

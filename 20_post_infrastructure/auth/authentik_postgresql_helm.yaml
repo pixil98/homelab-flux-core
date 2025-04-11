@@ -20,7 +20,7 @@ spec:
     architecture: standalone
     primary:
       persistence:
-        storageClass: nfs-client-nobackup
+        storageClass: nfs-client-ssd
       resourcesPreset: "${vals_apps_auth_authentik_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true

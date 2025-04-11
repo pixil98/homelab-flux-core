@@ -20,7 +20,7 @@ spec:
     architecture: standalone
     primary:
       persistence:
-        storageClass: nfs-client-nobackup
+        storageClass: nfs-client-ssd
       resourcesPreset: "${vals_apps_mail_roundcube_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
