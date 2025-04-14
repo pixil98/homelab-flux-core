@@ -70,5 +70,5 @@ spec:
       dashboards:
         enabled: true
         searchNamespace:
-          - auth
+          - ALL
     #TODO: setup smtp
