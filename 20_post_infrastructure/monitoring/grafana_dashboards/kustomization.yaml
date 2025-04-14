@@ -8,7 +8,6 @@ configMapGenerator:
   - name: grafana-dashboards
     namespace: monitoring
     files:
-      - dashboards/authentik.json
       - dashboards/bind.json
       - dashboards/metallb.json
       - dashboards/nodes.json
