@@ -4,7 +4,7 @@ metadata:
   name: authentik-dashboard
   namespace: auth
   labels:
-    grafana_dashboard: true
+    grafana_dashboard: "true"
 data:
   authentik.json: |
     {
