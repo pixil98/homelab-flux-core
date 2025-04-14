@@ -86,4 +86,7 @@ spec:
             - "grafana.${vals_info_cluster_domain}"
           secretName: grafana-tls
       ingressClassName: nginx
+    sidecar:
+      dashboards:
+        enabled: true
     #TODO: setup smtp
