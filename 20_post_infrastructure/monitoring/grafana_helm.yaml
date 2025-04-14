@@ -19,14 +19,6 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
-    extraVolumes:
-      - name: grafana-dashboards
-        configMap:
-          name: grafana-dashboards
-    extraVolumeMounts:
-      - name: grafana-dashboards
-        mountPath: /var/lib/grafana/dashboards/default
-        readOnly: true
     extraSecretMounts:
       - name: grafana-oauth
         secretName: grafana-oauth
@@ -63,18 +55,6 @@ spec:
             basicAuth: false
             isDefault: true
             editable: false
-    dashboardProviders:
-      dashboardproviders.yaml:
-        apiVersion: 1
-        providers:
-          - name: "default"
-            orgId: 1
-            folder: ""
-            type: file
-            disableDeletion: false
-            editable: false
-            options:
-              path: /var/lib/grafana/dashboards/default
     ingress:
       enabled: true
       annotations:
