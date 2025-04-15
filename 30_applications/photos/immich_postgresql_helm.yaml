@@ -32,6 +32,10 @@ spec:
         homelab.local/vm-host: hobbes
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
+      extendedConfiguration: |
+        checkpoint_completion_target = 0.9
+        checkpoint_timeout = 15min
+        max_wal_size = 4GB
     auth:
       database: immich
       username: immich
