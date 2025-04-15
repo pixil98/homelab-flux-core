@@ -41,5 +41,3 @@ spec:
           storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: true
-      image:
-        registry: registry.lab.reisman.org/proxy.docker.io

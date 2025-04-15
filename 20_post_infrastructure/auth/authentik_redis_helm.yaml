@@ -15,17 +15,15 @@ spec:
         name: registry-lab
         namespace: flux-system
   values:
+    global:
+      imageRegistry: registry.lab.reisman.org/proxy.docker.io
     architecture: standalone
     auth:
       existingSecret: authentik-secrets
       existingSecretPasswordKey: redis-password
-    image:
-      registry: registry.lab.reisman.org/proxy.docker.io
     master:
       persistence:
         enabled: false
         storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: true
-      image:
-        registry: registry.lab.reisman.org/proxy.docker.io

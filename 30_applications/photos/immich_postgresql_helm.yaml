@@ -26,12 +26,6 @@ spec:
       persistence:
         storageClass: nfs-client-ssd
       resourcesPreset: "${vals_apps_photos_immich_postgresql_resourcesPreset:=small}"
-      livenessProbe:
-        timeoutSeconds: 60
-        failureThreshold: 10
-      readinessProbe:
-        timeoutSeconds: 60
-        failureThreshold: 10
       startupProbe:
         enabled: true
       nodeSelector:
@@ -53,8 +47,6 @@ spec:
           storageClass: ${vals_infra_csi_nfsSubdir_backupStorageClass}
     metrics:
       enabled: true
-      image:
-        registry: registry.lab.reisman.org/proxy.docker.io
 ---
 apiVersion: v1
 stringData:
