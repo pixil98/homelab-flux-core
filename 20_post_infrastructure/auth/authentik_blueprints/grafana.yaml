@@ -93,3 +93,14 @@ stringData:
           order: 10
           group: !Find [authentik_core.group, [name, grafana]]
           target: !Find [authentik_core.Application, [slug, grafana]]
+
+      - model: authentik_policies.PolicyBinding
+        id: grafana-policy-binding-admin
+        identifiers:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, grafana]]
+        attrs:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, grafana]]

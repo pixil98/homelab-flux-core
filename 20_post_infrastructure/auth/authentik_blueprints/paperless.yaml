@@ -65,3 +65,14 @@ stringData:
           order: 10
           group: !Find [authentik_core.group, [name, paperless]]
           target: !Find [authentik_core.Application, [slug, paperless]]
+
+      - model: authentik_policies.PolicyBinding
+        id: paperless-policy-binding-admin
+        identifiers:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, paperless]]
+        attrs:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, paperless]]
