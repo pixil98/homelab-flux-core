@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: dovecot
-          image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.4.0
+          image: registry.lab.reisman.org/proxy.docker.io/dovecot/dovecot:2.3.21
           imagePullPolicy: IfNotPresent
           env:
             - name: DOVECOT_TLS_CERT_FILE

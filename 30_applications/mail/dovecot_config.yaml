@@ -5,29 +5,18 @@ metadata:
   namespace: mail
 data:
   dovecot.conf: |
-    dovecot_config_version = 2.4.0
-    dovecot_storage_version = 2.4.0
-
-    protocols {
-      imap = yes
-      pop3 = yes
-      submission = yes
-      sieve = yes
-      lmtp = yes
-    }
+    protocols = imap pop3 submission sieve lmtp
 
     service lmtp {
       inet_listener {
         port = 24
       }
     }
-
     service auth {
       inet_listener {
         port = 12345
       }
     }
-
     listen = *
 
     log_path=/dev/stdout
