@@ -89,3 +89,14 @@ stringData:
           order: 10
           group: !Find [authentik_core.group, [name, audiobookshelf]]
           target: !Find [authentik_core.Application, [slug, audiobookshelf]]
+
+      - model: authentik_policies.PolicyBinding
+        id: audiobookshelf-policy-binding-admin
+        identifiers:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, audiobookshelf]]
+        attrs: 
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, audiobookshelf]]

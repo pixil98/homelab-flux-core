@@ -87,3 +87,14 @@ stringData:
           order: 10
           group: !Find [authentik_core.group, [name, dovecot]]
           target: !Find [authentik_core.Application, [slug, dovecot]]
+
+      - model: authentik_policies.PolicyBinding
+        id: dovecot-policy-binding-admin
+        identifiers:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, dovecot]]
+        attrs:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, dovecot]]
