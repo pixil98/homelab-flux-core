@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authoritative-dns
+  name: authoritative-bind
   namespace: dns
   annotations:
     reloader.stakater.com/auto: "true"
   labels:
-    app: authoritative-dns
+    app: authoritative-bind
 spec:
   replicas: ${vals_apps_dns_authoritative_replicas:=1}
   selector:
     matchLabels:
-      app: authoritative-dns
+      app: authoritative-bind
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9119"
       labels:
-        app: authoritative-dns
+        app: authoritative-bind
     spec:
       initContainers:
         - name: init-zones

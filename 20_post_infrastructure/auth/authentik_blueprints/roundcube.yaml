@@ -67,3 +67,14 @@ stringData:
           order: 10
           group: !Find [authentik_core.group, [name, dovecot]]
           target: !Find [authentik_core.Application, [slug, roundcube]]
+
+      - model: authentik_policies.PolicyBinding
+        id: roundcube-policy-binding-admin
+        identifiers:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, roundcube]]
+        attrs:
+          order: 20
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+          target: !Find [authentik_core.Application, [slug, roundcube]]

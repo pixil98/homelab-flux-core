@@ -1,12 +1,12 @@
 apiVersion: autoscaling.k8s.io/v1beta2
 kind: VerticalPodAutoscaler
 metadata:
-  name: authoritative-dns-vpa
+  name: authoritative-bind-vpa
   namespace: dns
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: authoritative-dns
+    name: authoritative-bind
   updatePolicy:
     updateMode: "Off"
