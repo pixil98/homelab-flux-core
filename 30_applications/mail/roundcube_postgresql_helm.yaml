@@ -24,6 +24,7 @@ spec:
       resourcesPreset: "${vals_apps_mail_roundcube_postgresql_resourcesPreset:=small}"
       startupProbe:
         enabled: true
+        failureThreshold: 150
       nodeSelector:
         homelab.local/vm-host: hobbes
     auth:
