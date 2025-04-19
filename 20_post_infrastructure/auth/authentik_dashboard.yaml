@@ -104,7 +104,7 @@ data:
           "type": "row"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -190,7 +190,7 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -308,7 +308,7 @@ data:
           "type": "text"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -371,7 +371,7 @@ data:
           "type": "stat"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -439,7 +439,7 @@ data:
           "type": "piechart"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -502,7 +502,7 @@ data:
           "type": "stat"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -563,7 +563,7 @@ data:
           "type": "bargauge"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -649,7 +649,7 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$${DS_PROMETHEUS}",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1303,7 +1303,7 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": "$${DS_PROMETHEUS}",
             "definition": "authentik_outpost_connection",
             "description": null,
             "error": null,
@@ -1326,7 +1326,7 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": "$${DS_PROMETHEUS}",
             "definition": "authentik_outpost_info{outpost_type=\"proxy\"}",
             "description": null,
             "error": null,
@@ -1349,7 +1349,7 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": "$${DS_PROMETHEUS}",
             "definition": "authentik_outpost_info{outpost_type=\"ldap\"}",
             "description": null,
             "error": null,
