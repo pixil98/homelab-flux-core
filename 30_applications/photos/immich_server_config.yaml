@@ -36,7 +36,7 @@ stringData:
       },
       "job": {
         "backgroundTask": {
-          "concurrency": ${vals_apps_photos_immich_jobs_backgroundTask_concurrency:=3}
+          "concurrency": ${vals_apps_photos_immich_jobs_backgroundTask_concurrency:=5}
         },
         "smartSearch": {
           "concurrency": ${vals_apps_photos_immich_jobs_smartSearch_concurrency:=1}
