@@ -88,25 +88,26 @@ spec:
           volumeMounts:
             - name: mailboxes
               mountPath: /var/vmail
-            - name: config
-              mountPath: /etc/dovecot/dovecot.conf
-              subPath: dovecot.conf
-            - name: config-confd
+            - name: confd
               mountPath: /etc/dovecot/conf.d
+              readOnly: true
             - name: certificate
               mountPath: /var/certificate
+              readOnly: true
             - name: scripts
               mountPath: /opt/dovecot/bin
+              readOnly: true
       volumes:
         - name: mailboxes
           persistentVolumeClaim:
             claimName: dovecot-mailboxes
-        - name: config
-          configMap:
-            name: dovecot-config
-        - name: config-confd
-          secret:
-            secretName: dovecot-config-confd
+        - name: confd
+          projected:
+            sources:
+              - configMap:
+                  name: dovecot-custom-confd
+              - secret:
+                  name: dovecot-custom-ext
         - name: scripts
           configMap:
             name: dovecot-config-scripts
