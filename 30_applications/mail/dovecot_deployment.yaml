@@ -37,28 +37,25 @@ spec:
               value: "/var/certificate/tls.key"
           ports:
             - name: pop3
-              containerPort: 110
+              containerPort: 31110
               protocol: TCP
             - name: pop3s
-              containerPort: 995
+              containerPort: 31995
               protocol: TCP
             - name: imap
-              containerPort: 143
+              containerPort: 31143
               protocol: TCP
             - name: imaps
-              containerPort: 993
+              containerPort: 31993
               protocol: TCP
             - name: submission
-              containerPort: 587
+              containerPort: 31587
               protocol: TCP
             - name: lmtp
-              containerPort: 24
+              containerPort: 31024
               protocol: TCP
             - name: sieve
               containerPort: 4190
-              protocol: TCP
-            - name: health
-              containerPort: 5001
               protocol: TCP
             - name: monitoring
               containerPort: 9900
@@ -66,18 +63,18 @@ spec:
             - name: auth
               containerPort: 12345
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: health
-            initialDelaySeconds: 5
-            periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /
-              port: health
+            tcpSocket:
+              port: imap 
             initialDelaySeconds: 5
             periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket: 
+              port: imap
+            initialDelaySeconds: 20
+            periodSeconds: 30
           resources:
             requests:
               memory: "50Mi"
@@ -88,29 +85,23 @@ spec:
           volumeMounts:
             - name: mailboxes
               mountPath: /var/vmail
-            - name: config
-              mountPath: /etc/dovecot/dovecot.conf
-              subPath: dovecot.conf
-            - name: config-confd
+            - name: confd
               mountPath: /etc/dovecot/conf.d
+              readOnly: true
             - name: certificate
               mountPath: /var/certificate
-            - name: scripts
-              mountPath: /opt/dovecot/bin
+              readOnly: true
       volumes:
         - name: mailboxes
           persistentVolumeClaim:
             claimName: dovecot-mailboxes
-        - name: config
-          configMap:
-            name: dovecot-config
-        - name: config-confd
-          secret:
-            secretName: dovecot-config-confd
-        - name: scripts
-          configMap:
-            name: dovecot-config-scripts
-            defaultMode: 0777
+        - name: confd
+          projected:
+            sources:
+              - configMap:
+                  name: dovecot-custom-confd
+              - secret:
+                  name: dovecot-custom-ext
         - name: certificate
           secret:
             secretName: mail-server-tls
