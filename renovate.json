@@ -1,12 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "automerge": false,
   "customManagers": [
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
-      "fileMatch": ["^.*\\.yaml$"],
+      "managerFilePatterns": [
+        "/^.*\\.yaml$/"
+      ],
       "matchStrings": [
         "image: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)",
         "imageName: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)"
