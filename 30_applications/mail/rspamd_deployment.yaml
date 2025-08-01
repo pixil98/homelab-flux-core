@@ -53,12 +53,19 @@ spec:
             limits:
               memory: "500Mi"
               cpu: "150m"
+          startupProbe:
+            failureThreshold: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ping
+              port: normal
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /ping
               port: normal
-            initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
@@ -67,7 +74,6 @@ spec:
             httpGet:
               path: /ping
               port: normal
-            initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
