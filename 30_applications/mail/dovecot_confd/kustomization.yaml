@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: dovecot-custom-confd
+    namespace: mail
+    files:
+      - configmap/10-auth.conf
+      - configmap/10-logging.conf
+      - configmap/10-mail.conf
+      - configmap/10-master.conf
+      - configmap/10-metrics.conf
+      - configmap/10-nfs.conf
+      - configmap/10-ssl.conf
+      - configmap/15-lda.conf
+      - configmap/15-mailboxes.conf
+      - configmap/20-imap.conf
+      - configmap/20-lmtp.conf
+      - configmap/20-managesieve.conf
+      - configmap/20-pop3.conf
+      - configmap/20-submission.conf
+      - configmap/30-dict-server.conf
+      - configmap/90-acl.conf
+      - configmap/90-quota.conf
+      - configmap/90-sieve.conf
