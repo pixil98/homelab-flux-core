@@ -80,15 +80,15 @@ spec:
             - name: config
               mountPath: /config
             - name: library
-              mountPath: /usr/src/app/upload/library
+              mountPath: /data/library
             - name: upload
-              mountPath: /usr/src/app/upload/upload
+              mountPath: /data/upload
             - name: encoded-video
-              mountPath: /usr/src/app/upload/encoded-video
+              mountPath: /data/encoded-video
             - name: profile
-              mountPath: /usr/src/app/upload/profile
+              mountPath: /data/profile
             - name: thumbs
-              mountPath: /usr/src/app/upload/thumbs
+              mountPath: /data/thumbs
           startupProbe:
             httpGet:
               path: /api/server/ping
