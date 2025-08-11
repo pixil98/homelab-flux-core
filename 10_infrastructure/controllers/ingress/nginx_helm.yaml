@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: ingress-nginx
         namespace: ingress
-      version: "4.x"
+      version: "4.13.0"
   interval: 1h0m0s
   install:
     remediation:
