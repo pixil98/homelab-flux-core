@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: bitnamicharts/redis
-      version: "18.x"
+      version: "18."
       sourceRef:
         kind: HelmRepository
         name: registry-lab
