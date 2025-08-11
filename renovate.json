@@ -4,17 +4,21 @@
     "config:recommended"
   ],
   "automerge": false,
-  "customManagers": [
-    {
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "managerFilePatterns": [
-        "/^.*\\.yaml$/"
-      ],
-      "matchStrings": [
-        "image: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)",
-        "imageName: registry\\.lab\\.reisman\\.org\\/proxy\\.(?<depName>.+?):(?<currentValue>.+)"
-      ]
-    }
-  ]
+  "enabledManagers": [
+    "flux", 
+    "kubernetes"
+  ],
+  "registryAliases": {
+    "registry.lab.reisman.org/proxy.ghcr.io": "ghcr.io",
+    "registry.lab.reisman.org/proxy.docker.io": "docker.io",
+    "registry.lab.reisman.org/proxy.quay.io": "quay.io",
+    "registry.lab.reisman.org/proxy.gcr.io": "gcr.io",
+    "registry.lab.reisman.org/proxy.registry.k8s.io": "registry.k8s.io"
+  },
+  "flux": {
+    "managerFilePatterns": ["/^.+\\.ya?ml$/"]
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/^.+\\.ya?ml$/"]
+  }
 }
