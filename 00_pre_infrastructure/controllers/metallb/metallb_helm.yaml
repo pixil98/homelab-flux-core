@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: metallb
         namespace: metallb
-      version: "0.14.8"
+      version: "0.15.2"
   interval: 1h0m0s
   values:
     controller:
