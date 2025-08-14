@@ -17,6 +17,8 @@ spec:
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
+      security: 
+        allowInsecureImages: true
     architecture: standalone
     auth:
       existingSecret: immich-redis-password
