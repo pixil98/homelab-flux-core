@@ -4,7 +4,6 @@ metadata:
   name: authentik-postgresql
   namespace: auth
 spec:
-  timeout: 30m
   chart:
     spec:
       chart: bitnamicharts/postgresql
@@ -15,6 +14,7 @@ spec:
         namespace: flux-system
       interval: 6h
   interval: 30m
+  timeout: 30m
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io
