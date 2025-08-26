@@ -4,7 +4,6 @@ metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
-  interval: 30m
   chart:
     spec:
       chart: cert-manager
@@ -13,7 +12,8 @@ spec:
         kind: HelmRepository
         name: cert-manager
         namespace: cert-manager
-      interval: 1h
+      interval: 6h
+  interval: 30m
   values:
     installCRDs: true
     replicaCount: 2

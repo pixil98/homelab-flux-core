@@ -4,8 +4,6 @@ metadata:
   name: immich-postgresql
   namespace: photos
 spec:
-  interval: 5m
-  timeout: 30m
   chart:
     spec:
       chart: bitnamicharts/postgresql
@@ -14,6 +12,8 @@ spec:
         kind: HelmRepository
         name: dockerio
         namespace: flux-system
+      interval: 6h
+  interval: 30m
   values:
     global:
       imageRegistry: registry.lab.reisman.org/proxy.docker.io

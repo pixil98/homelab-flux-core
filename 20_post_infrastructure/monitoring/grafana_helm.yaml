@@ -12,7 +12,8 @@ spec:
         name: grafana
         namespace: monitoring
       version: "9.3.2"
-  interval: 1h0m0s
+      interval: 6h
+  interval: 30m
   install:
     remediation:
       retries: 3

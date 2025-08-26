@@ -4,7 +4,6 @@ metadata:
   name: paperless-tika
   namespace: paperless
 spec:
-  interval: 5m
   chart:
     spec:
       chart: tika
@@ -13,6 +12,8 @@ spec:
         kind: HelmRepository
         name: paperless-tika
         namespace: paperless
+      interval: 6h
+  interval: 30m
   values:
     image:
       repository: registry.lab.reisman.org/proxy.docker.io/apache/tika

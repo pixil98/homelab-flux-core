@@ -13,7 +13,8 @@ spec:
         name: ingress-nginx
         namespace: ingress
       version: "4.13.1"
-  interval: 1h0m0s
+      interval: 6h
+  interval: 30m
   install:
     remediation:
       retries: 3

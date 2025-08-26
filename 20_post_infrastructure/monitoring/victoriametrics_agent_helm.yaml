@@ -12,7 +12,8 @@ spec:
         name: victoria-metrics
         namespace: monitoring
       version: "0.25.2"
-  interval: 1h0m0s
+      interval: 6h
+  interval: 30m
   install:
     remediation:
       retries: 3
