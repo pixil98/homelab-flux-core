@@ -5,5 +5,4 @@ metadata:
   namespace: flux-system
 spec:
   type: "oci"
-  interval: 1h0m0s
   url: oci://registry.lab.reisman.org/proxy.docker.io
