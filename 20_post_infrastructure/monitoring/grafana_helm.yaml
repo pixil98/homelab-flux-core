@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: monitoring
-      version: "9.3.2"
+      version: "9.3.5"
       interval: 6h
   interval: 30m
   install:
