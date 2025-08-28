@@ -8,65 +8,14 @@ metadata:
 data:
   authentik.json: |
     {
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "Prometheus",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
-      "__requires": [
-        {
-          "type": "panel",
-          "id": "bargauge",
-          "name": "Bar gauge",
-          "version": ""
-        },
-        {
-          "type": "grafana",
-          "id": "grafana",
-          "name": "Grafana",
-          "version": "8.1.4"
-        },
-        {
-          "type": "panel",
-          "id": "piechart",
-          "name": "Pie chart",
-          "version": ""
-        },
-        {
-          "type": "datasource",
-          "id": "prometheus",
-          "name": "Prometheus",
-          "version": "1.0.0"
-        },
-        {
-          "type": "panel",
-          "id": "stat",
-          "name": "Stat",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "text",
-          "name": "Text",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "timeseries",
-          "name": "Time series",
-          "version": ""
-        }
-      ],
       "annotations": {
         "list": [
           {
             "builtIn": 1,
-            "datasource": "-- Grafana --",
+            "datasource": {
+              "type": "datasource",
+              "uid": "grafana"
+            },
             "enable": true,
             "hide": true,
             "iconColor": "rgba(0, 211, 255, 1)",
@@ -83,15 +32,13 @@ data:
       },
       "description": "Grafana Dashboard for Prometheus metrics exposed by authentik.",
       "editable": true,
-      "gnetId": 14837,
+      "fiscalYearStartMonth": 0,
       "graphTooltip": 1,
-      "id": null,
-      "iteration": 1631795206449,
+      "id": 1,
       "links": [],
       "panels": [
         {
           "collapsed": false,
-          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -104,16 +51,23 @@ data:
           "type": "row"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 10,
                 "gradientMode": "hue",
@@ -122,6 +76,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -144,7 +99,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -167,30 +122,39 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
-          "pluginVersion": "8.1.2",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
               "exemplar": true,
               "expr": "avg by (flow_slug) (rate(authentik_flows_plan_time_sum{namespace=~\"$namespace\"}[5m]) / rate(authentik_flows_plan_time_count{namespace=~\"$namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ flow_slug }}",
+              "range": true,
               "refId": "A"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "FlowPlanner time by flow",
           "transparent": true,
           "type": "timeseries"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -250,22 +214,30 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "bottom",
+              "showLegend": true,
               "values": []
             },
             "pieType": "donut",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
             "text": {},
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
-          "pluginVersion": "7.5.6",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum(authentik_system_tasks{namespace=~\"$namespace\",status=\"TaskResultStatus.ERROR\"})",
               "format": "time_series",
@@ -275,6 +247,9 @@ data:
               "refId": "A"
             },
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum(authentik_system_tasks{namespace=~\"$namespace\",status=\"TaskResultStatus.SUCCESSFUL\"})",
               "hide": false,
@@ -289,7 +264,10 @@ data:
           "type": "piechart"
         },
         {
-          "datasource": null,
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "gridPos": {
             "h": 5,
             "w": 4,
@@ -298,17 +276,24 @@ data:
           },
           "id": 13,
           "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
             "content": "\n\n<img src=\"https://goauthentik.io/img/icon_top_brand.svg\">",
             "mode": "html"
           },
-          "pluginVersion": "8.1.4",
-          "timeFrom": null,
-          "timeShift": null,
+          "pluginVersion": "12.1.0",
+          "title": "",
           "transparent": true,
           "type": "text"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -329,7 +314,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   }
                 ]
               }
@@ -348,17 +333,25 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
+            "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
+            "showPercentChange": false,
             "text": {},
-            "textMode": "auto"
+            "textMode": "auto",
+            "wideLayout": true
           },
-          "pluginVersion": "8.1.4",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "max(authentik_admin_workers{namespace=~\"$namespace\"})",
               "interval": "",
@@ -371,7 +364,10 @@ data:
           "type": "stat"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -401,22 +397,30 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "bottom",
+              "showLegend": true,
               "values": []
             },
             "pieType": "donut",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
             "text": {},
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
-          "pluginVersion": "7.5.6",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum(authentik_policies_cached{namespace=~\"$namespace\"})",
               "instant": true,
@@ -425,6 +429,9 @@ data:
               "refId": "A"
             },
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum(authentik_models{namespace=~\"$namespace\",app=\"authentik_policies\", model_name=\"policy\"}) - authentik_policies_cached",
               "hide": false,
@@ -439,7 +446,10 @@ data:
           "type": "piechart"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -460,7 +470,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   }
                 ]
               }
@@ -479,17 +489,25 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
+            "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
+            "showPercentChange": false,
             "text": {},
-            "textMode": "auto"
+            "textMode": "auto",
+            "wideLayout": true
           },
-          "pluginVersion": "8.1.4",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum(authentik_outposts_connected{namespace=~\"$namespace\"})",
               "interval": "",
@@ -502,7 +520,10 @@ data:
           "type": "stat"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -515,7 +536,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -536,18 +557,35 @@ data:
           "id": 15,
           "options": {
             "displayMode": "lcd",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
             "orientation": "horizontal",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
             "showUnfilled": true,
-            "text": {}
+            "sizing": "auto",
+            "text": {},
+            "valueMode": "color"
           },
-          "pluginVersion": "8.1.4",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "avg by (task_name) (authentik_system_tasks{namespace=~\"$namespace\"})",
               "instant": true,
@@ -556,23 +594,28 @@ data:
               "refId": "A"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "System task duration",
           "transparent": true,
           "type": "bargauge"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 10,
                 "gradientMode": "none",
@@ -581,6 +624,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -603,7 +647,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -626,39 +670,52 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
-          "pluginVersion": "8.1.2",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
               "exemplar": true,
               "expr": "topk(5, avg by(binding_target_type) (rate(authentik_policies_execution_time_sum{namespace=~\"$namespace\"}[5m]) / rate(authentik_policies_execution_time_count{namespace=~\"$namespace\"}[5m])))",
               "interval": "",
               "legendFormat": "{{ binding_target_type }}",
+              "range": true,
               "refId": "A"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "PolicyEngine Execution time by binding type (Top 5)",
           "transparent": true,
           "type": "timeseries"
         },
         {
-          "datasource": "$${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 10,
                 "gradientMode": "hue",
@@ -667,6 +724,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -689,7 +747,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -712,15 +770,21 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
-          "pluginVersion": "8.1.2",
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "uid": "$${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "topk(5, avg by(object_type) (rate(authentik_policies_execution_time_sum{namespace=~\"$namespace\"}[5m]) / rate(authentik_policies_execution_time_count{namespace=~\"$namespace\"}[5m])))",
               "interval": "",
@@ -728,15 +792,12 @@ data:
               "refId": "A"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "PolicyEngine Execution time by binding target (Top 5)",
           "transparent": true,
           "type": "timeseries"
         },
         {
           "collapsed": false,
-          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -750,16 +811,23 @@ data:
           "type": "row"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
@@ -768,6 +836,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -790,7 +859,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -812,18 +881,28 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": "sum by (host) (rate(authentik_outpost_proxy_requests_sum{namespace=~\"$namespace\", outpost_name=\"$outpost_proxy\"}[5m]))",
+              "expr": "sum by (host) (rate(authentik_outpost_proxy_requests_sum{namespace=~\"$namespace\", outpost_type=\"proxy\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ host }}",
+              "range": true,
               "refId": "A"
             }
           ],
@@ -832,7 +911,10 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -840,9 +922,13 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
@@ -851,6 +937,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -873,7 +960,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -895,14 +982,22 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
               "exemplar": true,
               "expr": "sum by (host) (rate(authentik_outpost_proxy_requests_sum{outpost_name=\"$outpost_proxy\", namespace=~\"$namespace\",user=\"\"}[5m]))",
               "interval": "",
@@ -916,7 +1011,6 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -930,16 +1024,23 @@ data:
           "type": "row"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
@@ -948,6 +1049,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -970,7 +1072,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -992,18 +1094,28 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": "avg by (dn) (rate(authentik_outpost_ldap_requests_bucket{namespace=~\"$namespace\", outpost_name=\"$outpost_ldap\"}[5m]))",
+              "expr": "avg by (dn) (rate(authentik_outpost_ldap_requests_bucket{namespace=~\"$namespace\", outpost_type=\"ldap\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ dn }}",
+              "range": true,
               "refId": "A"
             }
           ],
@@ -1012,16 +1124,23 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
@@ -1030,6 +1149,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -1052,7 +1172,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -1074,18 +1194,28 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": "avg by (reason) (rate(authentik_outpost_ldap_requests_rejected{namespace=~\"$namespace\", outpost_name=\"$outpost_ldap\"}[5m]))",
+              "expr": "avg by (reason) (rate(authentik_outpost_ldap_requests_rejected{namespace=~\"$namespace\", outpost_type=\"ldap\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ reason }}",
+              "range": true,
               "refId": "A"
             }
           ],
@@ -1094,16 +1224,23 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
+                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
@@ -1112,6 +1249,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -1134,7 +1272,7 @@ data:
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "red",
@@ -1156,14 +1294,22 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
               "exemplar": true,
               "expr": "avg by (flow) (rate(authentik_outpost_flow_timing_get_bucket{namespace=~\"$namespace\"}[5m]))",
               "hide": false,
@@ -1172,6 +1318,10 @@ data:
               "refId": "A"
             },
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
               "exemplar": true,
               "expr": "avg by (flow) (rate(authentik_outpost_flow_timing_post_bucket{namespace=~\"$namespace\"}[5m]))",
               "hide": false,
@@ -1185,7 +1335,10 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1212,20 +1365,30 @@ data:
           "options": {
             "legend": {
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "pieType": "pie",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
               "exemplar": true,
               "expr": "group by (type) (authentik_outpost_ldap_requests_sum)",
               "hide": false,
@@ -1239,7 +1402,10 @@ data:
           "type": "piechart"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -1267,20 +1433,30 @@ data:
           "options": {
             "legend": {
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "pieType": "pie",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
               "values": false
             },
             "tooltip": {
-              "mode": "single"
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.1.0",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
               "exemplar": true,
               "expr": "group by (reason) (authentik_outpost_ldap_requests_rejected)",
               "hide": false,
@@ -1294,79 +1470,71 @@ data:
           "type": "piechart"
         }
       ],
+      "preload": false,
       "refresh": false,
-      "schemaVersion": 30,
-      "style": "dark",
+      "schemaVersion": 41,
       "tags": [],
       "templating": {
         "list": [
           {
-            "allValue": null,
             "current": {},
-            "datasource": "$${DS_PROMETHEUS}",
-            "definition": "authentik_outpost_connection",
-            "description": null,
-            "error": null,
-            "hide": 0,
-            "includeAll": true,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "definition": "label_values(authentik_outpost_connection,namespace)",
+            "includeAll": false,
             "label": "Namespace",
             "multi": true,
             "name": "namespace",
             "options": [],
             "query": {
-              "query": "authentik_outpost_connection",
-              "refId": "StandardVariableQuery"
+              "qryType": 1,
+              "query": "label_values(authentik_outpost_connection,namespace)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "refresh": 1,
-            "regex": "/.*namespace=\"([^\"]*).*/",
-            "skipUrlSync": false,
-            "sort": 0,
+            "regex": "",
             "type": "query"
           },
           {
-            "allValue": null,
             "current": {},
-            "datasource": "$${DS_PROMETHEUS}",
-            "definition": "authentik_outpost_info{outpost_type=\"proxy\"}",
-            "description": null,
-            "error": null,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "definition": "label_values(authentik_outpost_info{outpost_type=\"proxy\"},outpost_name)",
             "hide": 2,
             "includeAll": false,
-            "label": null,
-            "multi": false,
             "name": "outpost_proxy",
             "options": [],
             "query": {
-              "query": "authentik_outpost_info{outpost_type=\"proxy\"}",
-              "refId": "StandardVariableQuery"
+              "qryType": 1,
+              "query": "label_values(authentik_outpost_info{outpost_type=\"proxy\"},outpost_name)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "refresh": 1,
-            "regex": "/.*outpost_name=\"([^\"]*).*/",
-            "skipUrlSync": false,
-            "sort": 0,
+            "regex": "",
             "type": "query"
           },
           {
-            "allValue": null,
             "current": {},
-            "datasource": "$${DS_PROMETHEUS}",
-            "definition": "authentik_outpost_info{outpost_type=\"ldap\"}",
-            "description": null,
-            "error": null,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "definition": "label_values(authentik_outpost_info{outpost_type=\"ldap\"},outpost_name)",
             "hide": 2,
             "includeAll": false,
-            "label": null,
-            "multi": false,
             "name": "outpost_ldap",
             "options": [],
             "query": {
-              "query": "authentik_outpost_info{outpost_type=\"ldap\"}",
-              "refId": "StandardVariableQuery"
+              "qryType": 1,
+              "query": "label_values(authentik_outpost_info{outpost_type=\"ldap\"},outpost_name)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "refresh": 1,
-            "regex": "/.*outpost_name=\"([^\"]*).*/",
-            "skipUrlSync": false,
-            "sort": 0,
+            "regex": "",
             "type": "query"
           }
         ]
@@ -1379,5 +1547,5 @@ data:
       "timezone": "",
       "title": "Authentik",
       "uid": "authentik",
-      "version": 32
+      "version": 1
     }
