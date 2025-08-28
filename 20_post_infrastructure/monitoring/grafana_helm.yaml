@@ -70,6 +70,7 @@ spec:
     sidecar:
       dashboards:
         enabled: true
+        resource: configmap
         searchNamespace:
           - ALL
     #TODO: setup smtp
