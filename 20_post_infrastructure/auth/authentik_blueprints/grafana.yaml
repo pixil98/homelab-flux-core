@@ -13,8 +13,7 @@ stringData:
     entries:
       - model: authentik_providers_oauth2.oauth2provider
         id: grafana
-        identifiers:
-          name: grafana
+        identifiers: { name: grafana }
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
@@ -24,10 +23,10 @@ stringData:
           client_id: ${secrets_apps_auth_applications_grafana_clientId}
           client_secret: ${secrets_apps_auth_applications_grafana_clientSecret}
           redirect_uris:
-            - matching_mode: strict
-              url: https://grafana.${vals_info_cluster_domain}/login/generic_oauth
+            - { matching_mode: strict, url: https://grafana.${vals_info_cluster_domain}/login/generic_oauth }
           access_code_validity: minutes=1
-          access_token_validity: minutes=5
+          access_token_validity: minutes=30
+          refresh_token_validity: days=30
           signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
@@ -37,70 +36,49 @@ stringData:
 
       - model: authentik_core.application
         id: grafana
-        identifiers:
-          slug: grafana
+        identifiers: { slug: grafana }
         state: present
         attrs:
-          name: grafana
+          name: Grafana
           slug: grafana
           provider: !KeyOf grafana
           meta_launch_url: https://grafana.${vals_info_cluster_domain}/
           icon: /icons/grafana.svg
           policy_engine_mode: any
 
+      # Parent group gates app visibility; children are for role mapping
       - model: authentik_core.group
         id: grafana
-        identifiers:
-          name: grafana
+        identifiers: { name: grafana }
         state: present
-        attrs:
-          name: grafana
+        attrs: { name: grafana }
 
       - model: authentik_core.group
         id: grafana-admin
-        identifiers:
-          name: grafana-admin
+        identifiers: { name: grafana-admin }
         state: present
-        attrs:
-          name: grafana-admin
-          parent: !Find [authentik_core.group, [name, grafana]]
+        attrs: { name: grafana-admin, parent: !KeyOf grafana }
 
       - model: authentik_core.group
         id: grafana-editor
-        identifiers:
-          name: grafana-editor
+        identifiers: { name: grafana-editor }
         state: present
-        attrs:
-          name: grafana-editor
-          parent: !Find [authentik_core.group, [name, grafana]]
+        attrs: { name: grafana-editor, parent: !KeyOf grafana }
 
       - model: authentik_core.group
         id: grafana-viewer
-        identifiers:
-          name: grafana-viewer
+        identifiers: { name: grafana-viewer }
         state: present
-        attrs:
-          name: grafana-viewer
-          parent: !Find [authentik_core.group, [name, grafana]]
-      
-      - model: authentik_policies.PolicyBinding
-        id: grafana-policy-binding
-        identifiers:
-          order: 10
-          group: !Find [authentik_core.group, [name, grafana]]
-          target: !Find [authentik_core.Application, [slug, grafana]]
-        attrs:
-          order: 10
-          group: !Find [authentik_core.group, [name, grafana]]
-          target: !Find [authentik_core.Application, [slug, grafana]]
+        attrs: { name: grafana-viewer, parent: !KeyOf grafana }
 
       - model: authentik_policies.PolicyBinding
-        id: grafana-policy-binding-admin
         identifiers:
-          order: 20
+          target: !KeyOf grafana
+          group:  !KeyOf grafana
+        attrs: { order: 10 }
+
+      - model: authentik_policies.PolicyBinding
+        identifiers:
+          target: !KeyOf grafana
           group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, grafana]]
-        attrs:
-          order: 20
-          group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, grafana]]
+        attrs: { order: 20 }
