@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-common
+  namespace: auth
+type: Opaque
+stringData:
+  common.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Common Functionality
+    entries:
+      # Shared group all SMTP service accounts can join
+      - model: authentik_core.group
+        identifiers: { name: smtp-senders }
+        state: present
+        attrs: { name: smtp-senders }
