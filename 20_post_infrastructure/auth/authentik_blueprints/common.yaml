@@ -13,6 +13,13 @@ stringData:
     entries:
       # Shared group all SMTP service accounts can join
       - model: authentik_core.group
-        identifiers: { name: smtp-senders }
+        identifiers: { name: mail-senders }
         state: present
-        attrs: { name: smtp-senders }
+        attrs: { name: mail-senders }
+
+      # Shared group all mail users can join
+      - model: authentik_core.group
+        id: mail-users
+        identifiers: { name: mail-users }
+        state: present
+        attrs: { name: mail-users }

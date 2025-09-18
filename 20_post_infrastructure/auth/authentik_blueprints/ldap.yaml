@@ -8,56 +8,44 @@ stringData:
   ldap.yaml: |
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
-    metadata:
-      name: Custom - LDAP
+    metadata: { name: Custom - LDAP }
     entries:
       - model: authentik_core.group
+        id: ldapsearch
         state: present
-        identifiers:
-          name: ldapsearch
+        identifiers: { name: ldapsearch }
+        attrs: { name: ldapsearch }
 
       - model: authentik_core.user
         state: present
-        identifiers:
-          username: ${secrets_apps_auth_authentik_outpost_ldap_username}
+        identifiers: { username: ${secrets_apps_auth_authentik_outpost_ldap_username} }
         attrs:
           name: ${secrets_apps_auth_authentik_outpost_ldap_username}
           type: service_account
-          groups:
-            - !Find [authentik_core.group, [name, ldapsearch]]
+          is_active: true
+          groups: [ !KeyOf ldapsearch ]
           path: goauthentik.io/service-accounts
           password: ${secrets_apps_auth_authentik_outpost_ldap_password}
-          attributes:
-            goauthentik.io/user/token-expires: false
 
       - model: authentik_providers_ldap.ldapprovider
         state: present
-        identifiers:
-          name: ldap
+        id: ldap
+        identifiers: { name: ldap }
         attrs:
-          authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
-          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
-          search_group: !Find [authentik_core.group, [name, ldapsearch]]
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          search_group: !KeyOf ldapsearch
           certificate: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
           tls_server_name: auth.${vals_info_cluster_domain}
           base_dn: DC=ldap,DC=goauthentik,DC=io
           search_mode: "cached"
-          bind_mode: "cached"
-
-      - model: authentik_core.application
-        state: present
-        identifiers:
-          slug: ldap
-        attrs:
-          name: ldap
-          provider: !Find [authentik_providers_ldap.ldapprovider, [name, ldap]]
+          bind_mode: "direct"
+          mfa_support: false
 
       - model: authentik_outposts.outpost
         state: present
-        identifiers:
-          name:  LDAP Outpost
+        identifiers: { name: LDAP Outpost }
         attrs:
           type: ldap
-          providers:
-            - !Find [authentik_providers_ldap.ldapprovider, [name, ldap]]
+          providers: [ !KeyOf ldap ]
           config: {}
