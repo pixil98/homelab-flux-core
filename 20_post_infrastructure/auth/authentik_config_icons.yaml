@@ -71,7 +71,7 @@ data:
       <path class="st4" d="M448.8,341.9c-30.7,6.5-71.5,8.1-113.4,4c-44.6-4.3-85.1-14.2-116.8-28.2c7.2,60.8,28.4,123.8,51.9,156.7   c0.2,0.2,0.3,0.4,0.5,0.6c35.2,48.4,97.1,32.2,138.7,1.9c41.6-30.2,76.2-84.1,41-132.5C450.2,343.8,449.6,343,448.8,341.9z"/>
     </g>
     </svg>
-  paperless.svg: |
+  paperless-ngx.svg: |
     <?xml version="1.0" encoding="UTF-8"?>
     <svg version="1.1" id="svg3923" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
     <style type="text/css">
