@@ -89,6 +89,8 @@ spec:
               - secret:
                   name: authentik-blueprint-audiobookshelf
               - secret:
+                  name: authentik-blueprint-common
+              - secret:
                   name: authentik-blueprint-dovecot
               - secret:
                   name: authentik-blueprint-grafana
