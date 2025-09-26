@@ -1,12 +1,12 @@
 apiVersion: dragonflydb.io/v1alpha1
 kind: Dragonfly
 metadata:
-  name: paperless-dragonfly
-  namespace: paperless
+  name: authentik-dragonfly
+  namespace: auth
 spec:
     authentication:
       passwordFromSecret:
-        name: paperless-secrets
+        name: authentik-secrets
         key: redis-password
     replicas: 1
     image: registry.lab.reisman.org/proxy.ghcr.io/dragonflydb/dragonfly:v1.21.2

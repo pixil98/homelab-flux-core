@@ -38,7 +38,7 @@ spec:
                   key: redis-password
                   name: paperless-secrets
             - name: PAPERLESS_REDIS
-              value: "redis://:$(REDIS_PASSWORD)@paperless-redis-master:6379"
+              value: "redis://:$(REDIS_PASSWORD)@paperless-dragonfly:6379"
 
             # Postgresql
             - name: PAPERLESS_DBENGINE
