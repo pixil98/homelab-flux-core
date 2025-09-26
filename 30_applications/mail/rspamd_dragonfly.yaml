@@ -1,0 +1,12 @@
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: rspamd-dragonfly
+  namespace: mail
+spec:
+    authentication:
+      passwordFromSecret:
+        name: rspamd-secrets
+        key: redis-password
+    replicas: 1
+    image: registry.lab.reisman.org/proxy.ghcr.io/dragonflydb/dragonfly:v1.21.2
