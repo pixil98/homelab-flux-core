@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: authentik-postgresql
+  namespace: auth
+spec:
+  serviceName: authentik-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentik-postgresql
+  template:
+    metadata:
+      labels:
+        app: authentik-postgresql
+    spec:
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: postgres
+          image: postgres:18.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 999
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_DB
+              value: authentik
+            - name: POSTGRES_USER
+              value: authentik
+            - name: POSTGRES_PASSWORD_FILE
+              value: /etc/postgres/credentials/user-password
+          ports:
+            - name: postgres
+              containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["sh","-lc","pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command: ["sh","-lc","pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              memory: "1Gi"
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql
+            - name: run
+              mountPath: /var/run/postgresql
+            - name: tmp
+              mountPath: /tmp
+            - name: dshm
+              mountPath: /dev/shm
+            - name: credentials
+              mountPath: /etc/postgres/credentials
+              readOnly: true
+      volumes:
+        - name: run
+          emptyDir: { medium: "Memory", sizeLimit: 64Mi }
+        - name: tmp
+          emptyDir: { medium: "Memory", sizeLimit: 128Mi }
+        - name: dshm
+          emptyDir: { medium: "Memory", sizeLimit: 256Mi }
+        - name: credentials
+          secret:
+            secretName: authentik-secrets
+            items:
+              - key: postgresql-user-password
+                path: user-password
+  volumeClaimTemplates:
+      - metadata:
+          name: data
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: nfs-client-ssd
+          resources:
+            requests:
+              storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentik-postgresql
+  namespace: auth
+spec:
+  type: ClusterIP
+  selector:
+    app: authentik-postgresql
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
