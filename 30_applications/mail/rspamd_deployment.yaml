@@ -27,7 +27,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: rspamd
-          image: registry.lab.reisman.org/proxy.docker.io/rspamd/rspamd:3.13.0
+          image: registry.lab.reisman.org/proxy.docker.io/rspamd/rspamd:3.13.2
           imagePullPolicy: IfNotPresent
           securityContext:
             capabilities:
