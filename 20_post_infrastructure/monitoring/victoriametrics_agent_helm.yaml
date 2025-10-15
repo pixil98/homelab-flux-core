@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: victoria-metrics
         namespace: monitoring
-      version: "0.25.10"
+      version: "0.26.1"
       interval: 6h
   interval: 30m
   install:
