@@ -26,8 +26,6 @@ spec:
       startupProbe:
         enabled: true
         failureThreshold: 150
-      nodeSelector:
-        homelab.local/vm-host: hobbes
     auth:
       database: paperless
       username: paperless

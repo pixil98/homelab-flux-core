@@ -30,8 +30,6 @@ spec:
       startupProbe:
         enabled: true
         failureThreshold: 150
-      nodeSelector:
-        homelab.local/vm-host: hobbes
       initdb:
         scriptsConfigMap: immich-postgresql-initdb
       extendedConfiguration: |
