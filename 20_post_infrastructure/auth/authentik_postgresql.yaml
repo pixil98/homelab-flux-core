@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-postgresql
+  namespace: auth
+spec:
+  instances: 1
+  storage:
+    storageClass: nfs-client-ssd
+    size: 1Gi
