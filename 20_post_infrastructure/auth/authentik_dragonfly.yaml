@@ -9,4 +9,4 @@ spec:
         name: authentik-secrets
         key: redis-password
     replicas: 1
-    image: registry.lab.reisman.org/proxy.ghcr.io/dragonflydb/dragonfly:v1.21.2
+    image: ghcr.io/dragonflydb/dragonfly:v1.21.2

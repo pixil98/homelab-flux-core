@@ -15,11 +15,5 @@ spec:
       interval: 6h
   interval: 30m
   values:
-    controller:
-      image:
-        repository: registry.lab.reisman.org/proxy.quay.io/metallb/controller
-    speaker:
-      image:
-        repository: registry.lab.reisman.org/proxy.quay.io/metallb/speaker
     prometheus:
       scrapeAnnotations: true
