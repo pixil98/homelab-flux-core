@@ -18,44 +18,62 @@ spec:
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   mutations:
-    - patchType: "ApplyConfiguration"
-      applyConfiguration:
+    - patchType: "JSONPatch"
+      jsonPatch:
         expression: >
-          Object{
-            spec: Object.spec{
-              template: Object.spec.template{
-                spec: Object.spec.template.spec{
-                  containers: [
-                    Object.spec.template.spec.containers{
-                      name: "initdb",
-                      env: [
-                        Object.spec.template.spec.containers.env{
-                          name: "ORIGINAL_FULL_CMD",
-                          value: object.spec.template.spec.containers
-                            .filter(c, c.name == "initdb")[0]
-                            .command.join(" ")
-                        }
-                      ],
-                      command: ["/bin/bash","-c"],
-                      args: [[
-                        "set -e",
-                        "",
-                        "echo \"Checking if folder $PGDATA already exists\"",
-                        "if [ -d \"$PGDATA\" ]; then",
-                        "  echo \"✓ Folder $PGDATA already exists, reusing it.\"",
-                        "  exit 0",
-                        "fi",
-                        "",
-                        "echo \"✗ Folder $PGDATA doesn't exist yet\"",
-                        "echo \"→ Run original CloudNativePG init...\"",
-                        "exec /bin/sh -c \"$ORIGINAL_FULL_CMD\""
-                      ].join("\n")]
-                    }
-                  ]
-                }
+          [
+            JSONPatch{
+              op: "add",
+              path: "/spec/template/spec/containers/"
+                + string(object.spec.template.spec.containers.map(c, c.name).indexOf("initdb"))
+                + "/env/-",
+              value: Object.spec.template.spec.containers.env{
+                name: "ORIGINAL_FULL_CMD",
+                value: 
+                  object.spec.template.spec.containers[
+                    object.spec.template.spec.containers.map(c, c.name).indexOf("initdb")
+                  ].command.join(" ")
               }
             }
-          }
+          ]
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "replace",
+              path: "/spec/template/spec/containers/"
+                    + string(object.spec.template.spec.containers.map(c, c.name).indexOf("initdb"))
+                    + "/command",
+              value: ["/bin/bash","-c"]
+            }
+          ]
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "add",
+              path: "/spec/template/spec/containers/"
+                    + string(object.spec.template.spec.containers.map(c, c.name).indexOf("initdb"))
+                    + "/args",
+              value: [
+                [
+                  "set -e",
+                  "",
+                  "echo \"Checking if folder $PGDATA already exists\"",
+                  "if [ -d \"$PGDATA\" ]; then",
+                  "  echo \"✓ Folder $PGDATA already exists, reusing it.\"",
+                  "  exit 0",
+                  "fi",
+                  "",
+                  "echo \"✗ Folder $PGDATA doesn't exist yet\"",
+                  "echo \"→ Run original CloudNativePG init...\"",
+                  "exec /bin/sh -c \"$ORIGINAL_FULL_CMD\""
+                ].join("\n")
+              ]
+            }
+          ]
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingAdmissionPolicyBinding
