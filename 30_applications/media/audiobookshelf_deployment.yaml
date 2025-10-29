@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: audiobookshelf
-          image: "registry.lab.reisman.org/proxy.ghcr.io/advplyr/audiobookshelf:2.30.0"
+          image: "ghcr.io/advplyr/audiobookshelf:2.30.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ

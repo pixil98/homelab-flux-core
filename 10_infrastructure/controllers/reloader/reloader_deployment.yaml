@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: reloader-reloader
-          image: "registry.lab.reisman.org/proxy.ghcr.io/stakater/reloader:v1.4.10"
+          image: "ghcr.io/stakater/reloader:v1.4.10"
           imagePullPolicy: IfNotPresent
           env:
             - name: GOMAXPROCS

@@ -16,8 +16,6 @@ spec:
   interval: 30m
   timeout: 30m
   values:
-    global:
-      imageRegistry: registry.lab.reisman.org/proxy.docker.io
     image:
       repository: pixil/bitnami-postgresql-immich
       debug: false
