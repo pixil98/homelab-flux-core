@@ -19,11 +19,5 @@ spec:
     remediation:
       retries: 3
   values:
-    rbacProxy:
-      image:
-        repository: registry.lab.reisman.org/proxy.quay.io/brancz/kube-rbac-proxy
-    manager:
-      image:
-        repository: registry.lab.reisman.org/proxy.ghcr.io/dragonflydb/operator
     grafanaDashboard:
       enabled: true

@@ -23,7 +23,7 @@ stringData:
   AUTHENTIK_EVENTS__CONTEXT_PROCESSORS__ASN: "/geoip/GeoLite2-ASN.mmdb"
   AUTHENTIK_EVENTS__CONTEXT_PROCESSORS__GEOIP: "/geoip/GeoLite2-City.mmdb"
   AUTHENTIK_LOG_LEVEL: "${vals_apps_auth_authentik_logLevel:=info}"
-  AUTHENTIK_OUTPOSTS__CONTAINER_IMAGE_BASE: "registry.lab.reisman.org/proxy.ghcr.io/goauthentik/%(type)s:%(version)s"
+  AUTHENTIK_OUTPOSTS__CONTAINER_IMAGE_BASE: "ghcr.io/goauthentik/%(type)s:%(version)s"
   AUTHENTIK_POSTGRESQL__HOST: "authentik-postgresql"
   AUTHENTIK_POSTGRESQL__NAME: "authentik"
   AUTHENTIK_POSTGRESQL__PASSWORD: "${secrets_apps_auth_authentik_postgresqlUserPassword}"
