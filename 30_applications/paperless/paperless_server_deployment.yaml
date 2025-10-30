@@ -44,12 +44,12 @@ spec:
             - name: PAPERLESS_DBENGINE
               value: "postgresql"
             - name: PAPERLESS_DBHOST
-              value: "paperless-postgresql"
+              value: "paperless-postgresql-rw"
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
-                  key: postgresql-user-password
-                  name: paperless-secrets
+                  name: paperless-postgresql-appuser
+                  key: password
 
             # Tika
             - name: PAPERLESS_TIKA_ENABLED

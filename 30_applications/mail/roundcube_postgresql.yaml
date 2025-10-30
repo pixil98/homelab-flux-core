@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: roundcube-postgresql
+  namespace: mail
+spec:
+  instances: 1
+  superuserSecret:
+    name: roundcube-postgresql-superuser
+  bootstrap:
+    initdb:
+      database: roundcube
+      owner: roundcube
+      secret:
+        name: roundcube-postgresql-appuser
+  storage:
+    storageClass: nfs-client-ssd
+    size: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: roundcube-postgresql-appuser
+  namespace: mail
+type: kubernetes.io/basic-auth
+stringData:
+  username: roundcube
+  password: ${secrets_apps_mail_roundcube_postgresql_app_password}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: roundcube-postgresql-superuser
+  namespace: mail
+type: kubernetes.io/basic-auth
+stringData:
+  username: postgres
+  password: ${secrets_apps_mail_roundcube_postgresql_superuser_password}
