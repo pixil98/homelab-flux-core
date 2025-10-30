@@ -5,6 +5,34 @@ metadata:
   namespace: auth
 spec:
   instances: 1
+  superuserSecret:
+    name: authentik-postgresql-superuser
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-postgresql-appuser
   storage:
     storageClass: nfs-client-ssd
     size: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-postgresql-appuser
+  namespace: auth
+type: kubernetes.io/basic-auth
+stringData:
+  username: authentik
+  password: ${secrets_apps_auth_authentik_postgresql_app_password}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-postgresql-superuser
+  namespace: auth
+type: kubernetes.io/basic-auth
+stringData:
+  username: postgres
+  password: ${secrets_apps_auth_authentik_postgresql_superuser_password}

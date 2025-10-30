@@ -6,7 +6,15 @@ metadata:
 spec:
     authentication:
       passwordFromSecret:
-        name: rspamd-secrets
-        key: redis-password
+        name: rspamd-redis-password
+        key: password
     replicas: 1
-    image: ghcr.io/dragonflydb/dragonfly:v1.21.2
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rspamd-redis-password
+  namespace: mail
+type: Opaque
+stringData:
+  password: ${secrets_apps_mail_rspamd_redisPassword}

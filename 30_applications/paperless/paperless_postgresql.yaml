@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: paperless-postgresql
+  namespace: paperless
+spec:
+  instances: 1
+  superuserSecret:
+    name: paperless-postgresql-superuser
+  bootstrap:
+    initdb:
+      database: paperless
+      owner: paperless
+      secret:
+        name: paperless-postgresql-appuser
+  storage:
+    storageClass: nfs-client-ssd
+    size: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: paperless-postgresql-appuser
+  namespace: paperless
+type: kubernetes.io/basic-auth
+stringData:
+  username: paperless
+  password: ${secrets_apps_paperless_paperless_postgresql_app_password}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: paperless-postgresql-superuser
+  namespace: paperless
+type: kubernetes.io/basic-auth
+stringData:
+  username: postgres
+  password: ${secrets_apps_paperless_paperless_postgresql_superuser_password}
