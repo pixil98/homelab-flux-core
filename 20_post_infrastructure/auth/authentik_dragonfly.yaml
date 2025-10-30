@@ -6,7 +6,15 @@ metadata:
 spec:
     authentication:
       passwordFromSecret:
-        name: authentik-secrets
-        key: redis-password
+        name: authentik-redis-password
+        key: password
     replicas: 1
-    image: ghcr.io/dragonflydb/dragonfly:v1.21.2
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-redis-password
+  namespace: auth
+type: Opaque
+stringData:
+  password: ${secrets_apps_auth_authentik_redisPassword}
