@@ -35,8 +35,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: redis-password
-                  name: paperless-secrets
+                  name: paperless-redis-password
+                  key: password
             - name: PAPERLESS_REDIS
               value: "redis://:$(REDIS_PASSWORD)@paperless-dragonfly:6379"
 
