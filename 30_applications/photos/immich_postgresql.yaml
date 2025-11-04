@@ -14,7 +14,7 @@ spec:
       owner: immich
       secret:
         name: immich-postgresql-appuser
-      postInitSQL:
+      postInitApplicationSQL:
         - CREATE EXTENSION IF NOT EXISTS "vector";
         - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
         - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
