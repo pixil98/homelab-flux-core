@@ -35,7 +35,7 @@ stringData:
             }
 
       - model: authentik_providers_oauth2.oauth2provider
-        id: audiobookshelf
+        id: audiobookshelf_provider
         identifiers: { name: audiobookshelf }
         state: present
         attrs:
@@ -60,19 +60,19 @@ stringData:
             - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, audiobookshelf_permissions]]
 
       - model: authentik_core.application
-        id: audiobookshelf
+        id: audiobookshelf_app
         identifiers: { slug: audiobookshelf }
         state: present
         attrs:
           name: Audiobookshelf
           slug: audiobookshelf
-          provider: !KeyOf audiobookshelf
+          provider: !KeyOf audiobookshelf_provider
           meta_launch_url: https://books.${vals_info_cluster_domain}/
           icon: /icons/audiobookshelf.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
-        id: audiobookshelf
+        id: audiobookshelf_group
         identifiers: { name: audiobookshelf }
         state: present
         attrs: { name: audiobookshelf }
@@ -80,14 +80,14 @@ stringData:
       # Application entitlements (group access)
       - model: authentik_policies.PolicyBinding
         identifiers:
-          target: !KeyOf audiobookshelf            # application
-          group:  !KeyOf audiobookshelf            # group
+          target: !KeyOf audiobookshelf_app    # application
+          group:  !KeyOf audiobookshelf_group  # group
         attrs:
           order: 10
 
       - model: authentik_policies.PolicyBinding
         identifiers:
-          target: !KeyOf audiobookshelf
+          target: !KeyOf audiobookshelf_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs:
           order: 20
