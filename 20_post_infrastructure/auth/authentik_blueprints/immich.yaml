@@ -17,7 +17,7 @@ stringData:
           required: true
 
       - model: authentik_providers_oauth2.oauth2provider
-        id: immich
+        id: immich_provider
         identifiers: { name: immich }
         state: present
         attrs:
@@ -34,40 +34,40 @@ stringData:
           access_code_validity: minutes=1
           access_token_validity: minutes=30
           refresh_token_validity: days=30
-          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
 
       - model: authentik_core.application
-        id: immich
+        id: immich_app
         identifiers: { slug: immich }
         state: present
         attrs:
           name: Immich
           slug: immich
-          provider: !KeyOf immich
+          provider: !KeyOf immich_provider
           meta_launch_url: https://photos.${vals_info_cluster_domain}/
           icon: /icons/immich.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
-        id: immich
+        id: immich_group
         identifiers: { name: immich }
         state: present
         attrs: { name: immich }
 
-      - model: authentik_policies.PolicyBinding
+      - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf immich          # application
-          group:  !KeyOf immich          # group
+          target: !KeyOf immich_app
+          group:  !KeyOf immich_group
         attrs:
           order: 10
-      - model: authentik_policies.PolicyBinding
+      - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf immich
+          target: !KeyOf immich_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs:
           order: 20

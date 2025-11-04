@@ -11,7 +11,7 @@ stringData:
     metadata: { name: Custom - LDAP }
     entries:
       - model: authentik_core.group
-        id: ldapsearch
+        id: ldapsearch_group
         state: present
         identifiers: { name: ldapsearch }
         attrs: { name: ldapsearch }
@@ -23,22 +23,24 @@ stringData:
           name: ${secrets_apps_auth_authentik_outpost_ldap_username}
           type: service_account
           is_active: true
-          groups: [ !KeyOf ldapsearch ]
+          groups: [ !KeyOf ldapsearch_group ]
           path: goauthentik.io/service-accounts
           password: ${secrets_apps_auth_authentik_outpost_ldap_password}
+          attributes:
+            goauthentik.io/user/token-expires: false
 
       - model: authentik_providers_ldap.ldapprovider
         state: present
-        id: ldap
+        id: ldap_provider
         identifiers: { name: ldap }
         attrs:
-          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
-          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
-          search_group: !KeyOf ldapsearch
-          certificate: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
+          search_group: !KeyOf ldapsearch_group
+          certificate: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           tls_server_name: auth.${vals_info_cluster_domain}
           base_dn: DC=ldap,DC=goauthentik,DC=io
-          search_mode: "cached"
+          search_mode: "direct"
           bind_mode: "direct"
           mfa_support: false
 
@@ -47,5 +49,5 @@ stringData:
         identifiers: { name: LDAP Outpost }
         attrs:
           type: ldap
-          providers: [ !KeyOf ldap ]
+          providers: [ !KeyOf ldap_provider ]
           config: {}

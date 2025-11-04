@@ -12,7 +12,7 @@ stringData:
       name: Custom - Paperless
     entries:
       - model: authentik_providers_oauth2.oauth2provider
-        id: paperless
+        id: paperless_provider
         identifiers: { name: paperless }
         state: present
         attrs:
@@ -27,40 +27,39 @@ stringData:
           access_code_validity: minutes=1
           access_token_validity: minutes=30
           refresh_token_validity: days=30
-          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
 
       - model: authentik_core.application
-        id: paperless
+        id: paperless_app
         identifiers: { slug: paperless }
         state: present
         attrs:
           name: Paperless
           slug: paperless
-          provider: !KeyOf paperless
+          provider: !KeyOf paperless_provider
           meta_launch_url: https://paperless.${vals_info_cluster_domain}/
           icon: /icons/paperless-ngx.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
-        id: paperless
+        id: paperless_group
         identifiers: { name: paperless }
         state: present
         attrs: { name: paperless }
 
-      - model: authentik_policies.PolicyBinding
+      - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf paperless
-          group:  !KeyOf paperless
+          target: !KeyOf paperless_app
+          group:  !KeyOf paperless_group
         attrs: { order: 10 }
 
-      - model: authentik_policies.PolicyBinding
+      - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf paperless
+          target: !KeyOf paperless_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs: { order: 20 }
-    
