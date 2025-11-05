@@ -68,7 +68,7 @@ stringData:
           slug: audiobookshelf
           provider: !KeyOf audiobookshelf_provider
           meta_launch_url: https://books.${vals_info_cluster_domain}/
-          icon: /icons/audiobookshelf.svg
+          icon: icons/audiobookshelf.svg
           policy_engine_mode: any
 
       - model: authentik_core.group

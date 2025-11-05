@@ -50,7 +50,7 @@ stringData:
           slug: immich
           provider: !KeyOf immich_provider
           meta_launch_url: https://photos.${vals_info_cluster_domain}/
-          icon: /icons/immich.svg
+          icon: icons/immich.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
