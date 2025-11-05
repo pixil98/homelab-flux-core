@@ -8,13 +8,14 @@ stringData:
   immich.json: |
     {
       "ffmpeg": {
-        "crf": 31,
+        "crf": 23,
         "threads": 0,
         "preset": "veryslow",
         "targetVideoCodec": "vp9",
         "acceptedVideoCodecs": ["h264", "vp9"],
         "targetAudioCodec": "aac",
-        "acceptedAudioCodecs": ["aac", "mp3", "libopus"],
+        "acceptedAudioCodecs": ["aac", "mp3", "libopus", "pcm_s16le"],
+        "acceptedContainers": ["mov", "ogg", "webm"],
         "targetResolution": "original",
         "maxBitrate": "0",
         "bframes": -1,
@@ -64,6 +65,9 @@ stringData:
         },
         "videoConversion": {
           "concurrency": ${vals_apps_photos_immich_jobs_videoConversion_concurrency:=1}
+        },
+        "notifications": {
+          "concurrency": ${vals_apps_photos_immich_jobs_notifications_concurrency:=1}
         }
       },
       "logging": {
@@ -85,15 +89,22 @@ stringData:
           "enabled": true,
           "modelName": "buffalo_l",
           "minScore": 0.7,
-          "maxDistance": 0.6,
+          "maxDistance": 0.5,
           "minFaces": 3
         }
       },
       "map": {
-        "enabled": true
+        "enabled": true,
+        "lightStyle": "https://tiles.immich.cloud/v1/style/light.json",
+        "darkStyle": "https://tiles.immich.cloud/v1/style/dark.json"
       },
       "reverseGeocoding": {
         "enabled": true
+      },
+      "metadata": {
+        "faces": {
+          "import": false
+        }
       },
       "oauth": {
         "enabled": true,
@@ -158,11 +169,11 @@ stringData:
           "from": "immich@${vals_info_cluster_domain}",
           "replyTo": "immich@${vals_info_cluster_domain}",
           "transport": {
-            "ignoreCert": false,
-            "host": "mail.${vals_info_cluster_domain}",
+            "ignoreCert": true,
+            "host": "postfix-server.mail.svc.cluster.local",
             "port": 587,
-            "username": "immich@service",
-            "password": "TODO: FILL THIS IN"
+            "username": "immich@${vals_info_cluster_domain}",
+            "password": "${secrets_apps_photos_immich_smtp_password}"
           }
         }
       },
