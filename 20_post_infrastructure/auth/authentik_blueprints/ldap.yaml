@@ -17,10 +17,10 @@ stringData:
         attrs: { name: ldapsearch }
 
       - model: authentik_core.user
+        identifiers: { username: ldapservice }
         state: present
-        identifiers: { username: ${secrets_apps_auth_authentik_outpost_ldap_username} }
         attrs:
-          name: ${secrets_apps_auth_authentik_outpost_ldap_username}
+          name: ldapservice
           type: service_account
           is_active: true
           groups: [ !KeyOf ldapsearch_group ]
@@ -30,9 +30,9 @@ stringData:
             goauthentik.io/user/token-expires: false
 
       - model: authentik_providers_ldap.ldapprovider
-        state: present
         id: ldap_provider
         identifiers: { name: ldap }
+        state: present
         attrs:
           authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
@@ -44,9 +44,18 @@ stringData:
           bind_mode: "direct"
           mfa_support: false
 
-      - model: authentik_outposts.outpost
+      - model: authentik_core.application
+        id: ldap_app
+        identifiers: { slug: ldap }
         state: present
+        attrs:
+          name: ldap
+          slug: ldap
+          provider: !KeyOf ldap_provider
+
+      - model: authentik_outposts.outpost
         identifiers: { name: LDAP Outpost }
+        state: present
         attrs:
           type: ldap
           providers: [ !KeyOf ldap_provider ]
