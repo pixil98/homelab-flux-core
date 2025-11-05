@@ -43,7 +43,7 @@ stringData:
           slug: paperless
           provider: !KeyOf paperless_provider
           meta_launch_url: https://paperless.${vals_info_cluster_domain}/
-          icon: /icons/paperless-ngx.svg
+          icon: icons/paperless-ngx.svg
           policy_engine_mode: any
 
       - model: authentik_core.group

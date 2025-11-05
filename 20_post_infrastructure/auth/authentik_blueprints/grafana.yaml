@@ -43,7 +43,7 @@ stringData:
           slug: grafana
           provider: !KeyOf grafana_provider
           meta_launch_url: https://grafana.${vals_info_cluster_domain}/
-          icon: /icons/grafana.svg
+          icon: icons/grafana.svg
           policy_engine_mode: any
 
       # Parent group gates app visibility; children are for role mapping

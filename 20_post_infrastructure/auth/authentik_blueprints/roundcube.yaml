@@ -53,7 +53,7 @@ stringData:
           slug: roundcube
           provider: !KeyOf roundcube_provider
           meta_launch_url: https://webmail.${vals_info_cluster_domain}/
-          icon: /icons/roundcube.svg
+          icon: icons/roundcube.svg
           policy_engine_mode: any
 
       - model: authentik_policies.policybinding
