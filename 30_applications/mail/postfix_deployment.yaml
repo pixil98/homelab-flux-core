@@ -89,7 +89,7 @@ spec:
               mountPath: /etc/postfix/tls
             - name: spool
               mountPath: /var/spool/postfix
-            - name: config-confd
+            - name: config-conf
               mountPath: /etc/postfix/conf
       volumes:
         - name: spool
@@ -98,6 +98,6 @@ spec:
         - name: certificate
           secret:
             secretName: mail-server-tls
-        - name: config-confd
+        - name: config-conf
           secret:
-            secretName: postfix-config-confd
+            secretName: postfix-config-conf

@@ -11,19 +11,20 @@ stringData:
     metadata: { name: Custom - LDAP }
     entries:
       - model: authentik_core.group
-        id: ldapsearch_group
+        id: ldap_group
         state: present
         identifiers: { name: ldapsearch }
         attrs: { name: ldapsearch }
 
       - model: authentik_core.user
-        identifiers: { username: ldapservice }
+        id: ldap_user
+        identifiers: { username: service-ldap }
         state: present
         attrs:
-          name: ldapservice
+          name: service-ldap
           type: service_account
           is_active: true
-          groups: [ !KeyOf ldapsearch_group ]
+          groups: [ !KeyOf ldap_group ]
           path: goauthentik.io/service-accounts
           password: ${secrets_apps_auth_authentik_outpost_ldap_password}
           attributes:
@@ -36,13 +37,15 @@ stringData:
         attrs:
           authorization_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
-          search_group: !KeyOf ldapsearch_group
           certificate: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           tls_server_name: auth.${vals_info_cluster_domain}
           base_dn: DC=ldap,DC=goauthentik,DC=io
           search_mode: "direct"
           bind_mode: "direct"
           mfa_support: false
+        permissions:
+          - permission: search_full_directory
+            user: !KeyOf ldap_user
 
       - model: authentik_core.application
         id: ldap_app
@@ -52,6 +55,20 @@ stringData:
           name: ldap
           slug: ldap
           provider: !KeyOf ldap_provider
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf ldap_app
+          group:  !KeyOf ldap_group
+        attrs:
+          order: 10
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf ldap_app
+          group:  !Find [authentik_core.group, [name, mail-users]]
+        attrs:
+          order: 20
 
       - model: authentik_outposts.outpost
         identifiers: { name: LDAP Outpost }
