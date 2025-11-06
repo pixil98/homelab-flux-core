@@ -172,7 +172,7 @@ stringData:
             "ignoreCert": true,
             "host": "postfix-server.mail.svc.cluster.local",
             "port": 587,
-            "username": "immich@${vals_info_cluster_domain}",
+            "username": "service-immich",
             "password": "${secrets_apps_photos_immich_smtp_password}"
           }
         }
