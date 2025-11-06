@@ -71,24 +71,3 @@ stringData:
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs:
           order: 20
-
-      - model: authentik_core.user
-        identifiers: { username: svc-immich-sender }
-        state: present
-        attrs:
-          name: svc-immich-sender
-          email: immich@${vals_info_cluster_domain}
-          is_active: true
-          groups:
-            - !Find [authentik_core.group, [name, mail-senders]]
-          attributes:
-            goauthentik.io/user/service-account: true
-
-      - model: authentik_core.token
-        identifiers: { identifier: svc-immich-smtp-password }
-        state: present
-        attrs:
-          user: !Find [authentik_core.user, [username, svc-immich-sender]]
-          intent: app_password
-          key: ${secrets_apps_photos_immich_smtp_password}
-          expiring: false

@@ -11,15 +11,23 @@ stringData:
     metadata:
       name: Custom - Common Functionality
     entries:
-      # Shared group all SMTP service accounts can join
-      - model: authentik_core.group
-        identifiers: { name: mail-senders }
-        state: present
-        attrs: { name: mail-senders }
-
       # Shared group all mail users can join
       - model: authentik_core.group
         id: mail-users
         identifiers: { name: mail-users }
         state: present
         attrs: { name: mail-users }
+
+      - model: authentik_core.user
+        identifiers: { username: service-noreply }
+        state: present
+        attrs:
+          name: service-noreply
+          email: noreply@${vals_info_cluster_domain}
+          type: service_account
+          is_active: true
+          groups: [ !KeyOf mail-users ]
+          path: goauthentik.io/service-accounts
+          password: ${secrets_apps_mail_noreplysender_password}
+          attributes:
+            goauthentik.io/user/service-account: true

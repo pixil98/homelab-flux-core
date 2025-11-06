@@ -166,14 +166,14 @@ stringData:
       "notifications": {
         "smtp": {
           "enabled": true,
-          "from": "immich@${vals_info_cluster_domain}",
-          "replyTo": "immich@${vals_info_cluster_domain}",
+          "from": "noreply@${vals_info_cluster_domain}",
+          "replyTo": "noreply@${vals_info_cluster_domain}",
           "transport": {
             "ignoreCert": true,
             "host": "postfix-server.mail.svc.cluster.local",
             "port": 587,
-            "username": "immich@${vals_info_cluster_domain}",
-            "password": "${secrets_apps_photos_immich_smtp_password}"
+            "username": "service-noreply",
+            "password": "${secrets_apps_mail_noreplysender_password}"
           }
         }
       },
