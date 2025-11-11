@@ -28,7 +28,7 @@ spec:
         runAsGroup: 1000
       containers:
         - name: paperless
-          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.19.3
+          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.19.5
           imagePullPolicy: IfNotPresent
           env:
             # Redis
