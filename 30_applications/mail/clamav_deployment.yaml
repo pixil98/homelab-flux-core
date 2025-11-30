@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: clamav
-          image: registry.lab.reisman.org/proxy.docker.io/clamav/clamav:1.4.3-53
+          image: docker.io/clamav/clamav:1.4.3-53
           imagePullPolicy: IfNotPresent
           env:
             - name: CLAMAV_NO_MILTERD

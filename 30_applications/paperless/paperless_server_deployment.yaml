@@ -28,28 +28,28 @@ spec:
         runAsGroup: 1000
       containers:
         - name: paperless
-          image: registry.lab.reisman.org/proxy.ghcr.io/paperless-ngx/paperless-ngx:2.20.0
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.0
           imagePullPolicy: IfNotPresent
           env:
             # Redis
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: redis-password
-                  name: paperless-secrets
+                  name: paperless-redis-password
+                  key: password
             - name: PAPERLESS_REDIS
-              value: "redis://:$(REDIS_PASSWORD)@paperless-redis-master:6379"
+              value: "redis://:$(REDIS_PASSWORD)@paperless-dragonfly:6379"
 
             # Postgresql
             - name: PAPERLESS_DBENGINE
               value: "postgresql"
             - name: PAPERLESS_DBHOST
-              value: "paperless-postgresql"
+              value: "paperless-postgresql-rw"
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
-                  key: postgresql-user-password
-                  name: paperless-secrets
+                  name: paperless-postgresql-appuser
+                  key: password
 
             # Tika
             - name: PAPERLESS_TIKA_ENABLED

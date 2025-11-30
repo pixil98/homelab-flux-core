@@ -20,8 +20,6 @@ spec:
       retries: 3
   values:
     controller:
-      image:
-        registry: registry.lab.reisman.org/proxy.registry.k8s.io
       kind: DaemonSet
       service:
         externalTrafficPolicy: Local
@@ -34,10 +32,3 @@ spec:
       podAnnotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "10254"
-    admissionWebhooks:
-      patch:
-        image:
-          registry: registry.lab.reisman.org/proxy.registry.k8s.io
-    defaultBackend:
-      image:
-        registry: registry.lab.reisman.org/proxy.registry.k8s.io
