@@ -18,9 +18,6 @@ spec:
     remediation:
       retries: 3
   values:
-    global:
-      image:
-        registry: registry.lab.reisman.org/proxy.docker.io
     annotations:
       reloader.stakater.com/auto: "true"
     configMap: victoria-metrics-agent-config

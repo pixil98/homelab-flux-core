@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: init-zones
-          image: registry.lab.reisman.org/proxy.docker.io/library/alpine:3.22.2
+          image: docker.io/library/alpine:3.22.2
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
@@ -33,7 +33,7 @@ spec:
               mountPath: /config
       containers:
         - name: bind9
-          image: "registry.lab.reisman.org/proxy.docker.io/internetsystemsconsortium/bind9:9.20"
+          image: "docker.io/internetsystemsconsortium/bind9:9.20"
           imagePullPolicy: Always
           command: ["/usr/sbin/named"]
           args: ["-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
@@ -74,7 +74,7 @@ spec:
             - name: logs
               mountPath: /var/log
         - name: metrics-exporter
-          image: registry.lab.reisman.org/proxy.docker.io/prometheuscommunity/bind-exporter:v0.8.0
+          image: docker.io/prometheuscommunity/bind-exporter:v0.8.0
           imagePullPolicy: IfNotPresent
           command: ["/bin/bind_exporter"]
           args:

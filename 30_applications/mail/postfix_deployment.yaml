@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: postfix
-          image: registry.lab.reisman.org/proxy.docker.io/boky/postfix:4.4.0
+          image: docker.io/boky/postfix:4.4.0
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
@@ -89,7 +89,7 @@ spec:
               mountPath: /etc/postfix/tls
             - name: spool
               mountPath: /var/spool/postfix
-            - name: config-confd
+            - name: config-conf
               mountPath: /etc/postfix/conf
       volumes:
         - name: spool
@@ -98,6 +98,6 @@ spec:
         - name: certificate
           secret:
             secretName: mail-server-tls
-        - name: config-confd
+        - name: config-conf
           secret:
-            secretName: postfix-config-confd
+            secretName: postfix-config-conf

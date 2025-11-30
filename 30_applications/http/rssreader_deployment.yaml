@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: rssreader
-          image: registry.lab.reisman.org/proxy.docker.io/jmehler/rss-reader:0.0.3
+          image: docker.io/jmehler/rss-reader:0.0.3
           imagePullPolicy: IfNotPresent
           env:
             - name: FLASK_PROXY

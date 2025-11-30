@@ -1,4 +1,3 @@
-# See https://docs.goauthentik.io/integrations/services/roundcube/
 apiVersion: v1
 kind: Secret
 metadata:
@@ -12,16 +11,19 @@ stringData:
     metadata:
       name: Custom - Roundcube
     entries:
-      # Roundcube depends on Dovecot to have made the "dovecot" group available
       - model: authentik_blueprints.metaapplyblueprint
         attrs:
-          identifiers:
-            name: Custom - Dovecot
+          identifiers: { name: Custom - Common Functionality }
+          required: true
+      # Ensure the Dovecot blueprint (group + custom scope mapping) is applied first
+      - model: authentik_blueprints.metaapplyblueprint
+        attrs:
+          identifiers: { name: Custom - Dovecot }
+          required: true
 
       - model: authentik_providers_oauth2.oauth2provider
-        id: roundcube
-        identifiers:
-          name: roundcube
+        id: roundcube_provider
+        identifiers: { name: roundcube }
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
@@ -31,50 +33,37 @@ stringData:
           client_id: ${secrets_apps_auth_applications_roundcube_clientId}
           client_secret: ${secrets_apps_auth_applications_roundcube_clientSecret}
           redirect_uris:
-            -  matching_mode: strict
-               url: https://mail.${vals_info_cluster_domain}/index.php/login/oauth 
-            -  matching_mode: strict
-               url: https://webmail.${vals_info_cluster_domain}/index.php/login/oauth 
+            - { matching_mode: strict, url: "https://mail.${vals_info_cluster_domain}/index.php?_task=settings&_action=plugin.oauth_redirect" }
+            - { matching_mode: strict, url: "https://webmail.${vals_info_cluster_domain}/index.php?_task=settings&_action=plugin.oauth_redirect" }
           access_code_validity: minutes=1
-          access_token_validity: minutes=5
-          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          access_token_validity: minutes=30
+          signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, offline_access]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, dovecot_profile]]
 
       - model: authentik_core.application
-        id: roundcube
-        identifiers:
-          slug: roundcube
+        id: roundcube_app
+        identifiers: { slug: roundcube }
         state: present
         attrs:
-          name: roundcube
+          name: Roundcube
           slug: roundcube
-          provider: !KeyOf roundcube
+          provider: !KeyOf roundcube_provider
           meta_launch_url: https://webmail.${vals_info_cluster_domain}/
-          icon: /icons/roundcube.svg
+          icon: icons/roundcube.svg
           policy_engine_mode: any
 
-      - model: authentik_policies.PolicyBinding
-        id: roundcube-policy-binding
+      - model: authentik_policies.policybinding
         identifiers:
-          order: 10
-          group: !Find [authentik_core.group, [name, dovecot]]
-          target: !Find [authentik_core.Application, [slug, roundcube]]
-        attrs:
-          order: 10
-          group: !Find [authentik_core.group, [name, dovecot]]
-          target: !Find [authentik_core.Application, [slug, roundcube]]
+          target: !KeyOf roundcube_app
+          group:  !Find [authentik_core.group, [name, mail-users]]
+        attrs: { order: 10 }
 
-      - model: authentik_policies.PolicyBinding
-        id: roundcube-policy-binding-admin
+      - model: authentik_policies.policybinding
         identifiers:
-          order: 20
+          target: !KeyOf roundcube_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, roundcube]]
-        attrs:
-          order: 20
-          group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, roundcube]]
+        attrs: { order: 20 }

@@ -19,8 +19,6 @@ spec:
     remediation:
       retries: 3
   values:
-    image:
-      repository: registry.lab.reisman.org/proxy.ghcr.io/cloudnative-pg/cloudnative-pg
     monitoring:
       grafanaDashboard:
         create: true
