@@ -1,16 +1,37 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik-blueprint-dovecot
+  name: authentik-blueprint-mail
   namespace: auth
 type: Opaque
 stringData:
-  dovecot.yaml: |
+  mail.yaml: |
     # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
     version: 1
     metadata:
-      name: Custom - Dovecot
+      name: Custom - Mail
     entries:
+      # Shared group all mail users can join
+      - model: authentik_core.group
+        id: mail-users
+        identifiers: { name: mail-users }
+        state: present
+        attrs: { name: mail-users }
+
+      - model: authentik_core.user
+        identifiers: { username: service-noreply }
+        state: present
+        attrs:
+          name: service-noreply
+          email: noreply@${vals_info_cluster_domain}
+          type: service_account
+          is_active: true
+          groups: [ !KeyOf mail-users ]
+          path: goauthentik.io/service-accounts
+          password: ${secrets_apps_mail_noreplysender_password}
+          attributes:
+            goauthentik.io/user/service-account: true
+
       - model: authentik_providers_oauth2.scopemapping
         identifiers:
           scope_name: dovecot_profile
@@ -25,10 +46,9 @@ stringData:
               "active": request.user.is_active,
             }
 
-      # OAuth2/OIDC provider used only as the issuer for tokens Dovecot validates.
       - model: authentik_providers_oauth2.oauth2provider
-        id: dovecot_provider
-        identifiers: { name: dovecot }
+        id: mail_provider
+        identifiers: { name: mail }
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
@@ -37,36 +57,38 @@ stringData:
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_dovecot_clientId}
           client_secret: ${secrets_apps_auth_applications_dovecot_clientSecret}
-          # No redirect_uris needed for Dovecot
-          redirect_uris: []
+          redirect_uris:
+            - { matching_mode: strict, url: "https://mail.${vals_info_cluster_domain}/index.php/login/oauth" }
+            - { matching_mode: strict, url: "https://webmail.${vals_info_cluster_domain}/index.php/login/oauth" }
           access_code_validity: minutes=1
           access_token_validity: minutes=30
           signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
-            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
             - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
             - !Find [authentik_providers_oauth2.scopemapping, [scope_name, dovecot_profile]]
 
       - model: authentik_core.application
-        id: dovecot_app
-        identifiers: { slug: dovecot }
+        id: mail_app
+        identifiers: { slug: mail }
         state: present
         attrs:
-          name: Dovecot
-          slug: dovecot
-          provider: !KeyOf dovecot_provider
-          meta_launch_url: blank://blank
-          icon: icons/dovecot.svg
+          name: Roundcube
+          slug: mail
+          provider: !KeyOf mail_provider
+          meta_launch_url: https://webmail.${vals_info_cluster_domain}/
+          icon: icons/roundcube.svg
           policy_engine_mode: any
 
       - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf dovecot_app
-          group:  !Find [authentik_core.group, [name, mail-users]]
+          target: !KeyOf mail_app
+          group:  !KeyOf mail-users
         attrs: { order: 10 }
 
       - model: authentik_policies.policybinding
         identifiers:
-          target: !KeyOf dovecot_app
+          target: !KeyOf mail_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs: { order: 20 }

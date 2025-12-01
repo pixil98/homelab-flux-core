@@ -89,16 +89,12 @@ spec:
               - secret:
                   name: authentik-blueprint-audiobookshelf
               - secret:
-                  name: authentik-blueprint-common
-              - secret:
-                  name: authentik-blueprint-dovecot
-              - secret:
                   name: authentik-blueprint-grafana
               - secret:
                   name: authentik-blueprint-immich
               - secret:
                   name: authentik-blueprint-ldap
               - secret:
-                  name: authentik-blueprint-paperless
+                  name: authentik-blueprint-mail
               - secret:
-                  name: authentik-blueprint-roundcube
+                  name: authentik-blueprint-paperless

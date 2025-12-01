@@ -4,6 +4,8 @@ metadata:
   name: immich-dragonfly
   namespace: photos
 spec:
+    args:
+      - "--default_lua_flags=allow-undeclared-keys"
     authentication:
       passwordFromSecret:
         name: immich-redis-password

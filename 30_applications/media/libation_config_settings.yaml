@@ -24,7 +24,7 @@ data:
           {
             "Name": "File",
             "Args": {
-              "path": "/var/log/libation.log",
+              "path": "/tmp/logs/libation.log",
               "rollingInterval": "Month",
               "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] (at {Caller}) {Message:lj}{NewLine}{Exception} {Properties:j}"
             }
@@ -32,7 +32,8 @@ data:
         ],
         "Using": [
           "Dinah.Core",
-          "Serilog.Exceptions"
+          "Serilog.Exceptions",
+          "Serilog.Sinks.File"
         ],
         "Enrich": [
           "WithCaller",

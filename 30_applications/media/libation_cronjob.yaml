@@ -18,7 +18,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: libation
-            image: docker.io/rmcrackan/libation:12.7.4
+            image: docker.io/rmcrackan/libation:12.7.5
             imagePullPolicy: Always
             volumeMounts:
             - name: data
@@ -31,6 +31,8 @@ spec:
               subPath: "AccountsSettings.json"
             - name: db
               mountPath: /db
+            - name: tmp
+              mountPath: /tmp
             env:
             - name: SLEEP_TIME
               value: "-1"
@@ -47,3 +49,5 @@ spec:
           - name: data
             persistentVolumeClaim:
               claimName: audiobooks-pvc
+          - name: tmp
+            emptyDir: {}
