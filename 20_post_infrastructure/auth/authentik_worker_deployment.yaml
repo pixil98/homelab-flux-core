@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: worker
-          image: registry.lab.reisman.org/proxy.ghcr.io/goauthentik/server:2025.10.2
+          image: ghcr.io/goauthentik/server:2025.10.2
           imagePullPolicy: IfNotPresent
           args:
             - worker
@@ -88,6 +88,8 @@ spec:
             sources:
               - secret:
                   name: authentik-blueprint-audiobookshelf
+              - secret:
+                  name: authentik-blueprint-common
               - secret:
                   name: authentik-blueprint-dovecot
               - secret:

@@ -11,10 +11,14 @@ stringData:
     metadata:
       name: Custom - Immich
     entries:
+      - model: authentik_blueprints.metaapplyblueprint
+        attrs:
+          identifiers: { name: Custom - Common Functionality }
+          required: true
+
       - model: authentik_providers_oauth2.oauth2provider
-        id: immich
-        identifiers:
-          name: immich
+        id: immich_provider
+        identifiers: { name: immich }
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
@@ -24,59 +28,46 @@ stringData:
           client_id: ${secrets_apps_auth_applications_immich_clientId}
           client_secret: ${secrets_apps_auth_applications_immich_clientSecret}
           redirect_uris:
-            - matching_mode: strict
-              url: https://photos.${vals_info_cluster_domain}/auth/login
-            - matching_mode: strict
-              url: https://photos.${vals_info_cluster_domain}/user-settings
-            - matching_mode: strict
-              url: app.immich:///oauth-callback
+            - { matching_mode: strict, url: https://photos.${vals_info_cluster_domain}/auth/login }
+            - { matching_mode: strict, url: https://photos.${vals_info_cluster_domain}/user-settings }
+            - { matching_mode: strict, url: app.immich:///oauth-callback }
           access_code_validity: minutes=1
-          access_token_validity: minutes=5
-          signing_key: !Find [authentik_crypto.CertificateKeyPair, [name, auth.${vals_info_cluster_domain}]]
+          access_token_validity: minutes=30
+          refresh_token_validity: days=30
+          signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
           property_mappings:
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, email]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, openid]]
-            - !Find [authentik_providers_oauth2.ScopeMapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
 
       - model: authentik_core.application
-        id: immich
-        identifiers:
-          slug: immich
+        id: immich_app
+        identifiers: { slug: immich }
         state: present
         attrs:
-          name: immich
+          name: Immich
           slug: immich
-          provider: !KeyOf immich
+          provider: !KeyOf immich_provider
           meta_launch_url: https://photos.${vals_info_cluster_domain}/
-          icon: /icons/immich.svg
+          icon: icons/immich.svg
           policy_engine_mode: any
 
       - model: authentik_core.group
-        id: immich
-        identifiers:
-          name: immich
+        id: immich_group
+        identifiers: { name: immich }
         state: present
-        attrs:
-          name: immich
-      
-      - model: authentik_policies.PolicyBinding
-        id: immich-policy-binding
-        identifiers:
-          order: 10
-          group: !Find [authentik_core.group, [name, immich]]
-          target: !Find [authentik_core.Application, [slug, immich]]
-        attrs:
-          order: 10
-          group: !Find [authentik_core.group, [name, immich]]
-          target: !Find [authentik_core.Application, [slug, immich]]
+        attrs: { name: immich }
 
-      - model: authentik_policies.PolicyBinding
-        id: immich-policy-binding-admin
+      - model: authentik_policies.policybinding
         identifiers:
-          order: 20
+          target: !KeyOf immich_app
+          group:  !KeyOf immich_group
+        attrs:
+          order: 10
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf immich_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, immich]]
         attrs:
           order: 20
-          group: !Find [authentik_core.group, [name, authentik Admins]]
-          target: !Find [authentik_core.Application, [slug, immich]]

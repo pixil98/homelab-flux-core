@@ -1,0 +1,81 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: cnpg-initdb-policy
+  namespace: cnpg-system
+spec:
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["batch"]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["jobs"]
+  matchConditions:
+    - name: cnpg-initdb-label
+      expression: "'cnpg.io/jobRole' in object.metadata.labels && object.metadata.labels['cnpg.io/jobRole'] == 'initdb'"
+    - name: has-initdb-container
+      expression: "object.spec.template.spec.containers.exists(c, c.name == 'initdb')"
+    - name: not-already-wrapped
+      expression: "!('cnpg.io/initdb-wrapped' in object.metadata.labels)"
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "add",
+              path: "/metadata/labels/" + jsonpatch.escapeKey("cnpg.io/initdb-wrapped"),
+              value: "true"
+            }
+          ]
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "replace",
+              path: "/spec/template/spec/containers/"
+                    + string(object.spec.template.spec.containers.map(c, c.name).indexOf("initdb"))
+                    + "/command",
+              value: ["/bin/bash","-c", 
+                [
+                  "set -e",
+                  "echo \"Checking if folder $PGDATA already exists\"",
+                  "if [ -d \"$PGDATA\" ]; then",
+                  "  echo \"✓ Folder $PGDATA already exists, reusing it.\"",
+                  "  exit 0",
+                  "fi",
+                  "echo \"✗ Folder $PGDATA doesn't exist yet\"",
+                  "echo \"→ Run original CloudNativePG init...\"",
+                  "exec \"$0\" \"$@\""
+                ].join("\n")
+              ]
+            },
+            JSONPatch{
+              op: "add",
+              path: "/spec/template/spec/containers/"
+                    + string(object.spec.template.spec.containers.map(c, c.name).indexOf("initdb"))
+                    + "/args",
+              value:
+                (
+                  (has(object.spec.template.spec.containers[object.spec.template.spec.containers.map(c, c.name).indexOf("initdb")].command)
+                    ? object.spec.template.spec.containers[object.spec.template.spec.containers.map(c, c.name).indexOf("initdb")].command
+                    : []
+                  )
+                  +
+                  (has(object.spec.template.spec.containers[object.spec.template.spec.containers.map(c, c.name).indexOf("initdb")].args)
+                    ? object.spec.template.spec.containers[object.spec.template.spec.containers.map(c, c.name).indexOf("initdb")].args
+                    : []
+                  )
+                )
+            }
+          ]
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: cnpg-initdb-policy-binding
+spec:
+  policyName: cnpg-initdb-policy
