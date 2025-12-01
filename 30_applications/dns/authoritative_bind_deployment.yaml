@@ -33,7 +33,7 @@ spec:
               mountPath: /config
       containers:
         - name: bind9
-          image: "docker.io/internetsystemsconsortium/bind9:9.20"
+          image: "docker.io/internetsystemsconsortium/bind9:9.21"
           imagePullPolicy: Always
           command: ["/usr/sbin/named"]
           args: ["-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
