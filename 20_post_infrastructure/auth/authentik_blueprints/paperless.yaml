@@ -63,3 +63,17 @@ stringData:
           target: !KeyOf paperless_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs: { order: 20 }
+
+      - model: authentik_core.user
+        identifiers: { username: service-paperless }
+        state: present
+        attrs:
+          name: service-paperless
+          email: paperless@${vals_info_cluster_domain}
+          type: service_account
+          is_active: true
+          groups: [ !Find [authentik_core.group, [name, mail-users]] ]
+          path: goauthentik.io/service-accounts
+          password: ${secrets_apps_paperless_paperless_account_password}
+          attributes:
+            goauthentik.io/user/service-account: true
