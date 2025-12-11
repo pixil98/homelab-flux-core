@@ -87,6 +87,8 @@ spec:
               value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
               value: "true"
+            - name: PAPERLESS_REDIRECT_LOGIN_TO_SSO
+              value: "true"
           ports:
             - name: http
               containerPort: 8000
