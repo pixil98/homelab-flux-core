@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: roundcube
-          image: docker.io/roundcube/roundcubemail:1.6.11-apache
+          image: docker.io/roundcube/roundcubemail:1.6.12-apache
           imagePullPolicy: IfNotPresent
           env:
             - name: ROUNDCUBEMAIL_DB_TYPE
