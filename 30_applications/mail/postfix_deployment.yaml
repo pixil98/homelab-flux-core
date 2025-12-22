@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: postfix
-          image: docker.io/boky/postfix:4.4.0
+          image: docker.io/boky/postfix:5.0.1
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
