@@ -38,6 +38,8 @@ spec:
             - name: audiobooks
               mountPath: /audiobooks
               readOnly: true
+            - name: ebooks
+              mountPath: /ebooks
             - name: podcasts
               mountPath: /podcasts
               readOnly: true
@@ -78,6 +80,9 @@ spec:
         - name: audiobooks
           persistentVolumeClaim:
             claimName: audiobooks-pvc
+        - name: ebooks
+          persistentVolumeClaim:
+            claimName: ebooks-pvc
         - name: podcasts
           emptyDir: {}
       dnsConfig:

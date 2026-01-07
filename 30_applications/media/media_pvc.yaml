@@ -10,3 +10,16 @@ spec:
   resources:
     requests:
       storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebooks-pvc
+  namespace: media
+spec:
+  storageClassName: nfs-client-nobackup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000Gi
