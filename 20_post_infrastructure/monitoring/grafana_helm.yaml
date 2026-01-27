@@ -24,6 +24,11 @@ spec:
         defaultMode: 0440
         mountPath: /etc/secrets/oauth
         readOnly: true
+      - name: grafana-smtp
+        secretName: grafana-smtp
+        defaultMode: 0440
+        mountPath: /etc/secrets/smtp
+        readOnly: true
     grafana.ini:
       server:
         domain: ${vals_info_cluster_domain}
@@ -44,6 +49,14 @@ spec:
         role_attribute_path: contains(groups, 'grafana-admin') && 'Admin' || contains(groups, 'grafana-editor') && 'Editor' || 'Viewer'
         auto_login: true
         use_refresh_token: true
+      smtp:
+        enabled: true
+        host: postfix-server.mail.svc.cluster.local:587
+        user: service-noreply
+        password: "$__file{/etc/secrets/smtp/password}"
+        from_address: noreply@${vals_info_cluster_domain}
+        from_name: Grafana
+        skip_verify: true
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -72,4 +85,3 @@ spec:
         resource: configmap
         searchNamespace:
           - ALL
-    #TODO: setup smtp

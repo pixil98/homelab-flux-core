@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-smtp
+  namespace: monitoring
+stringData:
+  password: "${secrets_apps_mail_noreplysender_password}"
