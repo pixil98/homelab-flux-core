@@ -12,9 +12,6 @@ spec:
       app.kubernetes.io/name: audiobookshelf-server
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: "false"
-        prometheus.io/port: "TODO"
       labels:
         app.kubernetes.io/name: audiobookshelf-server
     spec:
