@@ -4,19 +4,19 @@ metadata:
   name: audiobookshelf-server
   namespace: media
   labels:
-    app: audiobookshelf-server
+    app.kubernetes.io/name: audiobookshelf-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: audiobookshelf-server
+      app.kubernetes.io/name: audiobookshelf-server
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "false"
         prometheus.io/port: "TODO"
       labels:
-        app: audiobookshelf-server
+        app.kubernetes.io/name: audiobookshelf-server
     spec:
       containers:
         - name: audiobookshelf

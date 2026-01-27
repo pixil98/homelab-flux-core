@@ -4,7 +4,7 @@ metadata:
   name: audiobookshelf
   namespace: media
   labels:
-    app: audiobookshelf-server
+    app.kubernetes.io/name: audiobookshelf-server
   annotations:
     cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
     nginx.ingress.kubernetes.io/proxy-body-size: "0"

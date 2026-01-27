@@ -6,19 +6,19 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
   labels:
-    app: authoritative-bind
+    app.kubernetes.io/name: authoritative-bind
 spec:
   replicas: ${vals_apps_dns_authoritative_replicas:=1}
   selector:
     matchLabels:
-      app: authoritative-bind
+      app.kubernetes.io/name: authoritative-bind
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9119"
       labels:
-        app: authoritative-bind
+        app.kubernetes.io/name: authoritative-bind
     spec:
       initContainers:
         - name: init-zones

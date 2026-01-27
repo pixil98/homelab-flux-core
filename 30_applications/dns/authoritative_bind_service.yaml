@@ -9,7 +9,7 @@ spec:
   type: LoadBalancer
   loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress}
   selector:
-    app: authoritative-bind
+    app.kubernetes.io/name: authoritative-bind
   ports:
     - port: 53
       targetPort: 53
@@ -27,7 +27,7 @@ spec:
   type: LoadBalancer
   loadBalancerIP: ${vals_apps_dns_authoritative_ipAddress}
   selector:
-    app: authoritative-bind
+    app.kubernetes.io/name: authoritative-bind
   ports:
     - port: 53
       targetPort: 53

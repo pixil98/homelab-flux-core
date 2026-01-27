@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vpa-recommender
+      app.kubernetes.io/name: vpa-recommender
   template:
     metadata:
       labels:
-        app: vpa-recommender
+        app.kubernetes.io/name: vpa-recommender
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8942"

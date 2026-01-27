@@ -8,11 +8,11 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: reloader-reloader
+      app.kubernetes.io/name: reloader-reloader
   template:
     metadata:
       labels:
-        app: reloader-reloader
+        app.kubernetes.io/name: reloader-reloader
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
