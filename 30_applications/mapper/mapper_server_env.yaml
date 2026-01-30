@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mapper-server-env
+  namespace: mapper
+type: Opaque
+stringData:
+  DISCORD_CLIENT_ID: ${secrets_apps_mapper_mapper_discordClientId}
+  DISCORD_CLIENT_SECRET: ${secrets_apps_mapper_mapper_discordClientSecret}
+  DISCORD_REDIRECT_URI: https://mapper.${vals_info_cluster_domain}/api/login/discord/callback
+  DISCORD_BOT_TOKEN: ${secrets_apps_mapper_mapper_discordBotToken}
+  DISCORD_GUILD_ID: ${secrets_apps_mapper_mapper_discordGuildId}
+  MAPPER_ROLE_ID: ${secrets_apps_mapper_mapper_discordMapperRoleId}
+  FRONTEND_URL: https://mapper.${vals_info_cluster_domain}/

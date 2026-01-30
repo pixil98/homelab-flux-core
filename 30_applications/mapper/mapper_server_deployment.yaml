@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mapper-server
+  namespace: mapper
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: mapper
+    app.kubernetes.io/name: server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: mapper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: mapper
+    spec:
+      imagePullSecrets:
+        - name: mapper-pull-secret
+      terminationGracePeriodSeconds: 120
+      initContainers:
+        - name: copy-db-from-nfs
+          image: docker.io/library/alpine:3.23.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Copying db from NFS to local storage..."
+              cp -a /db-nfs/. /db-local/ 2>/dev/null || true
+              echo "Copy complete."
+          volumeMounts:
+            - name: db-nfs
+              mountPath: /db-nfs
+            - name: db-local
+              mountPath: /db-local
+      containers:
+        - name: mapper-server
+          image: ghcr.io/bcnoexceptions/mapper-server:main
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DATABASE_URL
+              value: "file:/mapper/db/mapper.db"
+            - name: USE_SSL
+              value: "false"
+          envFrom:
+            - secretRef:
+                name: mapper-server-env
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Copying db from local storage back to NFS..."
+                    cp -a /db/. /db-nfs/
+                    echo "Copy complete."
+          volumeMounts:
+            - name: db-local
+              mountPath: /mapper/db
+            - name: db-nfs
+              mountPath: /mapper/db-nfs
+      volumes:
+        - name: db-nfs
+          persistentVolumeClaim:
+            claimName: mapper-server-db
+        - name: db-local
+          emptyDir: {}

@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mapper
+  namespace: mapper
+  labels:
+    app.kubernetes.io/instance: mapper
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - mapper.${vals_info_cluster_domain}
+      secretName: mapper-tls
+  rules:
+    - host: mapper.${vals_info_cluster_domain}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: mapper-server
+                port:
+                  name: http
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mapper-client
+                port:
+                  name: http
