@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mapper-server
+  namespace: mapper
+  labels:
+    app.kubernetes.io/instance: mapper
+    app.kubernetes.io/name: server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: mapper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: mapper
+    spec:
+      imagePullSecrets:
+        - name: mapper-pull-secret
+      containers:
+        - name: mapper-server
+          image: ghcr.io/bcnoexceptions/mapper-server:main
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DATABASE_URL
+              value: "/mapper/db/mapper.db"
+            - name: SSL_CERT_PATH
+              value: "/mapper/ssl/tls.crt"
+            - name: SSL_KEY_PATH
+              value: "/mapper/ssl/tls.key"
+          envFrom:
+            - secretRef:
+                name: mapper-server-env
+          ports:
+            - name: https
+              containerPort: 3443
+              protocol: TCP
+          volumeMounts:
+            - name: database
+              mountPath: /mapper/db
+            - name: cert
+              mountPath: /mapper/ssl
+      volumes:
+        - name: database
+          secret:
+            secretName: mapper-server-db
+        - name: cert
+          secret:
+            secretName: mapper-server-tls
