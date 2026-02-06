@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: libation-liberate-script
+  namespace: media
+data:
+  liberate.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    log() {
+      local level="$1"; shift
+      printf '%s %s: %s\n' "$(date '+%F %T')" "$level" "$*"
+    }
+    error(){ log "ERROR" "$*"; }
+    warn(){  log "WARN"  "$*"; }
+    info(){  log "INFO"  "$*"; }
+
+    require_cmd() {
+      command -v "$1" >/dev/null 2>&1 || { error "required command not found: $1"; exit 1; }
+    }
+
+    init_config_file() {
+      local file="$1"
+      local src="${LIBATION_CONFIG_DIR}/${file}"
+      local dst="${LIBATION_CONFIG_INTERNAL}/${file}"
+
+      if [[ -f "${src}" ]]; then
+        info "loading ${file}"
+        cp -f "${src}" "${dst}"
+      else
+        warn "${src} not found, creating empty ${file}"
+        printf '{}' > "${dst}"
+      fi
+    }
+
+    update_settings() {
+      local file="$1"
+      local key="$2"
+      local value="$3"
+      local path="${LIBATION_CONFIG_INTERNAL}/${file}"
+
+      info "setting ${file}.${key} = ${value}"
+      jq --arg k "${key}" --arg v "${value}" '.[$k] = $v' "${path}" > "${path}.tmp"
+      mv -f "${path}.tmp" "${path}"
+    }
+
+    main() {
+      require_cmd jq
+
+      if [[ -z "${LIBATION_CONFIG_INTERNAL:-}" ]]; then
+        error "LIBATION_CONFIG_INTERNAL is not set (image should define this)."
+        exit 1
+      fi
+
+      info "initializing libation (cronjob mode: stateless DB)"
+
+      mkdir -p "${LIBATION_CONFIG_INTERNAL}"
+      mkdir -p "${LIBATION_DB_DIR}"
+
+      init_config_file "AccountsSettings.json"
+      init_config_file "Settings.json"
+
+      update_settings "Settings.json" "Books" "${LIBATION_BOOKS_DIR}"
+      update_settings "Settings.json" "InProgress" "/tmp"
+
+      # Fresh DB in emptyDir and symlink where Libation expects it.
+      db_file="${LIBATION_DB_DIR}/LibationContext.db"
+      touch "${db_file}"
+      ln -sf "${db_file}" "${LIBATION_CONFIG_INTERNAL}/LibationContext.db"
+      info "using database at ${db_file}"
+
+      info "scanning accounts"
+      /libation/LibationCli scan
+
+      info "reconciling downloaded status from disk"
+      /libation/LibationCli set-status -d
+
+      info "liberating books"
+      /libation/LibationCli liberate
+
+      info "done"
+    }
+
+    main

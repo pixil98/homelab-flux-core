@@ -20,6 +20,18 @@ spec:
           - name: libation
             image: docker.io/rmcrackan/libation:13.1.4
             imagePullPolicy: Always
+            env:
+            - name: LIBATION_BOOKS_DIR
+              value: /data
+            - name: LIBATION_CONFIG_DIR
+              value: /config
+            - name: LIBATION_DB_DIR
+              value: /db
+            command: ["/bin/sh", "-lc"]
+            args:
+              - |
+                set -euo pipefail
+                /liberate.sh
             volumeMounts:
             - name: data
               mountPath: /data
@@ -29,13 +41,13 @@ spec:
             - name: accounts
               mountPath: /config/AccountsSettings.json
               subPath: "AccountsSettings.json"
-            - name: db
+            - name: db-local
               mountPath: /db
             - name: tmp
               mountPath: /tmp
-            env:
-            - name: SLEEP_TIME
-              value: "-1"
+            - name: liberate-script
+              mountPath: /liberate.sh
+              subPath: liberate.sh
           volumes:
           - name: settings
             configMap:
@@ -43,11 +55,14 @@ spec:
           - name: accounts
             secret:
               secretName: libation-accounts
-          - name: db
-            persistentVolumeClaim:
-              claimName: libation-db-pvc
           - name: data
             persistentVolumeClaim:
               claimName: audiobooks-pvc
+          - name: db-local
+            emptyDir: {}
           - name: tmp
             emptyDir: {}
+          - name: liberate-script
+            configMap:
+              name: libation-liberate-script
+              defaultMode: 0755
