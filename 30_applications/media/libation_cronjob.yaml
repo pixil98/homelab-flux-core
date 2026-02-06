@@ -37,7 +37,6 @@ spec:
             - name: liberate-script
               mountPath: /libation/liberate.sh
               subPath: liberate.sh
-
           volumes:
           - name: settings
             configMap:
