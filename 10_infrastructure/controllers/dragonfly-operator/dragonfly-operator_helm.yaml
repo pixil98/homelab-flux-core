@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: dragonfly-operator
         namespace: flux-system
-      version: "v1.3.1"
+      version: "v1.4.0"
       interval: 6h
   interval: 30m
   install:
