@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: init-zones
-          image: docker.io/library/alpine:3.23.2
+          image: docker.io/library/alpine:3.23.3
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
