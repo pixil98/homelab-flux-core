@@ -20,18 +20,6 @@ spec:
           - name: libation
             image: docker.io/rmcrackan/libation:13.1.8
             imagePullPolicy: Always
-            env:
-            - name: LIBATION_BOOKS_DIR
-              value: /data
-            - name: LIBATION_CONFIG_DIR
-              value: /config
-            - name: LIBATION_DB_DIR
-              value: /db
-            command: ["/usr/bin/env", "bash", "-lc"]
-            args:
-              - |
-                set -euo pipefail
-                /liberate.sh
             volumeMounts:
             - name: data
               mountPath: /data
@@ -45,9 +33,11 @@ spec:
               mountPath: /db
             - name: tmp
               mountPath: /tmp
+            # Mount over the script the image actually executes:
             - name: liberate-script
-              mountPath: /liberate.sh
+              mountPath: /libation/liberate.sh
               subPath: liberate.sh
+
           volumes:
           - name: settings
             configMap:

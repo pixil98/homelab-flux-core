@@ -48,10 +48,11 @@ data:
     main() {
       require_cmd jq
 
-      if [[ -z "${LIBATION_CONFIG_INTERNAL:-}" ]]; then
-        error "LIBATION_CONFIG_INTERNAL is not set (image should define this)."
-        exit 1
-      fi
+      # These are provided by the image ENV, but keep sensible defaults
+      export LIBATION_BOOKS_DIR="${LIBATION_BOOKS_DIR:-/data}"
+      export LIBATION_CONFIG_DIR="${LIBATION_CONFIG_DIR:-/config}"
+      export LIBATION_DB_DIR="${LIBATION_DB_DIR:-/db}"
+      export LIBATION_CONFIG_INTERNAL="${LIBATION_CONFIG_INTERNAL:-/config-internal}"
 
       info "initializing libation (cronjob mode: stateless DB)"
 
@@ -64,7 +65,6 @@ data:
       update_settings "Settings.json" "Books" "${LIBATION_BOOKS_DIR}"
       update_settings "Settings.json" "InProgress" "/tmp"
 
-      # Fresh DB in emptyDir and symlink where Libation expects it.
       db_file="${LIBATION_DB_DIR}/LibationContext.db"
       touch "${db_file}"
       ln -sf "${db_file}" "${LIBATION_CONFIG_INTERNAL}/LibationContext.db"
