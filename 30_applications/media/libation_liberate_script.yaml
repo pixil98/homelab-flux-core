@@ -22,15 +22,15 @@ data:
 
     init_config_file() {
       local file="$1"
-      local src="${LIBATION_CONFIG_DIR}/${file}"
-      local dst="${LIBATION_CONFIG_INTERNAL}/${file}"
+      local src="$${LIBATION_CONFIG_DIR}/$${file}"
+      local dst="$${LIBATION_CONFIG_INTERNAL}/$${file}"
 
-      if [[ -f "${src}" ]]; then
-        info "loading ${file}"
-        cp -f "${src}" "${dst}"
+      if [[ -f "$${src}" ]]; then
+        info "loading $${file}"
+        cp -f "$${src}" "$${dst}"
       else
-        warn "${src} not found, creating empty ${file}"
-        printf '{}' > "${dst}"
+        warn "$${src} not found, creating empty $${file}"
+        printf '{}' > "$${dst}"
       fi
     }
 
@@ -38,37 +38,37 @@ data:
       local file="$1"
       local key="$2"
       local value="$3"
-      local path="${LIBATION_CONFIG_INTERNAL}/${file}"
+      local path="$${LIBATION_CONFIG_INTERNAL}/$${file}"
 
-      info "setting ${file}.${key} = ${value}"
-      jq --arg k "${key}" --arg v "${value}" '.[$k] = $v' "${path}" > "${path}.tmp"
-      mv -f "${path}.tmp" "${path}"
+      info "setting $${file}.$${key} = $${value}"
+      jq --arg k "$${key}" --arg v "$${value}" '.[$k] = $v' "$${path}" > "$${path}.tmp"
+      mv -f "$${path}.tmp" "$${path}"
     }
 
     main() {
       require_cmd jq
 
       # These are provided by the image ENV, but keep sensible defaults
-      export LIBATION_BOOKS_DIR="${LIBATION_BOOKS_DIR:-/data}"
-      export LIBATION_CONFIG_DIR="${LIBATION_CONFIG_DIR:-/config}"
-      export LIBATION_DB_DIR="${LIBATION_DB_DIR:-/db}"
-      export LIBATION_CONFIG_INTERNAL="${LIBATION_CONFIG_INTERNAL:-/config-internal}"
+      export LIBATION_BOOKS_DIR="$${LIBATION_BOOKS_DIR:-/data}"
+      export LIBATION_CONFIG_DIR="$${LIBATION_CONFIG_DIR:-/config}"
+      export LIBATION_DB_DIR="$${LIBATION_DB_DIR:-/db}"
+      export LIBATION_CONFIG_INTERNAL="$${LIBATION_CONFIG_INTERNAL:-/config-internal}"
 
       info "initializing libation (cronjob mode: stateless DB)"
 
-      mkdir -p "${LIBATION_CONFIG_INTERNAL}"
-      mkdir -p "${LIBATION_DB_DIR}"
+      mkdir -p "$${LIBATION_CONFIG_INTERNAL}"
+      mkdir -p "$${LIBATION_DB_DIR}"
 
       init_config_file "AccountsSettings.json"
       init_config_file "Settings.json"
 
-      update_settings "Settings.json" "Books" "${LIBATION_BOOKS_DIR}"
+      update_settings "Settings.json" "Books" "$${LIBATION_BOOKS_DIR}"
       update_settings "Settings.json" "InProgress" "/tmp"
 
-      db_file="${LIBATION_DB_DIR}/LibationContext.db"
-      touch "${db_file}"
-      ln -sf "${db_file}" "${LIBATION_CONFIG_INTERNAL}/LibationContext.db"
-      info "using database at ${db_file}"
+      db_file="$${LIBATION_DB_DIR}/LibationContext.db"
+      touch "$${db_file}"
+      ln -sf "$${db_file}" "$${LIBATION_CONFIG_INTERNAL}/LibationContext.db"
+      info "using database at $${db_file}"
 
       info "scanning accounts"
       /libation/LibationCli scan
