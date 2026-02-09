@@ -7,6 +7,8 @@ metadata:
     app.kubernetes.io/name: audiobookshelf-server
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: audiobookshelf-server
@@ -15,6 +17,21 @@ spec:
       labels:
         app.kubernetes.io/name: audiobookshelf-server
     spec:
+      terminationGracePeriodSeconds: 120
+      initContainers:
+        - name: copy-config-from-nfs
+          image: docker.io/library/alpine:3.23.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Copying config from NFS to local storage..."
+              cp -a /config-nfs/. /config-local/ 2>/dev/null || true
+              echo "Copy complete."
+          volumeMounts:
+            - name: config-nfs
+              mountPath: /config-nfs
+            - name: config-local
+              mountPath: /config-local
       containers:
         - name: audiobookshelf
           image: "ghcr.io/advplyr/audiobookshelf:2.32.1"
@@ -27,9 +44,21 @@ spec:
               containerPort: 80
               protocol: TCP
           resources: {}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Copying config from local storage back to NFS..."
+                    cp -a /config/. /config-nfs/
+                    echo "Copy complete."
           volumeMounts:
-            - name: config
+            - name: config-local
               mountPath: /config
+            - name: config-nfs
+              mountPath: /config-nfs
             - name: metadata
               mountPath: /metadata
             - name: audiobooks
@@ -68,9 +97,11 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
       volumes:
-        - name: config
+        - name: config-nfs
           persistentVolumeClaim:
             claimName: audiobookshelf-config-pvc
+        - name: config-local
+          emptyDir: {}
         - name: metadata
           persistentVolumeClaim:
             claimName: audiobookshelf-metadata-pvc
