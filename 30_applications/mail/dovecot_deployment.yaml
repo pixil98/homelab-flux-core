@@ -77,11 +77,11 @@ spec:
             periodSeconds: 30
           resources:
             requests:
-              memory: "50Mi"
+              memory: "256Mi"
               cpu: "100m"
             limits:
-              memory: "150Mi"
-              cpu: "150m"
+              memory: "512Mi"
+              cpu: "300m"
           volumeMounts:
             - name: mailboxes
               mountPath: /var/vmail
