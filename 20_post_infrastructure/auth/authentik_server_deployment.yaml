@@ -53,14 +53,14 @@ spec:
               containerPort: 9300
               protocol: TCP
           livenessProbe:
-            failureThreshold: 3
+            failureThreshold: 5
             httpGet:
               path: /-/health/live/
               port: http
             initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -69,7 +69,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           startupProbe:
             failureThreshold: 60
             httpGet:
@@ -78,7 +78,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "600Mi"

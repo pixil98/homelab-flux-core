@@ -40,11 +40,11 @@ spec:
               memory: "750Mi"
               cpu: "2"
           livenessProbe:
-            failureThreshold: 3
+            failureThreshold: 5
             initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             exec:
               command:
                 - ak
@@ -54,7 +54,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             exec:
               command:
                 - ak
@@ -64,7 +64,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             exec:
               command:
                 - ak
