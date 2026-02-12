@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: ghcr.io/goauthentik/ldap:2025.12.3
+          image: ghcr.io/goauthentik/ldap:2025.12.4
           imagePullPolicy: IfNotPresent
           env:
             - name: AUTHENTIK_HOST
