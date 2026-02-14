@@ -5,14 +5,35 @@ metadata:
   namespace: paperless
 spec:
   instances: 1
+
+  # Moderate autovacuum tuning for celery workloads
+  postgresql:
+    parameters:
+      autovacuum_naptime: "45s"
+      autovacuum_vacuum_scale_factor: "0.1"
+      autovacuum_analyze_scale_factor: "0.05"
+
+      # Performance
+      shared_buffers: "192MB"
+      effective_cache_size: "4GB"
+      maintenance_work_mem: "96MB"
+      checkpoint_completion_target: "0.9"
+
   superuserSecret:
     name: paperless-postgresql-superuser
+
   bootstrap:
     initdb:
       database: paperless
       owner: paperless
       secret:
         name: paperless-postgresql-appuser
+      postInitSQL:
+        # Aggressive vacuum for task tables
+        - ALTER TABLE django_celery_results_taskresult SET (autovacuum_vacuum_scale_factor = 0.02);
+        - ALTER TABLE documents_paperlesstask SET (autovacuum_vacuum_scale_factor = 0.02, autovacuum_vacuum_threshold = 50);
+        - ALTER TABLE django_celery_results_chordcounter SET (autovacuum_vacuum_scale_factor = 0.02);
+
   storage:
     storageClass: nfs-client-ssd
     size: 1Gi

@@ -6,8 +6,23 @@ metadata:
 spec:
   instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.3.0
+
+  # Tuned for vector workloads + bursty writes
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+      effective_cache_size: "4GB"
+      maintenance_work_mem: "128MB"
+      work_mem: "32MB"
+      autovacuum_vacuum_scale_factor: "0.1"
+      checkpoint_completion_target: "0.9"
+
+    shared_preload_libraries:
+      - "vchord.so"
+
   superuserSecret:
     name: immich-postgresql-superuser
+
   bootstrap:
     initdb:
       database: immich
@@ -19,12 +34,12 @@ spec:
         - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
         - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
         - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
-  postgresql:
-    shared_preload_libraries:
-      - "vchord.so"
+        # Tune session table
+        - ALTER TABLE session SET (autovacuum_vacuum_scale_factor = 0.05);
+
   storage:
     storageClass: nfs-client-ssd
-    size: 1Gi
+    size: 2Gi
 ---
 apiVersion: v1
 kind: Secret
