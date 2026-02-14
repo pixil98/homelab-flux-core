@@ -46,7 +46,7 @@ spec:
               secretName: libation-accounts
           - name: data
             persistentVolumeClaim:
-              claimName: audiobooks-pvc
+              claimName: audible-pvc
           - name: db-local
             emptyDir: {}
           - name: tmp

@@ -61,9 +61,11 @@ spec:
               mountPath: /config-nfs
             - name: metadata
               mountPath: /metadata
+            - name: audible
+              mountPath: /audible
+              readOnly: true
             - name: audiobooks
               mountPath: /audiobooks
-              readOnly: true
             - name: ebooks
               mountPath: /ebooks
             - name: podcasts
@@ -105,6 +107,9 @@ spec:
         - name: metadata
           persistentVolumeClaim:
             claimName: audiobookshelf-metadata-pvc
+        - name: audible
+          persistentVolumeClaim:
+            claimName: audible-pvc
         - name: audiobooks
           persistentVolumeClaim:
             claimName: audiobooks-pvc
