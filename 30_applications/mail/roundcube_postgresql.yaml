@@ -5,14 +5,33 @@ metadata:
   namespace: mail
 spec:
   instances: 1
+
+  # Light tuning for webmail workload
+  postgresql:
+    parameters:
+      # Moderate autovacuum for session table churn
+      autovacuum_naptime: "60s"
+      autovacuum_vacuum_scale_factor: "0.1"
+
+      # Basic performance tuning
+      shared_buffers: "128MB"
+      effective_cache_size: "2GB"
+      maintenance_work_mem: "64MB"
+      checkpoint_completion_target: "0.9"
+
   superuserSecret:
     name: roundcube-postgresql-superuser
+
   bootstrap:
     initdb:
       database: roundcube
       owner: roundcube
       secret:
         name: roundcube-postgresql-appuser
+      postInitSQL:
+        # Session table has highest churn from webmail logins
+        - ALTER TABLE session SET (autovacuum_vacuum_scale_factor = 0.05);
+
   storage:
     storageClass: nfs-client-ssd
     size: 1Gi

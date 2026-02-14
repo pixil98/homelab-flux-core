@@ -4,10 +4,10 @@ metadata:
   name: paperless-dragonfly
   namespace: paperless
 spec:
-    #authentication:
-    #  passwordFromSecret:
-    #    name: paperless-secrets
-    #    key: password
+    authentication:
+      passwordFromSecret:
+        name: paperless-redis-password
+        key: password
     replicas: 1
 ---
 apiVersion: v1
