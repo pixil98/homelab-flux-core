@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin-server
+  namespace: media
+  labels:
+    app.kubernetes.io/name: jellyfin-server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jellyfin-server
+    spec:
+      terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: setup-config
+          image: docker.io/library/alpine:3.23.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Seeding config files (first-run only)..."
+              for f in system.xml network.xml branding.xml; do
+                if [ ! -f "/config/$f" ]; then
+                  echo "  Copying $f"
+                  cp "/config-templates/$f" "/config/$f"
+                fi
+              done
+
+              echo "Installing SSO plugin if not present..."
+              if [ ! -d "/config/plugins/SSO-Auth" ]; then
+                apk add --no-cache wget unzip > /dev/null 2>&1
+                mkdir -p /config/plugins/SSO-Auth
+                wget -q -O /tmp/sso.zip "https://github.com/9p4/jellyfin-plugin-sso/releases/download/v4.0.0.3/sso-authentication_4.0.0.3.zip"
+                unzip -q /tmp/sso.zip -d /config/plugins/SSO-Auth/
+                rm /tmp/sso.zip
+                echo "  SSO plugin installed."
+              else
+                echo "  SSO plugin already present."
+              fi
+
+              echo "Updating SSO plugin configuration..."
+              mkdir -p /config/plugins/configurations
+              cp /sso-config/SSO-Auth.xml /config/plugins/configurations/SSO-Auth.xml
+              echo "Setup complete."
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: config-templates
+              mountPath: /config-templates
+            - name: sso-config
+              mountPath: /sso-config
+      containers:
+        - name: jellyfin
+          image: "docker.io/jellyfin/jellyfin:10.11.6"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: "America/Chicago"
+          ports:
+            - name: http
+              containerPort: 8096
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: cache
+              mountPath: /cache
+            - name: movies
+              mountPath: /movies
+              readOnly: true
+            - name: tv
+              mountPath: /tv
+              readOnly: true
+            - name: music
+              mountPath: /music
+              readOnly: true
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config-pvc
+        - name: cache
+          emptyDir: {}
+        - name: config-templates
+          configMap:
+            name: jellyfin-config
+        - name: sso-config
+          secret:
+            secretName: jellyfin-sso-config
+        - name: movies
+          persistentVolumeClaim:
+            claimName: movies-pvc
+        - name: tv
+          persistentVolumeClaim:
+            claimName: tv-pvc
+        - name: music
+          persistentVolumeClaim:
+            claimName: music-pvc
+      dnsConfig:
+          options:
+            - name: ndots
+              value: "2"

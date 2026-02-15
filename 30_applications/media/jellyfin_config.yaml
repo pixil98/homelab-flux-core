@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jellyfin-config
+  namespace: media
+data:
+  system.xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <ServerConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <IsStartupWizardCompleted>true</IsStartupWizardCompleted>
+      <PublishedServerUrl>https://jellyfin.${vals_info_cluster_domain}</PublishedServerUrl>
+    </ServerConfiguration>
+  network.xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <NetworkConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <BaseUrl />
+      <HttpServerPortNumber>8096</HttpServerPortNumber>
+      <EnableHttps>false</EnableHttps>
+    </NetworkConfiguration>
+  branding.xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <BrandingOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <LoginDisclaimer><![CDATA[<form action="/sso/OID/start/authentik"><button class="raised block emby-button button-submit">Sign in with SSO</button></form>]]></LoginDisclaimer>
+    </BrandingOptions>

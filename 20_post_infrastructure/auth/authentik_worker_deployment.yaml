@@ -97,4 +97,6 @@ spec:
               - secret:
                   name: authentik-blueprint-mail
               - secret:
+                  name: authentik-blueprint-jellyfin
+              - secret:
                   name: authentik-blueprint-paperless

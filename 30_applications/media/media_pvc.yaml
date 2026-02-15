@@ -6,7 +6,7 @@ metadata:
 spec:
   storageClassName: nfs-client-nobackup
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
@@ -19,7 +19,7 @@ metadata:
 spec:
   storageClassName: nfs-client-nobackup
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
@@ -32,7 +32,46 @@ metadata:
 spec:
   storageClassName: nfs-client-nobackup
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: movies-pvc
+  namespace: media
+spec:
+  storageClassName: nfs-client-nobackup
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tv-pvc
+  namespace: media
+spec:
+  storageClassName: nfs-client-nobackup
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: music-pvc
+  namespace: media
+spec:
+  storageClassName: nfs-client-nobackup
+  accessModes:
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
