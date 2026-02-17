@@ -1,0 +1,48 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client-backup
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: "192.168.1.10"
+  share: /mnt/main/kubernetes
+  subDir: "${vals_info_cluster_name}/$${pvc.metadata.namespace}-$${pvc.metadata.name}"
+  onDelete: retain
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.1
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client-ssd
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: "192.168.1.10"
+  share: /mnt/ssd/kubernetes
+  subDir: "${vals_info_cluster_name}/$${pvc.metadata.namespace}-$${pvc.metadata.name}"
+  onDelete: retain
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.1
+  - hard
+  - noatime
+  - rsize=1048576
+  - wsize=1048576
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client-nobackup
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: "192.168.1.10"
+  share: /mnt/main/kubernetes-nobackup
+  subDir: "${vals_info_cluster_name}/$${pvc.metadata.namespace}-$${pvc.metadata.name}"
+  onDelete: retain
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.1
