@@ -19,14 +19,16 @@ spec:
       autovacuum_vacuum_cost_delay: "10ms"
       autovacuum_vacuum_cost_limit: "1000"
 
-      # Performance - better for write-heavy workload
+      # Performance - tuned for NFS-backed storage
       shared_buffers: "256MB"
       effective_cache_size: "4GB"
       maintenance_work_mem: "128MB"
       checkpoint_completion_target: "0.9"
-      wal_buffers: "16MB"
+      wal_buffers: "4MB"
       max_wal_size: "2GB"
+      wal_keep_size: "256MB"
       max_connections: "100"
+      synchronous_commit: "off"
 
   superuserSecret:
     name: authentik-postgresql-superuser
@@ -44,6 +46,20 @@ spec:
         - ALTER TABLE authentik_tasks_task SET (autovacuum_vacuum_scale_factor = 0.01);
         - ALTER TABLE authentik_tasks_tasklog SET (autovacuum_vacuum_scale_factor = 0.01);
         - ALTER TABLE authentik_core_session SET (autovacuum_vacuum_scale_factor = 0.05);
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+
+  probes:
+    liveness:
+      isolationCheck:
+        enabled: true
+        connectionTimeout: 5000
+        requestTimeout: 5000
 
   storage:
     storageClass: nfs-client-ssd
