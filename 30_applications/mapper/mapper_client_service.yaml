@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mapper-client
+  namespace: mapper
+  labels:
+    app.kubernetes.io/instance: mapper
+    app.kubernetes.io/name: client
+spec:
+  selector:
+    app.kubernetes.io/instance: mapper
+    app.kubernetes.io/name: client
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  type: ClusterIP

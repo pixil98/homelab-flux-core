@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mapper
+  namespace: mapper
+  labels:
+    app.kubernetes.io/instance: mapper
+  annotations:
+    #TODO: This shouldn't be hard coded, it will be used in dev clusters unnecessarily
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - mapper.${secrets_apps_mapper_mapper_domain}
+      secretName: mapper-tls
+  rules:
+    - host: mapper.${secrets_apps_mapper_mapper_domain}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: mapper-server
+                port:
+                  name: http
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mapper-client
+                port:
+                  name: http

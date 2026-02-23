@@ -1,0 +1,10 @@
+kubeconfig
+*.kubeconfig
+.env
+*.dec
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
