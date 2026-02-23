@@ -28,7 +28,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: gotenberg
-          image: docker.io/gotenberg/gotenberg:8.26.0
+          image: docker.io/gotenberg/gotenberg:8.27.0
           imagePullPolicy: IfNotPresent
           command:
             - "gotenberg"
