@@ -39,6 +39,16 @@ spec:
               mountPath: /db-nfs
             - name: db-local
               mountPath: /db-local
+        - name: prisma-db-push
+          image: ghcr.io/bcnoexceptions/mapper-server:main
+          imagePullPolicy: IfNotPresent
+          command: ["npx", "prisma", "db", "push", "--skip-generate"]
+          env:
+            - name: DATABASE_URL
+              value: "file:/mapper/db/mapper.db"
+          volumeMounts:
+            - name: db-local
+              mountPath: /mapper/db
       containers:
         - name: mapper-server
           image: ghcr.io/bcnoexceptions/mapper-server:main
@@ -79,7 +89,7 @@ spec:
                   - -c
                   - |
                     echo "Copying db from local storage back to NFS..."
-                    cp -a /db/. /db-nfs/
+                    cp -a /mapper/db/. /mapper/db-nfs/
                     echo "Copy complete."
           volumeMounts:
             - name: db-local

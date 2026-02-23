@@ -11,10 +11,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - mapper.${vals_info_cluster_domain}
+        - mapper.${secrets_apps_mapper_mapper_domain}
       secretName: mapper-tls
   rules:
-    - host: mapper.${vals_info_cluster_domain}
+    - host: mapper.${secrets_apps_mapper_mapper_domain}
       http:
         paths:
           - path: /api
