@@ -6,7 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: mapper
   annotations:
-    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    #TODO: This shouldn't be hard coded, it will be used in dev clusters unnecessarily
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
 spec:
   ingressClassName: nginx
   tls:
