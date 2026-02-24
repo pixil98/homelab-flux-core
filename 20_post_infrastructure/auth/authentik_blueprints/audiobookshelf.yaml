@@ -21,12 +21,13 @@ stringData:
           scope_name: audiobookshelf_permissions
           description: "Audiobookshelf Advanced Permissions"
           expression: |
+            is_manager = ak_is_group_member(request.user, name="audiobookshelf-managers") or ak_is_group_member(request.user, name="authentik Admins")
             return {
               "audiobookshelf_permissions": {
                 "canDownload": True,
-                "canUpload": False,
-                "canDelete": False,
-                "canUpdate": False,
+                "canUpload": is_manager,
+                "canDelete": is_manager,
+                "canUpdate": is_manager,
                 "canAccessExplicitContent": True,
                 "canAccessAllLibraries": True,
                 "canAccessAllTags": True,
@@ -76,6 +77,22 @@ stringData:
         identifiers: { name: audiobookshelf }
         state: present
         attrs: { name: audiobookshelf }
+
+      - model: authentik_core.group
+        id: audiobookshelf_users_group
+        identifiers: { name: audiobookshelf-users }
+        state: present
+        attrs:
+          name: audiobookshelf-users
+          parent: !KeyOf audiobookshelf_group
+
+      - model: authentik_core.group
+        id: audiobookshelf_managers_group
+        identifiers: { name: audiobookshelf-managers }
+        state: present
+        attrs:
+          name: audiobookshelf-managers
+          parent: !KeyOf audiobookshelf_group
 
       # Application entitlements (group access)
       - model: authentik_policies.policybinding
