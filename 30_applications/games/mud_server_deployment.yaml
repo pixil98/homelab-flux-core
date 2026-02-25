@@ -30,6 +30,9 @@ spec:
             - name: telnet
               containerPort: 4000
               protocol: TCP
+            - name: ssh
+              containerPort: 4022
+              protocol: TCP
           volumeMounts:
             - name: characters
               mountPath: /app/assets/characters
