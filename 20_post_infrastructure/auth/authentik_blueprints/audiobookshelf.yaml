@@ -84,7 +84,8 @@ stringData:
         state: present
         attrs:
           name: audiobookshelf-users
-          parent: !KeyOf audiobookshelf_group
+          parents:
+            - !KeyOf audiobookshelf_group
 
       - model: authentik_core.group
         id: audiobookshelf_managers_group
@@ -92,7 +93,8 @@ stringData:
         state: present
         attrs:
           name: audiobookshelf-managers
-          parent: !KeyOf audiobookshelf_group
+          parents:
+            - !KeyOf audiobookshelf_group
 
       # Application entitlements (group access)
       - model: authentik_policies.policybinding

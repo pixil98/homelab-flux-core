@@ -57,19 +57,19 @@ stringData:
         id: grafana_group_admin
         identifiers: { name: grafana-admin }
         state: present
-        attrs: { name: grafana-admin, parent: !KeyOf grafana_group }
+        attrs: { name: grafana-admin, parents: [!KeyOf grafana_group] }
 
       - model: authentik_core.group
         id: grafana_group_editor
         identifiers: { name: grafana-editor }
         state: present
-        attrs: { name: grafana-editor, parent: !KeyOf grafana_group }
+        attrs: { name: grafana-editor, parents: [!KeyOf grafana_group] }
 
       - model: authentik_core.group
         id: grafana_group_viewer
         identifiers: { name: grafana-viewer }
         state: present
-        attrs: { name: grafana-viewer, parent: !KeyOf grafana_group }
+        attrs: { name: grafana-viewer, parents: [!KeyOf grafana_group] }
 
       - model: authentik_policies.policybinding
         identifiers:
