@@ -37,7 +37,7 @@ spec:
               memory: "600Mi"
               cpu: "500m"
             limits:
-              memory: "750Mi"
+              memory: "1Gi"
               cpu: "2"
           livenessProbe:
             failureThreshold: 5
