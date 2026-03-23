@@ -22,8 +22,6 @@ spec:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: mapper
     spec:
-      imagePullSecrets:
-        - name: mapper-pull-secret
       terminationGracePeriodSeconds: 120
       initContainers:
         - name: copy-db-from-nfs
@@ -51,7 +49,7 @@ spec:
               mountPath: /mapper/db
       containers:
         - name: mapper-server
-          image: ghcr.io/bcnoexceptions/mapper-server:0.0.1
+          image: ghcr.io/bcnoexceptions/mapper-server:0.0.3
           imagePullPolicy: IfNotPresent
           env:
             - name: DATABASE_URL

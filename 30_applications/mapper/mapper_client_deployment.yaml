@@ -20,11 +20,9 @@ spec:
         app.kubernetes.io/name: client
         app.kubernetes.io/instance: mapper
     spec:
-      imagePullSecrets:
-        - name: mapper-pull-secret
       containers:
         - name: mapper-client
-          image: ghcr.io/bcnoexceptions/mapper-client:0.0.1
+          image: ghcr.io/bcnoexceptions/mapper-client:0.0.3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
