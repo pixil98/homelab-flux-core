@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: metrics-server
         namespace: kube-system
-      version: "3.12.x"
+      version: "3.13.x"
       interval: 6h
   interval: 30m
   values:
