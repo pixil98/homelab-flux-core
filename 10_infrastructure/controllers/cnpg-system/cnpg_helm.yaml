@@ -19,6 +19,7 @@ spec:
     remediation:
       retries: 3
   values:
+    replicaCount: 2
     monitoring:
       grafanaDashboard:
         create: true

@@ -17,3 +17,43 @@ spec:
   values:
     prometheus:
       scrapeAnnotations: true
+    speaker:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+      frr:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+      frrMetrics:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      reloader:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+    controller:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
