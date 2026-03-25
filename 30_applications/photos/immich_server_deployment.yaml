@@ -95,6 +95,14 @@ spec:
               port: http
             failureThreshold: 60
             periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/server/ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           livenessProbe:
             failureThreshold: 30
             httpGet:

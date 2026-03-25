@@ -26,6 +26,13 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/app/mud"]
           args: ["--config", "/app/config.json"]
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
           ports:
             - name: telnet
               containerPort: 4000
@@ -33,6 +40,20 @@ spec:
             - name: ssh
               containerPort: 4022
               protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: telnet
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: telnet
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           volumeMounts:
             - name: characters
               mountPath: /app/assets/characters

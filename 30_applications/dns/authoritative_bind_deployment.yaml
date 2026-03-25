@@ -26,6 +26,13 @@ spec:
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
           volumeMounts:
             - name: zones
               mountPath: /configtmp
@@ -84,6 +91,22 @@ spec:
             - name: monitoring
               containerPort: 9119
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: monitoring
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: monitoring
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           resources:
             requests:
               memory: "20Mi"

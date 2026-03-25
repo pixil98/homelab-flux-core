@@ -26,6 +26,13 @@ spec:
           args:
             - --custom-resource-state-config-file=/data/custom-resource-state-metrics.yaml
           image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.18.0
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
           livenessProbe:
             httpGet:
               path: /livez
