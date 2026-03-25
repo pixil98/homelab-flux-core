@@ -26,6 +26,13 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/app/mud"]
           args: ["--config", "/app/config.json"]
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
           ports:
             - name: telnet
               containerPort: 4000

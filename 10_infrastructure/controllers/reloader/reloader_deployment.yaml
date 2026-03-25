@@ -21,6 +21,13 @@ spec:
         - name: reloader-reloader
           image: "ghcr.io/stakater/reloader:v1.4.14"
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           env:
             - name: GOMAXPROCS
               valueFrom:

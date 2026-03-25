@@ -32,6 +32,13 @@ spec:
               echo "Copying db from NFS to local storage..."
               cp -a /db-nfs/. /db-local/ 2>/dev/null || true
               echo "Copy complete."
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
           volumeMounts:
             - name: db-nfs
               mountPath: /db-nfs
@@ -44,6 +51,13 @@ spec:
           env:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
           volumeMounts:
             - name: db-local
               mountPath: /mapper/db
@@ -51,6 +65,13 @@ spec:
         - name: mapper-server
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.3
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
           env:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"

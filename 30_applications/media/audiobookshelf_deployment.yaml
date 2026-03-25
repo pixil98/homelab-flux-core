@@ -27,6 +27,13 @@ spec:
               echo "Copying config from NFS to local storage..."
               cp -a /config-nfs/. /config-local/ 2>/dev/null || true
               echo "Copy complete."
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
           volumeMounts:
             - name: config-nfs
               mountPath: /config-nfs
@@ -43,7 +50,13 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "10m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
           lifecycle:
             preStop:
               exec:
