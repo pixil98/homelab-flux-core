@@ -56,6 +56,22 @@ spec:
             - name: monitoring
               containerPort: 9100
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: monitoring
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: monitoring
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             limits:
               cpu: 250m

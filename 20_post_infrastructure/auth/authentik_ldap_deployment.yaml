@@ -62,3 +62,19 @@ spec:
             limits:
               memory: "150Mi"
               cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /outpost.goauthentik.io/ping
+              port: monitoring
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /outpost.goauthentik.io/ping
+              port: monitoring
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3

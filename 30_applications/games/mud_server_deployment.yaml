@@ -33,6 +33,20 @@ spec:
             - name: ssh
               containerPort: 4022
               protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: telnet
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: telnet
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           volumeMounts:
             - name: characters
               mountPath: /app/assets/characters
