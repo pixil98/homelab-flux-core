@@ -1,0 +1,12 @@
+apiVersion: autoscaling.k8s.io/v1beta2
+kind: VerticalPodAutoscaler
+metadata:
+  name: libation-vpa
+  namespace: media
+spec:
+  targetRef:
+    apiVersion: "batch/v1"
+    kind: CronJob
+    name: libation
+  updatePolicy:
+    updateMode: "Off"

@@ -1,0 +1,12 @@
+apiVersion: autoscaling.k8s.io/v1beta2
+kind: VerticalPodAutoscaler
+metadata:
+  name: mud-server-vpa
+  namespace: games
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: mud-server
+  updatePolicy:
+    updateMode: "Off"
