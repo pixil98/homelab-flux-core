@@ -48,11 +48,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "100m"
-            limits:
               memory: "500Mi"
-              cpu: "150m"
+              cpu: "25m"
+            limits:
+              memory: "750Mi"
+              cpu: "50m"
           startupProbe:
             failureThreshold: 60
             periodSeconds: 10

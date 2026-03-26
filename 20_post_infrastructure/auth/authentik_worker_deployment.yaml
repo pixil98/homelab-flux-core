@@ -34,11 +34,11 @@ spec:
                 name: authentik-env
           resources:
             requests:
-              memory: "600Mi"
-              cpu: "500m"
+              memory: "900Mi"
+              cpu: "350m"
             limits:
-              memory: "1Gi"
-              cpu: "2"
+              memory: "1536Mi"
+              cpu: "700m"
           livenessProbe:
             failureThreshold: 5
             initialDelaySeconds: 5

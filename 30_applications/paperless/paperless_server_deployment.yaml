@@ -89,6 +89,13 @@ spec:
               value: "true"
             - name: PAPERLESS_REDIRECT_LOGIN_TO_SSO
               value: "true"
+          resources:
+            requests:
+              memory: "700Mi"
+              cpu: "25m"
+            limits:
+              memory: "1Gi"
+              cpu: "50m"
           ports:
             - name: http
               containerPort: 8000

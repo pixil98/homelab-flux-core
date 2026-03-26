@@ -81,11 +81,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: "600Mi"
-              cpu: "500m"
-            limits:
               memory: "1Gi"
-              cpu: "1"
+              cpu: "300m"
+            limits:
+              memory: "1536Mi"
+              cpu: "500m"
           volumeMounts:
             - name: icons
               mountPath: /media/public/icons

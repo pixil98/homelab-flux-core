@@ -14,3 +14,11 @@ spec:
         namespace: paperless
       interval: 6h
   interval: 30m
+  values:
+    resources:
+      requests:
+        memory: "300Mi"
+        cpu: "25m"
+      limits:
+        memory: "500Mi"
+        cpu: "50m"

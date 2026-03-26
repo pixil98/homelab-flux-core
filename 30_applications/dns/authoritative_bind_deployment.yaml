@@ -59,11 +59,11 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              memory: "150Mi"
-              cpu: "100m"
+              memory: "125Mi"
+              cpu: "15m"
             limits:
-              memory: "200Mi"
-              cpu: "150m"
+              memory: "175Mi"
+              cpu: "25m"
           volumeMounts:
             - name: config
               mountPath: /etc/bind
@@ -86,11 +86,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              memory: "20Mi"
-              cpu: "150m"
+              memory: "125Mi"
+              cpu: "15m"
             limits:
-              memory: "50Mi"
-              cpu: "200m"
+              memory: "175Mi"
+              cpu: "25m"
       volumes:
         - name: config
           projected:
