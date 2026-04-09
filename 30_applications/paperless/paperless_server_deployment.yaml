@@ -95,7 +95,6 @@ spec:
               cpu: "25m"
             limits:
               memory: "1Gi"
-              cpu: "50m"
           ports:
             - name: http
               containerPort: 8000

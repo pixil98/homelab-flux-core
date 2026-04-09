@@ -68,16 +68,21 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              memory: "1200Mi"
-              cpu: "50m"
-            limits:
-              memory: "1800Mi"
+              memory: "1500Mi"
               cpu: "100m"
+            limits:
+              memory: "2700Mi"
+              cpu: "200m"
           volumeMounts:
             - name: scripts
               mountPath: /scripts
+            - name: clamav-db
+              mountPath: /var/lib/clamav
       volumes:
         - name: scripts
           configMap:
             name: clamav-config-scripts
             defaultMode: 0777
+        - name: clamav-db
+          persistentVolumeClaim:
+            claimName: clamav-db
