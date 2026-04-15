@@ -5,10 +5,10 @@ metadata:
   namespace: mapper
 type: Opaque
 stringData:
-  DISCORD_CLIENT_ID: ${secrets_apps_mapper_mapper_discordClientId}
-  DISCORD_CLIENT_SECRET: ${secrets_apps_mapper_mapper_discordClientSecret}
-  DISCORD_REDIRECT_URI: https://mapper.${secrets_apps_mapper_mapper_domain}/api/login/discord/callback
-  DISCORD_BOT_TOKEN: ${secrets_apps_mapper_mapper_discordBotToken}
-  DISCORD_GUILD_ID: ${secrets_apps_mapper_mapper_discordGuildId}
-  MAPPER_ROLE_ID: ${secrets_apps_mapper_mapper_discordMapperRoleId}
-  FRONTEND_URL: https://mapper.${secrets_apps_mapper_mapper_domain}/
+  DISCORD_CLIENT_ID: "${secrets_apps_mapper_mapper_discordClientId}"
+  DISCORD_CLIENT_SECRET: "${secrets_apps_mapper_mapper_discordClientSecret}"
+  DISCORD_REDIRECT_URI: "https://mapper.${secrets_apps_mapper_mapper_domain}/api/login/discord/callback"
+  DISCORD_BOT_TOKEN: "${secrets_apps_mapper_mapper_discordBotToken}"
+  DISCORD_GUILD_ID: "${secrets_apps_mapper_mapper_discordGuildId}"
+  MAPPER_ROLE_ID: "${secrets_apps_mapper_mapper_discordMapperRoleId}"
+  FRONTEND_URL: "https://mapper.${secrets_apps_mapper_mapper_domain}/"
