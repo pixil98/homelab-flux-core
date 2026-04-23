@@ -18,6 +18,8 @@ spec:
     remediation:
       retries: 3
   values:
+    plugins:
+      - victoriametrics-logs-datasource
     extraSecretMounts:
       - name: grafana-oauth
         secretName: grafana-oauth
@@ -67,6 +69,12 @@ spec:
             url: http://victoria-metrics-cluster-vmselect.monitoring.svc.cluster.local:8481/select/0/prometheus
             basicAuth: false
             isDefault: true
+            editable: false
+          - name: VictoriaLogs
+            type: victoriametrics-logs-datasource
+            access: proxy
+            url: http://victoria-logs-cluster-vlselect.monitoring.svc.cluster.local:9471
+            basicAuth: false
             editable: false
     ingress:
       enabled: true
