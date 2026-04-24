@@ -1,0 +1,17 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: audiobookshelf-config-backup
+  namespace: media
+spec:
+  sourcePVC: audiobookshelf-config-pvc
+  trigger:
+    schedule: "0 4 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-audiobookshelf-config
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    copyMethod: Direct

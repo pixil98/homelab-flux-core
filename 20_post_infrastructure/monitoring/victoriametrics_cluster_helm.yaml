@@ -23,4 +23,4 @@ spec:
     vmstorage:
       persistentVolume:
         enabled: true
-        storageClassName: nfs-client-nobackup
+        storageClassName: local-path

@@ -1,45 +1,80 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
   name: immich-postgresql
   namespace: photos
 spec:
-  instances: 1
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.3.0
+  chart:
+    spec:
+      chart: cluster
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+        namespace: cnpg-system
+      version: "0.6.0"
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: immich-postgresql
+    mode: ${vals_cluster_restore_mode:=standalone}
 
-  # Tuned for vector workloads + bursty writes
-  postgresql:
-    parameters:
-      shared_buffers: "256MB"
-      effective_cache_size: "4GB"
-      maintenance_work_mem: "128MB"
-      work_mem: "32MB"
-      autovacuum_vacuum_scale_factor: "0.1"
-      checkpoint_completion_target: "0.9"
+    cluster:
+      instances: 1
+      imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.3.0
+      enableSuperuserAccess: true
+      superuserSecret: immich-postgresql-superuser
+      storage:
+        storageClass: local-path
+        size: 2Gi
+      postgresql:
+        shared_preload_libraries:
+          - "vchord.so"
+      initdb:
+        database: immich
+        owner: immich
+        secret:
+          name: immich-postgresql-appuser
+        postInitApplicationSQL:
+          - CREATE EXTENSION IF NOT EXISTS "vector";
+          - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
+          - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
+          - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
+      monitoring:
+        enabled: true
+        podMonitor:
+          enabled: true
 
-    shared_preload_libraries:
-      - "vchord.so"
-
-  superuserSecret:
-    name: immich-postgresql-superuser
-
-  bootstrap:
-    initdb:
-      database: immich
-      owner: immich
+    recovery:
+      method: object_store
+      clusterName: immich-postgresql
+      provider: s3
+      endpointURL: "${vals_infra_backup_s3_endpoint}"
+      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/immich/"
+      s3:
+        accessKey: "${secrets_infra_backup_s3_accessKey}"
+        secretKey: "${secrets_infra_backup_s3_secretKey}"
       secret:
-        name: immich-postgresql-appuser
-      postInitApplicationSQL:
-        - CREATE EXTENSION IF NOT EXISTS "vector";
-        - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
-        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
-        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
-        # Tune session table
-        - ALTER TABLE session SET (autovacuum_vacuum_scale_factor = 0.05);
+        create: true
 
-  storage:
-    storageClass: nfs-client-ssd
-    size: 2Gi
+    backups:
+      enabled: true
+      provider: s3
+      endpointURL: "${vals_infra_backup_s3_endpoint}"
+      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/immich/"
+      s3:
+        accessKey: "${secrets_infra_backup_s3_accessKey}"
+        secretKey: "${secrets_infra_backup_s3_secretKey}"
+      secret:
+        create: true
+      scheduledBackups:
+        - name: daily
+          schedule: "0 0 2 * * *"
+          backupOwnerReference: self
+          method: barmanObjectStore
+      retentionPolicy: "30d"
 ---
 apiVersion: v1
 kind: Secret

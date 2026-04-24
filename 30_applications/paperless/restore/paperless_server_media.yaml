@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-paperless-server-media
+  namespace: paperless
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "s3:${vals_infra_backup_s3_endpoint}/${vals_infra_backup_s3_bucket_volsync}/${vals_info_cluster_name}/paperless/paperless-server-media"
+  RESTIC_PASSWORD: "${secrets_infra_backup_volsync_restic_password}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_backup_s3_accessKey}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_backup_s3_secretKey}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-server-media
+  namespace: paperless
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Ti
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: paperless-server-media-restore
+  namespace: paperless
+spec:
+  trigger:
+    manual: "${vals_cluster_restore_mode}"
+  restic:
+    repository: volsync-paperless-server-media
+    destinationPVC: paperless-server-media
+    copyMethod: Direct

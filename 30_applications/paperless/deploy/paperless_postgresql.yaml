@@ -1,8 +1,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: authentik-postgresql
-  namespace: auth
+  name: paperless-postgresql
+  namespace: paperless
 spec:
   chart:
     spec:
@@ -18,21 +18,21 @@ spec:
     remediation:
       retries: 3
   values:
-    fullnameOverride: authentik-postgresql
+    fullnameOverride: paperless-postgresql
     mode: ${vals_cluster_restore_mode:=standalone}
 
     cluster:
       instances: 1
       enableSuperuserAccess: true
-      superuserSecret: authentik-postgresql-superuser
+      superuserSecret: paperless-postgresql-superuser
       storage:
         storageClass: local-path
-        size: 2Gi
+        size: 1Gi
       initdb:
-        database: authentik
-        owner: authentik
+        database: paperless
+        owner: paperless
         secret:
-          name: authentik-postgresql-appuser
+          name: paperless-postgresql-appuser
       monitoring:
         enabled: true
         podMonitor:
@@ -40,10 +40,10 @@ spec:
 
     recovery:
       method: object_store
-      clusterName: authentik-postgresql
+      clusterName: paperless-postgresql
       provider: s3
       endpointURL: "${vals_infra_backup_s3_endpoint}"
-      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/authentik/"
+      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/paperless/"
       s3:
         accessKey: "${secrets_infra_backup_s3_accessKey}"
         secretKey: "${secrets_infra_backup_s3_secretKey}"
@@ -54,7 +54,7 @@ spec:
       enabled: true
       provider: s3
       endpointURL: "${vals_infra_backup_s3_endpoint}"
-      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/authentik/"
+      destinationPath: "s3://${vals_infra_backup_s3_bucket_cnpg}/${vals_info_cluster_name}/paperless/"
       s3:
         accessKey: "${secrets_infra_backup_s3_accessKey}"
         secretKey: "${secrets_infra_backup_s3_secretKey}"
@@ -70,19 +70,19 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik-postgresql-appuser
-  namespace: auth
+  name: paperless-postgresql-appuser
+  namespace: paperless
 type: kubernetes.io/basic-auth
 stringData:
-  username: authentik
-  password: ${secrets_apps_auth_authentik_postgresql_app_password}
+  username: paperless
+  password: ${secrets_apps_paperless_paperless_postgresql_app_password}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: authentik-postgresql-superuser
-  namespace: auth
+  name: paperless-postgresql-superuser
+  namespace: paperless
 type: kubernetes.io/basic-auth
 stringData:
   username: postgres
-  password: ${secrets_apps_auth_authentik_postgresql_superuser_password}
+  password: ${secrets_apps_paperless_paperless_postgresql_superuser_password}

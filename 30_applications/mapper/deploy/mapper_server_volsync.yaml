@@ -1,0 +1,17 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: mapper-server-db-backup
+  namespace: mapper
+spec:
+  sourcePVC: mapper-server-db
+  trigger:
+    schedule: "0 4 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-mapper-server-db
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    copyMethod: Direct

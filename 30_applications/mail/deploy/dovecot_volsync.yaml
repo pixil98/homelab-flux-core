@@ -1,0 +1,17 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: dovecot-mailboxes-backup
+  namespace: mail
+spec:
+  sourcePVC: dovecot-mailboxes
+  trigger:
+    schedule: "0 4 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-dovecot-mailboxes
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    copyMethod: Direct

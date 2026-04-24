@@ -84,5 +84,4 @@ spec:
             name: clamav-config-scripts
             defaultMode: 0777
         - name: clamav-db
-          persistentVolumeClaim:
-            claimName: clamav-db
+          emptyDir: {}

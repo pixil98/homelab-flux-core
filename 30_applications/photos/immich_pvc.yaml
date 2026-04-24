@@ -1,10 +1,27 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-library-pv
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes/${vals_info_cluster_name}/photos-immich-library"
+  claimRef:
+    namespace: photos
+    name: immich-library
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-library
   namespace: photos
 spec:
-  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  storageClassName: ""
   accessModes:
     - ReadWriteMany
   resources:
@@ -12,12 +29,29 @@ spec:
       storage: 1Ti
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-upload-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes/${vals_info_cluster_name}/photos-immich-upload"
+  claimRef:
+    namespace: photos
+    name: immich-upload
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-upload
   namespace: photos
 spec:
-  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  storageClassName: ""
   accessModes:
     - ReadWriteMany
   resources:
@@ -25,17 +59,51 @@ spec:
       storage: 5Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-encoded-video-pv
+spec:
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/photos-immich-encoded-video"
+  claimRef:
+    namespace: photos
+    name: immich-encoded-video
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-encoded-video
   namespace: photos
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 200Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-profile-pv
+spec:
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/photos-immich-profile"
+  claimRef:
+    namespace: photos
+    name: immich-profile
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -43,7 +111,7 @@ metadata:
   name: immich-profile
   namespace: photos
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -51,12 +119,29 @@ spec:
       storage: 200Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-thumbs-pv
+spec:
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/photos-immich-thumbs"
+  claimRef:
+    namespace: photos
+    name: immich-thumbs
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-thumbs
   namespace: photos
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:

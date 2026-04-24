@@ -87,5 +87,4 @@ spec:
           secret:
             secretName: rspamd-config-confd
         - name: rspamd-var
-          persistentVolumeClaim:
-            claimName: rspamd-var
+          emptyDir: {}

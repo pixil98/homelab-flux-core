@@ -1,25 +1,349 @@
 ---
+# Apps with VolSync restore: deploy depends on both restore + post-infra
+# Apps without VolSync: deploy depends on post-infra only
+#
+# Dependency graph:
+#   infra-controllers ──→ infra-configs ──→ post-infra ──────────┐
+#         │                                                      │
+#         ├── applications-mail-restore ──→ applications-mail ←──┤
+#         ├── applications-paperless-restore ──→ applications-paperless ←──┤
+#         ├── applications-games-restore ──→ applications-games ←─┤
+#         ├── applications-media-restore ──→ applications-media ←─┤
+#         ├── applications-mapper-restore ──→ applications-mapper ←┤
+#         │                                                      │
+#         │  applications-photos ←───────────────────────────────┤
+#         │  applications-dns ←──────────────────────────────────┤
+#         │  applications-http ←─────────────────────────────────┘
+
+# ---------- Restore Kustomizations (per-app, depend on VolSync operator) ----------
+
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-applications
+  name: flux-core-applications-mail-restore
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: flux-core-infrastructure-controllers
   interval: 5m
   retryInterval: 1m
-  timeout: 1h
-  dependsOn:
-    - name: flux-core-post-infrastructure
+  timeout: 15m
   sourceRef:
     kind: GitRepository
     name: flux-core
+  path: ./30_applications/mail/restore
   postBuild:
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
       - kind: Secret
         name: flux-secrets
-  path: ./30_applications
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-paperless-restore
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-infrastructure-controllers
+  interval: 5m
+  retryInterval: 1m
+  timeout: 15m
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/paperless/restore
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-games-restore
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-infrastructure-controllers
+  interval: 5m
+  retryInterval: 1m
+  timeout: 15m
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/games/restore
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-media-restore
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-infrastructure-controllers
+  interval: 5m
+  retryInterval: 1m
+  timeout: 15m
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/media/restore
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-mapper-restore
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-infrastructure-controllers
+  interval: 5m
+  retryInterval: 1m
+  timeout: 15m
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/mapper/restore
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+
+# ---------- Deploy Kustomizations (per-app) ----------
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-mail
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+    - name: flux-core-applications-mail-restore
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/mail/deploy
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-paperless
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+    - name: flux-core-applications-paperless-restore
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/paperless/deploy
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-games
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+    - name: flux-core-applications-games-restore
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/games/deploy
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-media
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+    - name: flux-core-applications-media-restore
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/media/deploy
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-mapper
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+    - name: flux-core-applications-mapper-restore
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/mapper/deploy
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+
+# ---------- Apps without VolSync (no restore phase) ----------
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-photos
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/photos
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-dns
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/dns
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
+  prune: true
+  wait: true
+  force: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-core-applications-http
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-core-post-infrastructure
+  interval: 5m
+  retryInterval: 1m
+  timeout: 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-core
+  path: ./30_applications/http
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: flux-values
+      - kind: Secret
+        name: flux-secrets
   prune: true
   wait: true
   force: true

@@ -1,0 +1,17 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: paperless-server-data-backup
+  namespace: paperless
+spec:
+  sourcePVC: paperless-server-data
+  trigger:
+    schedule: "0 4 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-paperless-server-data
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    copyMethod: Direct

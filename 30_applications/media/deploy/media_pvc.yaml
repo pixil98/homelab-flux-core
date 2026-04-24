@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audible-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/media-audible-pvc"
+  claimRef:
+    namespace: media
+    name: audible-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audible-pvc
+  namespace: media
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audiobooks-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/media-audiobooks-pvc"
+  claimRef:
+    namespace: media
+    name: audiobooks-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobooks-pvc
+  namespace: media
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebooks-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: "/mnt/main/kubernetes-nobackup/${vals_info_cluster_name}/media-ebooks-pvc"
+  claimRef:
+    namespace: media
+    name: ebooks-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebooks-pvc
+  namespace: media
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000Gi
