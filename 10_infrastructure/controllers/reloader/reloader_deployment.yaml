@@ -53,7 +53,6 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             initialDelaySeconds: 10
-          securityContext: {}
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
