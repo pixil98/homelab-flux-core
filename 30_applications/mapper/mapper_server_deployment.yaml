@@ -37,10 +37,10 @@ spec:
               mountPath: /db-nfs
             - name: db-local
               mountPath: /db-local
-        - name: prisma-db-push
+        - name: prisma-migrate-deploy
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.6
           imagePullPolicy: IfNotPresent
-          command: ["npx", "prisma", "db", "push", "--skip-generate"]
+          command: ["npx", "prisma", "migrate", "deploy"]
           env:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"
