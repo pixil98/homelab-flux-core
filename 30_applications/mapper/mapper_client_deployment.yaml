@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: mapper-client
-          image: ghcr.io/bcnoexceptions/mapper-client:0.0.5
+          image: ghcr.io/bcnoexceptions/mapper-client:0.0.6
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
