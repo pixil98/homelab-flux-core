@@ -19,14 +19,25 @@ spec:
       priorityClassName: system-node-critical
       tolerations:
         - operator: Exists
+      initContainers:
+        - name: talos-tool-wrappers
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              echo '#!/bin/sh' > /wrappers/iscsiadm
+              echo 'exec nsenter --mount=/host/proc/1/ns/mnt -- /usr/local/sbin/iscsiadm "$@"' >> /wrappers/iscsiadm
+              echo '#!/bin/sh' > /wrappers/resize2fs
+              echo 'exec nsenter --mount=/host/proc/1/ns/mnt -- /usr/bin/resize2fs "$@"' >> /wrappers/resize2fs
+              chmod +x /wrappers/iscsiadm /wrappers/resize2fs
+          volumeMounts:
+            - name: talos-wrappers
+              mountPath: /wrappers
       containers:
         - name: csi-node
           image: ghcr.io/truenas/truenas-csi:v1.0.3
           imagePullPolicy: IfNotPresent
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "-c", "mkdir -p /run/lock/iscsi && mv /usr/sbin/iscsiadm /usr/sbin/iscsiadm.orig 2>/dev/null; printf '#!/bin/sh\\nnsenter --mount=/host/proc/1/ns/mnt -- /usr/local/sbin/iscsiadm \"$@\"\\n' > /usr/sbin/iscsiadm && chmod +x /usr/sbin/iscsiadm"]
           securityContext:
             privileged: true
           args:
@@ -79,6 +90,8 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           volumeMounts:
+            - name: talos-wrappers
+              mountPath: /usr/local/sbin
             - name: plugin-dir
               mountPath: /csi
             - name: kubelet-dir
@@ -162,3 +175,5 @@ spec:
           hostPath:
             path: /
             type: Directory
+        - name: talos-wrappers
+          emptyDir: {}
