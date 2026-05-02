@@ -15,6 +15,7 @@ metadata:
 data:
   truenasURL: "${vals_infra_storage_truenasCsi_url}"
   truenasInsecure: "true"
+  defaultPool: "ssd"
   nfsServer: "${vals_infra_storage_truenasCsi_nfsServer}"
   iscsiPortal: "${vals_infra_storage_truenasCsi_iscsiPortal}"
   iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"

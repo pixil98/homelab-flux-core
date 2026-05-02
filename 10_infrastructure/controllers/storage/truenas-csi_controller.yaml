@@ -36,6 +36,11 @@ spec:
                 secretKeyRef:
                   name: truenas-api-credentials
                   key: api-key
+            - name: TRUENAS_DEFAULT_POOL
+              valueFrom:
+                configMapKeyRef:
+                  name: truenas-csi-config
+                  key: defaultPool
             - name: TRUENAS_NFS_SERVER
               valueFrom:
                 configMapKeyRef:
