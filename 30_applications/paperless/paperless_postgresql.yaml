@@ -28,11 +28,6 @@ spec:
       owner: paperless
       secret:
         name: paperless-postgresql-appuser
-      postInitSQL:
-        # Aggressive vacuum for task tables
-        - ALTER TABLE django_celery_results_taskresult SET (autovacuum_vacuum_scale_factor = 0.02);
-        - ALTER TABLE documents_paperlesstask SET (autovacuum_vacuum_scale_factor = 0.02, autovacuum_vacuum_threshold = 50);
-        - ALTER TABLE django_celery_results_chordcounter SET (autovacuum_vacuum_scale_factor = 0.02);
 
   storage:
     storageClass: truenas-iscsi
