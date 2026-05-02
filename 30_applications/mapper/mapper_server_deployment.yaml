@@ -22,6 +22,10 @@ spec:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: mapper
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       initContainers:
         - name: prisma-migrate-deploy
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.6

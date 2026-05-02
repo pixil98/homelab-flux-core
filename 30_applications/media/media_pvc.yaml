@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.10
-    path: /mnt/main/media/audible # TODO: update to actual NFS export path
+    path: /mnt/main/media/audible
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -38,7 +38,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.10
-    path: /mnt/main/media/audiobooks # TODO: update to actual NFS export path
+    path: /mnt/main/media/audiobooks
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -66,7 +66,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.10
-    path: /mnt/main/media/ebooks # TODO: update to actual NFS export path
+    path: /mnt/main/media/ebooks
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
