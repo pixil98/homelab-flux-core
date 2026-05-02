@@ -4,7 +4,7 @@ metadata:
   name: postfix-spool
   namespace: mail
 spec:
-  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  storageClassName: truenas-iscsi
   accessModes:
     - ReadWriteOnce
   resources:

@@ -4,7 +4,7 @@ metadata:
   name: audiobookshelf-config-pvc
   namespace: media
 spec:
-  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  storageClassName: truenas-iscsi
   accessModes:
     - ReadWriteOnce
   resources:
@@ -17,7 +17,7 @@ metadata:
   name: audiobookshelf-metadata-pvc
   namespace: media
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: truenas-iscsi
   accessModes:
     - ReadWriteOnce
   resources:

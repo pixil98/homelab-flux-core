@@ -14,7 +14,6 @@ configMapGenerator:
       - confd/10-mail.conf
       - confd/10-master.conf
       - confd/10-metrics.conf
-      - confd/10-nfs.conf
       - confd/10-ssl.conf
       - confd/15-lda.conf
       - confd/15-mailboxes.conf

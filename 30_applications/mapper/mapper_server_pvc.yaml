@@ -4,9 +4,9 @@ metadata:
   name: mapper-server-db
   namespace: mapper
 spec:
-  storageClassName: ${vals_infra_csi_nfsSubdir_backupStorageClass}
+  storageClassName: truenas-iscsi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi

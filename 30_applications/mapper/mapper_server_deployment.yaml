@@ -22,21 +22,7 @@ spec:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: mapper
     spec:
-      terminationGracePeriodSeconds: 120
       initContainers:
-        - name: copy-db-from-nfs
-          image: docker.io/library/alpine:3.23.4
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "Copying db from NFS to local storage..."
-              cp -a /db-nfs/. /db-local/ 2>/dev/null || true
-              echo "Copy complete."
-          volumeMounts:
-            - name: db-nfs
-              mountPath: /db-nfs
-            - name: db-local
-              mountPath: /db-local
         - name: prisma-migrate-deploy
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.6
           imagePullPolicy: IfNotPresent
@@ -45,7 +31,7 @@ spec:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"
           volumeMounts:
-            - name: db-local
+            - name: db
               mountPath: /mapper/db
       containers:
         - name: mapper-server
@@ -79,24 +65,10 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    echo "Copying db from local storage back to NFS..."
-                    cp -a /mapper/db/. /mapper/db-nfs/
-                    echo "Copy complete."
           volumeMounts:
-            - name: db-local
+            - name: db
               mountPath: /mapper/db
-            - name: db-nfs
-              mountPath: /mapper/db-nfs
       volumes:
-        - name: db-nfs
+        - name: db
           persistentVolumeClaim:
             claimName: mapper-server-db
-        - name: db-local
-          emptyDir: {}

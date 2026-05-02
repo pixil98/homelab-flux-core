@@ -1,15 +1,44 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audible-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: /mnt/main/media/audible # TODO: update to actual NFS export path
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: audible-pvc
   namespace: media
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
+  volumeName: audible-pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audiobooks-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: /mnt/main/media/audiobooks # TODO: update to actual NFS export path
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -17,12 +46,27 @@ metadata:
   name: audiobooks-pvc
   namespace: media
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
+  volumeName: audiobooks-pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebooks-pv
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.10
+    path: /mnt/main/media/ebooks # TODO: update to actual NFS export path
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -30,9 +74,10 @@ metadata:
   name: ebooks-pvc
   namespace: media
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1000Gi
+  volumeName: ebooks-pv

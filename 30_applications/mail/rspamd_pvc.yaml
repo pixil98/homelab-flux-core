@@ -4,7 +4,7 @@ metadata:
   name: rspamd-var
   namespace: mail
 spec:
-  storageClassName: nfs-client-nobackup
+  storageClassName: truenas-iscsi
   accessModes:
     - ReadWriteOnce
   resources:

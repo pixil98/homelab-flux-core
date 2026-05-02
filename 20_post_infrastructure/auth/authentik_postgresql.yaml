@@ -62,7 +62,7 @@ spec:
         requestTimeout: 5000
 
   storage:
-    storageClass: nfs-client-ssd
+    storageClass: truenas-iscsi
     size: 2Gi
 
   # Enable monitoring
