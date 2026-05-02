@@ -153,7 +153,7 @@ spec:
         - name: iscsi-dir
           hostPath:
             path: /etc/iscsi
-            type: Directory
+            type: DirectoryOrCreate
         - name: iscsi-lib
           hostPath:
             path: /var/lib/iscsi

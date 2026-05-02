@@ -5,7 +5,8 @@ metadata:
 provisioner: csi.truenas.io
 parameters:
   protocol: "iscsi"
-  pool: "ssd/kubernetes/${vals_info_cluster_name}"
+  pool: "ssd"
+  datasetPath: "k8s-test"
   compression: "LZ4"
   volblocksize: "16K"
   iscsi.blocksize: "4096"
@@ -20,7 +21,8 @@ metadata:
 provisioner: csi.truenas.io
 parameters:
   protocol: "nfs"
-  pool: "main/kubernetes/${vals_info_cluster_name}"
+  pool: "main"
+  datasetPath: "k8s-test"
   compression: "LZ4"
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
