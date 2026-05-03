@@ -20,4 +20,4 @@ spec:
   values:
     logLevel: "info"
     operator:
-       enable_converter_ownership: true
+      enable_converter_ownership: true
