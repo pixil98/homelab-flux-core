@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paperless-server-data
+  name: paperless-server-media
   namespace: paperless
 spec:
-  storageClassName: truenas-iscsi
+  storageClassName: truenas-nfs
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 1Ti

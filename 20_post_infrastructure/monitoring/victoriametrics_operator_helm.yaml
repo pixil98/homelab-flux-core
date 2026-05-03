@@ -14,10 +14,12 @@ spec:
       version: "0.62.1"
       interval: 6h
   interval: 30m
+  dependsOn:
+    - name: prometheus-operator-crds
   install:
     remediation:
       retries: 3
   values:
     logLevel: "info"
     operator:
-       enable_converter_ownership: true
+      enable_converter_ownership: true

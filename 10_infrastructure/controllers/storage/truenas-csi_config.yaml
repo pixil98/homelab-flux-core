@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: truenas-api-credentials
+  namespace: storage
+type: Opaque
+stringData:
+  api-key: "${secrets_infra_storage_truenasCsi_apiKey}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: truenas-csi-config
+  namespace: storage
+data:
+  truenasURL: "${vals_infra_storage_truenasCsi_url}"
+  truenasInsecure: "true"
+  defaultPool: "ssd"
+  nfsServer: "${vals_infra_storage_truenasCsi_nfsServer}"
+  iscsiPortal: "${vals_infra_storage_truenasCsi_iscsiPortal}"
+  iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"

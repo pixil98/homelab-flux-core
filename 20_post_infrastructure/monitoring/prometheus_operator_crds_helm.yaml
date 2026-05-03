@@ -1,26 +1,19 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: victoria-logs-cluster
+  name: prometheus-operator-crds
   namespace: monitoring
 spec:
   chart:
     spec:
-      chart: victoria-logs-cluster
+      chart: prometheus-operator-crds
       sourceRef:
         kind: HelmRepository
-        name: victoria-metrics
+        name: prometheus-community
         namespace: monitoring
-      version: "0.1.3"
+      version: "19.1.0"
       interval: 6h
   interval: 30m
   install:
     remediation:
       retries: 3
-  values:
-    vlselect: {}
-    vlinsert: {}
-    vlstorage:
-      persistentVolume:
-        enabled: true
-        storageClassName: truenas-iscsi

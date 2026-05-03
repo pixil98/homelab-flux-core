@@ -28,12 +28,9 @@ spec:
       owner: roundcube
       secret:
         name: roundcube-postgresql-appuser
-      postInitSQL:
-        # Session table has highest churn from webmail logins
-        - ALTER TABLE session SET (autovacuum_vacuum_scale_factor = 0.05);
 
   storage:
-    storageClass: nfs-client-ssd
+    storageClass: truenas-iscsi
     size: 1Gi
 ---
 apiVersion: v1

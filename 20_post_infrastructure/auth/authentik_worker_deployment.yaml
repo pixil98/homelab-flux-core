@@ -23,6 +23,13 @@ spec:
     spec:
       serviceAccountName: authentik
       terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: wait-for-server
+          image: busybox:1.37.0
+          command:
+            - sh
+            - -c
+            - until wget -qO- http://authentik-server/-/health/ready/; do echo "waiting for authentik server"; sleep 5; done
       containers:
         - name: worker
           image: ghcr.io/goauthentik/server:2026.2.2
