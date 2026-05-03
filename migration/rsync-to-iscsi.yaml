@@ -1,0 +1,489 @@
+# Migration jobs: rsync data from old nfs-subdir volumes to new iSCSI PVCs.
+#
+# Usage:
+#   1. Replace CLUSTER_NAME with your production cluster name
+#      (check: ls /mnt/main/kubernetes/ on TrueNAS)
+#   2. Scale down the relevant deployment first
+#   3. Delete the old PVC so Flux creates the new iSCSI one
+#   4. Wait for the new PVC to be Bound
+#   5. kubectl apply -f migration/rsync-to-iscsi.yaml
+#   6. Watch: kubectl logs -f job/migrate-<name> -n <namespace>
+#   7. Scale the deployment back up
+#   8. kubectl delete -f migration/rsync-to-iscsi.yaml
+#
+# Old nfs-subdir paths:
+#   backup:   /mnt/main/kubernetes/CLUSTER_NAME/<namespace>-<pvc>/
+#   nobackup: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/<namespace>-<pvc>/
+
+# --- mail namespace ---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-dovecot-mailboxes
+  namespace: mail
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/mail-dovecot-mailboxes
+        - name: dst
+          persistentVolumeClaim:
+            claimName: dovecot-mailboxes
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-postfix-spool
+  namespace: mail
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/mail-postfix-spool
+        - name: dst
+          persistentVolumeClaim:
+            claimName: postfix-spool
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-clamav-db
+  namespace: mail
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/mail-clamav-db
+        - name: dst
+          persistentVolumeClaim:
+            claimName: clamav-db
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-rspamd-var
+  namespace: mail
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/mail-rspamd-var
+        - name: dst
+          persistentVolumeClaim:
+            claimName: rspamd-var
+
+# --- mapper namespace ---
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-mapper-server-db
+  namespace: mapper
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/mapper-mapper-server-db
+        - name: dst
+          persistentVolumeClaim:
+            claimName: mapper-server-db
+
+# --- games namespace ---
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-mud-server-characters
+  namespace: games
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/games-mud-server-characters
+        - name: dst
+          persistentVolumeClaim:
+            claimName: mud-server-characters
+
+# --- paperless namespace ---
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-paperless-server-data
+  namespace: paperless
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/paperless-paperless-server-data
+        - name: dst
+          persistentVolumeClaim:
+            claimName: paperless-server-data
+
+# --- media namespace ---
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-audiobookshelf-config
+  namespace: media
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/media-audiobookshelf-config-pvc
+        - name: dst
+          persistentVolumeClaim:
+            claimName: audiobookshelf-config-pvc
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-audiobookshelf-metadata
+  namespace: media
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/media-audiobookshelf-metadata-pvc
+        - name: dst
+          persistentVolumeClaim:
+            claimName: audiobookshelf-metadata-pvc
+
+# --- CNPG PostgreSQL clusters ---
+# These were on nfs-client-ssd (base: /mnt/ssd/kubernetes/).
+# CNPG names PVCs as <cluster>-<instance>, e.g. roundcube-postgresql-1.
+#
+# Migration steps (per cluster):
+#   1. Scale CNPG Cluster to 0 instances: kubectl patch cluster <name> -n <ns> --type merge -p '{"spec":{"instances":0}}'
+#   2. Wait for pods to terminate
+#   3. Delete the old PVC: kubectl delete pvc <cluster>-1 -n <ns>
+#   4. Scale back to 1: kubectl patch cluster <name> -n <ns> --type merge -p '{"spec":{"instances":1}}'
+#   5. CNPG creates a new PVC with truenas-iscsi, then wait for it to be Bound
+#   6. Scale back to 0 again (so the rsync job can mount the PVC exclusively)
+#   7. Apply the rsync job below
+#   8. Scale back to 1 when done
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-roundcube-postgresql
+  namespace: mail
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/ssd/kubernetes/CLUSTER_NAME/mail-roundcube-postgresql-1
+        - name: dst
+          persistentVolumeClaim:
+            claimName: roundcube-postgresql-1
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-paperless-postgresql
+  namespace: paperless
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/ssd/kubernetes/CLUSTER_NAME/paperless-paperless-postgresql-1
+        - name: dst
+          persistentVolumeClaim:
+            claimName: paperless-postgresql-1
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-postgresql
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rm -rf /dst/*
+              rsync -avP --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/ssd/kubernetes/CLUSTER_NAME/photos-immich-postgresql-1
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-postgresql-1
