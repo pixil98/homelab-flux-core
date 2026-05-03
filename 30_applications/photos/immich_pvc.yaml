@@ -4,9 +4,9 @@ metadata:
   name: immich-upload
   namespace: photos
 spec:
-  storageClassName: truenas-iscsi
+  storageClassName: truenas-nfs
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
