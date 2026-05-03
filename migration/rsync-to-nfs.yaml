@@ -1,0 +1,229 @@
+# Migration jobs: rsync data from old nfs-subdir volumes to new truenas-nfs PVCs.
+#
+# These are NFS-to-NFS copies (RWX), so no scheduling conflicts.
+# Large volumes may take significant time.
+#
+# Old nfs-subdir paths:
+#   backup:   /mnt/main/kubernetes/CLUSTER_NAME/<namespace>-<pvc>/
+#   nobackup: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/<namespace>-<pvc>/
+
+# --- photos namespace ---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-library
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/photos-immich-library
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-library
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-upload
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/photos-immich-upload
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-upload
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-encoded-video
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/photos-immich-encoded-video
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-encoded-video
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-profile
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/photos-immich-profile
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-profile
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-immich-thumbs
+  namespace: photos
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes-nobackup/CLUSTER_NAME/photos-immich-thumbs
+        - name: dst
+          persistentVolumeClaim:
+            claimName: immich-thumbs
+
+# --- paperless namespace ---
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-paperless-server-media
+  namespace: paperless
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rsync
+          image: docker.io/library/alpine:3.23.4
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              rsync -avP --delete --info=progress2 /src/ /dst/
+          volumeMounts:
+            - name: src
+              mountPath: /src
+              readOnly: true
+            - name: dst
+              mountPath: /dst
+      volumes:
+        - name: src
+          nfs:
+            server: 192.168.1.10
+            path: /mnt/main/kubernetes/CLUSTER_NAME/paperless-paperless-server-media
+        - name: dst
+          persistentVolumeClaim:
+            claimName: paperless-server-media
