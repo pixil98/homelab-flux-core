@@ -5,10 +5,10 @@ metadata:
   namespace: photos
 type: Opaque
 stringData:
-  RESTIC_REPOSITORY: "${vals_infra_storage_volsync_repository}/${vals_info_cluster_name}/photos-immich-library"
-  RESTIC_PASSWORD: "${secrets_infra_storage_volsync_resticPassword}"
-  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_volsync_awsAccessKeyId}"
-  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_volsync_awsSecretAccessKey}"
+  RESTIC_REPOSITORY: "${vals_infra_storage_backup_repository}/${vals_info_cluster_name}/photos-immich-library"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
@@ -16,7 +16,7 @@ metadata:
   name: immich-library-backup
   namespace: photos
 spec:
-  paused: ${vals_infra_storage_volsync_paused}
+  paused: ${vals_infra_storage_backup_paused}
   sourcePVC: immich-library
   trigger:
     schedule: "0 3 * * *"

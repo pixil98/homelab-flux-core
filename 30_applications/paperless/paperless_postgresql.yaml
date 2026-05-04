@@ -29,9 +29,46 @@ spec:
       secret:
         name: paperless-postgresql-appuser
 
+  backup:
+    barmanObjectStore:
+      destinationPath: "s3://backup/${vals_info_cluster_name}/cnpg/paperless-postgresql/"
+      endpointURL: "http://${vals_infra_storage_truenasCsi_nfsServer}:30157"
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: cnpg-backup-credentials
+          key: SECRET_ACCESS_KEY
+      wal:
+        compression: gzip
+    retentionPolicy: "30d"
+
   storage:
     storageClass: truenas-iscsi
     size: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cnpg-backup-credentials
+  namespace: paperless
+type: Opaque
+stringData:
+  ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: paperless-postgresql-backup
+  namespace: paperless
+spec:
+  suspend: ${vals_infra_storage_backup_paused}
+  schedule: "0 3 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: paperless-postgresql
 ---
 apiVersion: v1
 kind: Secret
