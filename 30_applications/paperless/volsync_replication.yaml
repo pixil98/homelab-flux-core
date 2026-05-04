@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic
+  namespace: paperless
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "${vals_infra_storage_volsync_repository}/${vals_info_cluster_name}/paperless-server-data"
+  RESTIC_PASSWORD: "${secrets_infra_storage_volsync_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_volsync_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_volsync_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: paperless-server-data-backup
+  namespace: paperless
+spec:
+  paused: ${vals_infra_storage_volsync_paused}
+  sourcePVC: paperless-server-data
+  trigger:
+    schedule: "0 2 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic
+    volumeSnapshotClassName: truenas-iscsi
+    copyMethod: Snapshot
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3

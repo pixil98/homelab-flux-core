@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: snapshot-controller
+  namespace: storage
+spec:
+  releaseName: snapshot-controller
+  chart:
+    spec:
+      chart: snapshot-controller
+      sourceRef:
+        kind: HelmRepository
+        name: piraeus
+      version: "3.0.6"
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
