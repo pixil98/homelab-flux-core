@@ -23,8 +23,8 @@ spec:
   restic:
     pruneIntervalDays: 14
     repository: volsync-restic
-    volumeSnapshotClassName: truenas-nfs
-    copyMethod: Snapshot
+    copyMethod: Direct
+    cacheStorageClassName: truenas-iscsi
     retain:
       daily: 7
       weekly: 4

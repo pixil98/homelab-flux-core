@@ -25,6 +25,39 @@ spec:
     repository: volsync-restic
     volumeSnapshotClassName: truenas-iscsi
     copyMethod: Snapshot
+    cacheStorageClassName: truenas-iscsi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic-media
+  namespace: paperless
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "${vals_infra_storage_backup_repository}/${vals_info_cluster_name}/paperless-server-media"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: paperless-server-media-backup
+  namespace: paperless
+spec:
+  paused: ${vals_infra_storage_backup_paused}
+  sourcePVC: paperless-server-media
+  trigger:
+    schedule: "0 3 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic-media
+    copyMethod: Direct
+    cacheStorageClassName: truenas-iscsi
     retain:
       daily: 7
       weekly: 4
