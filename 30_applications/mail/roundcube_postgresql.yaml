@@ -31,8 +31,8 @@ spec:
 
   backup:
     barmanObjectStore:
-      destinationPath: "s3://backup/${vals_info_cluster_name}/cnpg/roundcube-postgresql/"
-      endpointURL: "http://${vals_infra_storage_truenasCsi_nfsServer}:30157"
+      destinationPath: "s3://${vals_infra_storage_backup_s3Bucket}/${vals_info_cluster_name}/cnpg/roundcube-postgresql/"
+      endpointURL: "${vals_infra_storage_backup_s3Endpoint}"
       s3Credentials:
         accessKeyId:
           name: cnpg-backup-credentials
