@@ -24,7 +24,7 @@ spec:
     pruneIntervalDays: 14
     repository: volsync-restic
     copyMethod: Direct
-    cacheStorageClassName: truenas-iscsi
+    cacheStorageClassName: truenas-iscsi-ephemeral
     retain:
       daily: 7
       weekly: 4
