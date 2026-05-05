@@ -5,7 +5,7 @@ metadata:
   namespace: mail
 type: Opaque
 stringData:
-  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_infra_storage_backup_s3Bucket}/${vals_info_cluster_name}/mail-dovecot-mailboxes"
+  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_info_cluster_name}/mail-dovecot-mailboxes"
   RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
   AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
   AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"

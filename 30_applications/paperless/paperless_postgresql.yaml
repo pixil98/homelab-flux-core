@@ -31,7 +31,7 @@ spec:
 
   backup:
     barmanObjectStore:
-      destinationPath: "s3://${vals_infra_storage_backup_s3Bucket}/${vals_info_cluster_name}/cnpg/paperless-postgresql/"
+      destinationPath: "s3://${vals_info_cluster_name}/cnpg/paperless-postgresql/"
       endpointURL: "${vals_infra_storage_backup_s3Endpoint}"
       s3Credentials:
         accessKeyId:
