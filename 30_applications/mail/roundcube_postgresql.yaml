@@ -46,7 +46,7 @@ spec:
 
   storage:
     storageClass: truenas-iscsi
-    size: 5Gi
+    size: 15Gi
 ---
 apiVersion: v1
 kind: Secret
