@@ -29,11 +29,11 @@ spec:
               cat > /wrappers/iscsiadm <<'WRAPPER'
               #!/bin/sh
               iscsid_pid=$(pgrep iscsid | head -1)
-              if [ -z "$iscsid_pid" ]; then
+              if [ -z "$${iscsid_pid}" ]; then
                 echo "iscsid not running" >&2
                 exit 1
               fi
-              exec nsenter --mount=/proc/${iscsid_pid}/ns/mnt --net=/proc/${iscsid_pid}/ns/net -- /usr/local/sbin/iscsiadm "$@"
+              exec nsenter --mount=/proc/$${iscsid_pid}/ns/mnt --net=/proc/$${iscsid_pid}/ns/net -- /usr/local/sbin/iscsiadm "$@"
               WRAPPER
 
               cat > /wrappers/resize2fs <<'WRAPPER'
