@@ -26,10 +26,21 @@ spec:
             - sh
             - -c
             - |
-              echo '#!/bin/sh' > /wrappers/iscsiadm
-              echo 'exec nsenter --mount=/host/proc/1/ns/mnt -- /usr/local/sbin/iscsiadm "$@"' >> /wrappers/iscsiadm
-              echo '#!/bin/sh' > /wrappers/resize2fs
-              echo 'exec nsenter --mount=/host/proc/1/ns/mnt -- /usr/bin/resize2fs "$@"' >> /wrappers/resize2fs
+              cat > /wrappers/iscsiadm <<'WRAPPER'
+              #!/bin/sh
+              iscsid_pid=$(pgrep iscsid | head -1)
+              if [ -z "$iscsid_pid" ]; then
+                echo "iscsid not running" >&2
+                exit 1
+              fi
+              exec nsenter --mount=/proc/${iscsid_pid}/ns/mnt --net=/proc/${iscsid_pid}/ns/net -- /usr/local/sbin/iscsiadm "$@"
+              WRAPPER
+
+              cat > /wrappers/resize2fs <<'WRAPPER'
+              #!/bin/sh
+              exec nsenter --mount=/host/proc/1/ns/mnt -- /usr/bin/resize2fs "$@"
+              WRAPPER
+
               chmod +x /wrappers/iscsiadm /wrappers/resize2fs
           volumeMounts:
             - name: talos-wrappers
