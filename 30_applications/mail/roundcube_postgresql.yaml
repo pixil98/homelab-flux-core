@@ -29,24 +29,35 @@ spec:
       secret:
         name: roundcube-postgresql-appuser
 
-  backup:
-    barmanObjectStore:
-      destinationPath: "s3://${vals_info_cluster_name}/cnpg/roundcube-postgresql/"
-      endpointURL: "${vals_infra_storage_backup_s3Endpoint}"
-      s3Credentials:
-        accessKeyId:
-          name: cnpg-backup-credentials
-          key: ACCESS_KEY_ID
-        secretAccessKey:
-          name: cnpg-backup-credentials
-          key: SECRET_ACCESS_KEY
-      wal:
-        compression: gzip
-    retentionPolicy: "30d"
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cnpg-backup
 
   storage:
     storageClass: truenas-iscsi
     size: 15Gi
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: cnpg-backup
+  namespace: mail
+spec:
+  configuration:
+    destinationPath: "s3://${vals_info_cluster_name}/cnpg/"
+    endpointURL: "${vals_infra_storage_backup_s3Endpoint}"
+    s3Credentials:
+      accessKeyId:
+        name: cnpg-backup-credentials
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: cnpg-backup-credentials
+        key: SECRET_ACCESS_KEY
+    wal:
+      compression: gzip
+  retentionPolicy: "30d"
 ---
 apiVersion: v1
 kind: Secret
@@ -67,6 +78,9 @@ spec:
   suspend: ${vals_infra_storage_backup_paused}
   schedule: "0 3 * * *"
   backupOwnerReference: self
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
   cluster:
     name: roundcube-postgresql
 ---
