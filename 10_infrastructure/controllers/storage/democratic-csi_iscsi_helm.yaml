@@ -1,0 +1,75 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: democratic-csi-iscsi
+  namespace: storage
+spec:
+  releaseName: democratic-csi-iscsi
+  chart:
+    spec:
+      chart: democratic-csi
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi
+        namespace: storage
+      version: "0.15.1"
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+  values:
+    csiDriver:
+      name: org.democratic-csi.iscsi
+
+    node:
+      hostPID: true
+      driver:
+        extraEnv:
+          - name: ISCSIADM_HOST_STRATEGY
+            value: nsenter
+          - name: ISCSIADM_HOST_PATH
+            value: /usr/local/sbin/iscsiadm
+        iscsiDirHostPath: /etc/iscsi
+        iscsiDirHostPathType: ""
+
+    storageClasses:
+      - name: truenas-iscsi
+        defaultClass: false
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        allowVolumeExpansion: true
+        parameters:
+          fsType: ext4
+      - name: truenas-iscsi-ephemeral
+        defaultClass: false
+        reclaimPolicy: Delete
+        volumeBindingMode: Immediate
+        allowVolumeExpansion: true
+        parameters:
+          fsType: ext4
+
+    driver:
+      config:
+        driver: freenas-api-iscsi
+        httpConnection:
+          protocol: https
+          host: ${vals_infra_storage_truenas_host}
+          port: 443
+          apiKey: ${secrets_infra_storage_truenas_apiKey}
+          allowInsecure: true
+        zfs:
+          datasetParentName: ssd/kubernetes/${vals_info_cluster_name}
+          detachedSnapshotsDatasetParentName: ssd/kubernetes/${vals_info_cluster_name}-snaps
+          datasetProperties:
+            "org.freenas:description": >-
+              {{ parameters.[csi.storage.k8s.io/pvc/namespace] }}/{{ parameters.[csi.storage.k8s.io/pvc/name] }}
+        iscsi:
+          targetPortal: ${vals_infra_storage_truenas_iscsiPortal}
+          namePrefix: csi-
+          targetGroups:
+            - targetGroupPortalGroup: ${vals_infra_storage_truenas_iscsiPortalGroupId}
+              targetGroupInitiatorGroup: ${vals_infra_storage_truenas_iscsiInitiatorGroupId}
+              targetGroupAuthType: None
+          extentRpm: "SSD"
+          extentBlocksize: 4096
