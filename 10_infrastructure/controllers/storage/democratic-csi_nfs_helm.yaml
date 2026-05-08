@@ -21,6 +21,7 @@ spec:
   values:
     csiDriver:
       name: org.democratic-csi.nfs
+      fsGroupPolicy: File
 
     storageClasses:
       - name: truenas-nfs
