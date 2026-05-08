@@ -43,5 +43,10 @@ spec:
         zfs:
           datasetParentName: main/kubernetes/${vals_info_cluster_name}
           detachedSnapshotsDatasetParentName: main/kubernetes/${vals_info_cluster_name}-snaps
+          datasetPermissionsMode: "0770"
+          datasetPermissionsUser: 0
+          datasetPermissionsGroup: 0
         nfs:
           shareHost: ${vals_infra_storage_truenas_nfsServer}
+          shareMaprootUser: root
+          shareMaprootGroup: root
