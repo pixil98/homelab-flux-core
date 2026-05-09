@@ -1,0 +1,53 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: democratic-csi-nfs
+  namespace: storage
+spec:
+  releaseName: democratic-csi-nfs
+  chart:
+    spec:
+      chart: democratic-csi
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi
+        namespace: storage
+      version: "0.15.1"
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+  values:
+    csiDriver:
+      name: org.democratic-csi.nfs
+      fsGroupPolicy: File
+
+    storageClasses:
+      - name: truenas-nfs
+        defaultClass: false
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        allowVolumeExpansion: true
+        parameters:
+          fsType: nfs
+
+    driver:
+      config:
+        driver: freenas-api-nfs
+        httpConnection:
+          protocol: https
+          host: ${vals_infra_storage_truenas_host}
+          port: 443
+          apiKey: ${secrets_infra_storage_truenas_apiKey}
+          allowInsecure: true
+        zfs:
+          datasetParentName: main/kubernetes/${vals_info_cluster_name}
+          detachedSnapshotsDatasetParentName: main/kubernetes/${vals_info_cluster_name}-snaps
+          datasetPermissionsMode: "0770"
+          datasetPermissionsUser: 0
+          datasetPermissionsGroup: 0
+        nfs:
+          shareHost: ${vals_infra_storage_truenas_nfsServer}
+          shareMaprootUser: root
+          shareMaprootGroup: root
