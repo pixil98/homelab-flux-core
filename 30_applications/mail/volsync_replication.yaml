@@ -26,6 +26,10 @@ spec:
     volumeSnapshotClassName: truenas-iscsi
     copyMethod: Snapshot
     cacheStorageClassName: truenas-iscsi-ephemeral
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
     retain:
       daily: 7
       weekly: 4
