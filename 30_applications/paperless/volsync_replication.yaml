@@ -58,6 +58,8 @@ spec:
     repository: volsync-restic-media
     copyMethod: Direct
     cacheStorageClassName: truenas-iscsi-ephemeral
+    cacheAccessModes:
+      - ReadWriteOnce
     retain:
       daily: 7
       weekly: 4
