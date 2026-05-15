@@ -28,7 +28,7 @@ spec:
         fsGroup: 1000
       initContainers:
         - name: prisma-migrate-deploy
-          image: ghcr.io/bcnoexceptions/mapper-server:0.0.7
+          image: ghcr.io/bcnoexceptions/mapper-server:0.0.8
           imagePullPolicy: IfNotPresent
           command: ["npx", "prisma", "migrate", "deploy"]
           env:
@@ -39,7 +39,7 @@ spec:
               mountPath: /mapper/db
       containers:
         - name: mapper-server
-          image: ghcr.io/bcnoexceptions/mapper-server:0.0.7
+          image: ghcr.io/bcnoexceptions/mapper-server:0.0.8
           imagePullPolicy: IfNotPresent
           env:
             - name: DATABASE_URL
