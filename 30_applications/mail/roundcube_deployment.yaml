@@ -54,6 +54,8 @@ spec:
               value: "elastic"
             - name: ROUNDCUBEMAIL_PLUGINS
               value: "archive,zipdownload,newmail_notifier"
+            - name: ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE
+              value: "25M"
           ports:
             - name: http
               containerPort: 80

@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: roundcube
   namespace: mail
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "28m"
   labels:
     app.kubernetes.io/name: "roundcube"
     app.kubernetes.io/instance: "roundcube"
