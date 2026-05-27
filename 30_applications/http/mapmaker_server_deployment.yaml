@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mapmaker-server
+  namespace: http
+  labels:
+    app.kubernetes.io/instance: mapmaker
+    app.kubernetes.io/name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: mapmaker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: mapmaker
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mapmaker-server
+          # The Go renderer ships from the root Dockerfile, which CI publishes as
+          # the bare repo image (subdir Dockerfiles get a "-<dir>" suffix).
+          image: ghcr.io/pixil98/mapmaker:0.0.1
+          imagePullPolicy: IfNotPresent
+          # No writable mounts: the renderer only reads config/assets. Its dump
+          # files land on the read-only rootfs and fail to write, which is fine.
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3
+          resources:
+            # Rendering is CPU- and memory-heavy (decoding/compositing large
+            # images). The VPA below will recommend tuned values.
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mapmaker-server
+  namespace: http
+  labels:
+    app.kubernetes.io/instance: mapmaker
+    app.kubernetes.io/name: server
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: mapmaker
+    app.kubernetes.io/name: server
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http
