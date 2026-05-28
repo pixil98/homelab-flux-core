@@ -27,11 +27,10 @@ spec:
       containers:
         - name: mapmaker-client
           # Unprivileged nginx serving the static SPA; listens on 8080 as non-root.
-          image: ghcr.io/pixil98/mapmaker-client:0.0.1
+          image: ghcr.io/pixil98/mapmaker-client:0.0.2
           imagePullPolicy: IfNotPresent
-          # No writable mounts: serving static files needs none. If nginx turns
-          # out to need its pid/temp dirs writable, add emptyDir mounts at /tmp
-          # and /var/cache/nginx.
+          # nginx-unprivileged writes its pid and temp dirs under /tmp, so a
+          # read-only rootfs needs a writable scratch volume mounted there.
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -65,3 +64,9 @@ spec:
             limits:
               cpu: 100m
               memory: 64Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
