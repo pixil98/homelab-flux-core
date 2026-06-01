@@ -32,7 +32,7 @@ spec:
             - until wget -qO- http://authentik-server/-/health/ready/; do echo "waiting for authentik server"; sleep 5; done
       containers:
         - name: worker
-          image: ghcr.io/goauthentik/server:2026.5.0
+          image: ghcr.io/goauthentik/server:2026.5.2
           imagePullPolicy: IfNotPresent
           args:
             - worker
