@@ -80,10 +80,10 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "35m"
-            limits:
-              memory: "350Mi"
               cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
           volumeMounts:
             - name: mailboxes
               mountPath: /var/vmail
