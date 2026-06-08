@@ -51,10 +51,10 @@ spec:
           resources:
             requests:
               memory: "500Mi"
-              cpu: "25m"
+              cpu: "100m"
             limits:
               memory: "750Mi"
-              cpu: "50m"
+              cpu: "1000m"
           startupProbe:
             failureThreshold: 60
             periodSeconds: 10
