@@ -51,8 +51,8 @@ spec:
               memory: "250Mi"
               cpu: "65m"
             limits:
-              memory: "300Mi"
-              cpu: "100m"
+              memory: "384Mi"
+              cpu: "500m"
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 60
@@ -65,7 +65,8 @@ spec:
                 - /scripts/healthcheck.sh
           livenessProbe:
             periodSeconds: 5
-            failureThreshold: 2
+            failureThreshold: 3
+            timeoutSeconds: 5
             exec:
               command:
                 - sh
@@ -76,6 +77,7 @@ spec:
           startupProbe:
             periodSeconds: 10
             failureThreshold: 90
+            timeoutSeconds: 5
             exec:
               command:
                 - sh
