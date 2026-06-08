@@ -29,7 +29,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: rspamd
-          image: docker.io/rspamd/rspamd:4.0.1
+          image: docker.io/rspamd/rspamd:4.1.0
           imagePullPolicy: IfNotPresent
           securityContext:
             capabilities:
