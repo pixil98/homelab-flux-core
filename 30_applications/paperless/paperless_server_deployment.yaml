@@ -30,17 +30,13 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:2.20.15
           imagePullPolicy: IfNotPresent
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
           env:
             # Redis
             - name: REDIS_PASSWORD
