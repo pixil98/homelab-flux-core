@@ -17,6 +17,9 @@ spec:
       labels:
         app.kubernetes.io/name: audiobookshelf-server
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: audiobookshelf
           image: "ghcr.io/advplyr/audiobookshelf:2.35.1"
@@ -28,7 +31,13 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
           volumeMounts:
             - name: config
               mountPath: /config

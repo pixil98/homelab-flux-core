@@ -20,10 +20,18 @@ spec:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: mud
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: mud
           image: ghcr.io/pixil98/mud:v0.0.7
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           command: ["/app/mud"]
           args: ["--config", "/app/config.json"]
           ports:
@@ -33,6 +41,13 @@ spec:
             - name: ssh
               containerPort: 4022
               protocol: TCP
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           volumeMounts:
             - name: characters
               mountPath: /app/assets/characters

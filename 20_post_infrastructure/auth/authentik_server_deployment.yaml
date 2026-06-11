@@ -25,10 +25,18 @@ spec:
         prometheus.io/port: "9300"
     spec:
       terminationGracePeriodSeconds: 30
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: server
           image: ghcr.io/goauthentik/server:2026.5.2
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           args:
             - server
           env:

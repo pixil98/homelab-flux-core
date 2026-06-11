@@ -18,9 +18,21 @@ spec:
     remediation:
       retries: 3
   values:
-    vmselect: {}
-    vminsert: {}
+    vmselect:
+      verticalPodAutoscaler:
+        enabled: true
+        updatePolicy:
+          updateMode: "Off"
+    vminsert:
+      verticalPodAutoscaler:
+        enabled: true
+        updatePolicy:
+          updateMode: "Off"
     vmstorage:
+      verticalPodAutoscaler:
+        enabled: true
+        updatePolicy:
+          updateMode: "Off"
       persistentVolume:
         enabled: true
         storageClassName: truenas-iscsi

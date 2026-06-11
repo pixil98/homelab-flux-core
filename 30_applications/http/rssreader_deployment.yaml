@@ -21,10 +21,18 @@ spec:
         app.kubernetes.io/instance: "rssreader"
         app.kubernetes.io/component: "server"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: rssreader
           image: docker.io/jmehler/rss-reader:0.0.3
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: FLASK_PROXY
               value: "true"

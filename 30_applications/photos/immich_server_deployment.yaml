@@ -25,10 +25,18 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8081"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: immich-server
           image: ghcr.io/immich-app/immich-server:v2.7.5
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: TZ
               value: "America/Chicago"

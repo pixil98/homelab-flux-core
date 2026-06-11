@@ -20,6 +20,9 @@ spec:
         app.kubernetes.io/name: client
         app.kubernetes.io/instance: mapper
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: mapper-client
           image: ghcr.io/bcnoexceptions/mapper-client:0.0.8

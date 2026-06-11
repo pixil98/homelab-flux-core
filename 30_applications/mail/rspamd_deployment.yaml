@@ -27,6 +27,9 @@ spec:
     spec:
       serviceAccountName: rspamd
       automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: rspamd
           image: docker.io/rspamd/rspamd:4.1.0

@@ -23,6 +23,9 @@ spec:
         app.kubernetes.io/instance: "roundcube"
         app.kubernetes.io/component: "server"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: roundcube
           image: docker.io/roundcube/roundcubemail:1.6.16-apache

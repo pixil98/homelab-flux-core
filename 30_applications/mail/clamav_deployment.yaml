@@ -25,6 +25,9 @@ spec:
         app.kubernetes.io/instance: "clamav"
         app.kubernetes.io/component: "server"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: clamav
           image: docker.io/clamav/clamav:1.5.2
@@ -84,7 +87,7 @@ spec:
         - name: scripts
           configMap:
             name: clamav-config-scripts
-            defaultMode: 0777
+            defaultMode: 0755
         - name: clamav-db
           persistentVolumeClaim:
             claimName: clamav-db

@@ -23,17 +23,32 @@ spec:
         app.kubernetes.io/instance: mapper
     spec:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       initContainers:
         - name: prisma-migrate-deploy
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.8
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           command: ["npx", "prisma", "migrate", "deploy"]
           env:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           volumeMounts:
             - name: db
               mountPath: /mapper/db
@@ -41,6 +56,11 @@ spec:
         - name: mapper-server
           image: ghcr.io/bcnoexceptions/mapper-server:0.0.8
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: DATABASE_URL
               value: "file:/mapper/db/mapper.db"
@@ -69,6 +89,13 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           volumeMounts:
             - name: db
               mountPath: /mapper/db

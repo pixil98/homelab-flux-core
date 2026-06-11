@@ -20,12 +20,28 @@ spec:
       labels:
         app.kubernetes.io/name: authoritative-bind
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       initContainers:
         - name: init-zones
           image: docker.io/library/alpine:3.23.4
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
           volumeMounts:
             - name: zones
               mountPath: /configtmp
@@ -76,6 +92,12 @@ spec:
         - name: metrics-exporter
           image: docker.io/prometheuscommunity/bind-exporter:v0.8.0
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
           command: ["/bin/bind_exporter"]
           args:
             - "--bind.stats-url=http://127.0.0.1:8053"

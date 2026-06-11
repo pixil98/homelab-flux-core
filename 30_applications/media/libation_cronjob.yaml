@@ -13,13 +13,28 @@ spec:
       template:
         spec:
           securityContext:
+            runAsNonRoot: true
             runAsUser: 1001
             runAsGroup: 1001
+            seccompProfile:
+              type: RuntimeDefault
           restartPolicy: Never
           containers:
           - name: libation
             image: docker.io/rmcrackan/libation:13.4.6
             imagePullPolicy: Always
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                cpu: 1000m
+                memory: 2Gi
             volumeMounts:
             - name: data
               mountPath: /data

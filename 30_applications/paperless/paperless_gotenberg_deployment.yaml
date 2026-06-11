@@ -22,14 +22,22 @@ spec:
         app.kubernetes.io/component: "gotenberg"
     spec:
       securityContext:
-        privileged: false
+        runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: gotenberg
           image: docker.io/gotenberg/gotenberg:8.33.0
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
           command:
             - "gotenberg"
           args:

@@ -21,5 +21,9 @@ spec:
     annotations:
       reloader.stakater.com/auto: "true"
     configMap: victoria-metrics-agent-config
+    verticalPodAutoscaler:
+      enabled: true
+      updatePolicy:
+        updateMode: "Off"
     remoteWrite:
       - url: http://victoria-metrics-cluster-vminsert.monitoring.svc.cluster.local:8480/insert/0/prometheus/api/v1/write

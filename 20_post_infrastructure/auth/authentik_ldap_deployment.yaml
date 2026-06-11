@@ -26,10 +26,18 @@ spec:
         app.kubernetes.io/instance: "authentik"
         app.kubernetes.io/component: "outpost-ldap"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: ldap
           image: ghcr.io/goauthentik/ldap:2026.5.2
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: AUTHENTIK_HOST
               value: "http://authentik-server"
@@ -40,8 +48,6 @@ spec:
                   key: token
             - name: AUTHENTIK_INSECURE
               value: "false"
-            - name: AUTHENTIK_DEBUG
-              value: "true"
           ports:
             - name: ldap
               containerPort: 3389
@@ -51,9 +57,6 @@ spec:
               protocol: TCP
             - name: monitoring
               containerPort: 9300
-              protocol: TCP
-            - name: debug
-              containerPort: 9900
               protocol: TCP
           resources:
             requests:

@@ -25,6 +25,9 @@ spec:
         app.kubernetes.io/instance: "postfix"
         app.kubernetes.io/component: "server"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: postfix
           image: docker.io/boky/postfix:5.1.0

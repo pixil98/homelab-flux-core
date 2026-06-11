@@ -21,6 +21,9 @@ spec:
         prometheus.io/port: "8081"
     spec:
       automountServiceAccountToken: true
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: kube-state-metrics
           args:
@@ -37,6 +40,13 @@ spec:
               containerPort: 8080
             - name: telemetry
               containerPort: 8081
+          resources:
+            requests:
+              cpu: 25m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           readinessProbe:
             httpGet:
               path: /readyz

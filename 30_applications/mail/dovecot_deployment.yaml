@@ -28,6 +28,9 @@ spec:
         app.kubernetes.io/instance: "dovecot"
         app.kubernetes.io/component: "server"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: dovecot
           image: docker.io/dovecot/dovecot:2.4.4
