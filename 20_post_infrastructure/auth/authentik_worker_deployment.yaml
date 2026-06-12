@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: wait-for-server
-          image: docker.io/library/alpine:3.23.4
+          image: docker.io/library/alpine:3.24.0
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
