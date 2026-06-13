@@ -21,7 +21,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: libation
-            image: docker.io/rmcrackan/libation:13.4.6
+            image: docker.io/rmcrackan/libation:13.4.9
             imagePullPolicy: Always
             securityContext:
               allowPrivilegeEscalation: false
