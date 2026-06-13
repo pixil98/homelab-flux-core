@@ -27,7 +27,7 @@ spec:
       containers:
         - name: mapmaker-client
           # Unprivileged nginx serving the static SPA; listens on 8080 as non-root.
-          image: ghcr.io/pixil98/mapmaker-client:0.0.3
+          image: ghcr.io/pixil98/mapmaker-client:0.0.4
           imagePullPolicy: IfNotPresent
           # nginx-unprivileged writes its pid and temp dirs under /tmp, so a
           # read-only rootfs needs a writable scratch volume mounted there.

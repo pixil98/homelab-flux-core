@@ -17,9 +17,6 @@ spec:
       labels:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: mapmaker
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -31,10 +28,12 @@ spec:
         - name: mapmaker-server
           # The Go renderer ships from the root Dockerfile, which CI publishes as
           # the bare repo image (subdir Dockerfiles get a "-<dir>" suffix).
-          image: ghcr.io/pixil98/mapmaker:0.0.3
+          image: ghcr.io/pixil98/mapmaker:0.0.4
           imagePullPolicy: IfNotPresent
-          # No writable mounts: the renderer only reads config/assets. Its dump
-          # files land on the read-only rootfs and fail to write, which is fine.
+          # Rootfs stays read-only; /tmp is the one writable path (the tmp
+          # emptyDir below). The canvas renderer sporadically dumps a debug .gob
+          # to the temp dir, and its leftover debug branch nil-derefs — panicking
+          # the render — if that write fails, so /tmp must be writable.
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -68,3 +67,9 @@ spec:
             limits:
               cpu: "2"
               memory: 2Gi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
