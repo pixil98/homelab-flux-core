@@ -21,9 +21,6 @@ spec:
       labels:
         app.kubernetes.io/name: server
         app.kubernetes.io/instance: immich
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8081"
     spec:
       securityContext:
         seccompProfile:

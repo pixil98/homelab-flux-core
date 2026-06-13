@@ -14,9 +14,6 @@ spec:
       app.kubernetes.io/name: authoritative-bind
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9119"
       labels:
         app.kubernetes.io/name: authoritative-bind
     spec:

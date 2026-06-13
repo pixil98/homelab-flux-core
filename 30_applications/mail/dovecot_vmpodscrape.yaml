@@ -1,0 +1,12 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: dovecot-server
+  namespace: mail
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dovecot
+      app.kubernetes.io/instance: dovecot
+  podMetricsEndpoints:
+    - targetPort: 9900

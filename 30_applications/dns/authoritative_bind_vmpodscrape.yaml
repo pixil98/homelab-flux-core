@@ -1,0 +1,11 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: authoritative-bind
+  namespace: dns
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: authoritative-bind
+  podMetricsEndpoints:
+    - targetPort: 9119

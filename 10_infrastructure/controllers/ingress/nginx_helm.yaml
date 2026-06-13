@@ -29,6 +29,3 @@ spec:
         default-ssl-certificate: "ingress/nginx-default-cert"
       metrics:
         enabled: true
-      podAnnotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "10254"

@@ -1,0 +1,11 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: reloader
+  namespace: reloader
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: reloader-reloader
+  podMetricsEndpoints:
+    - targetPort: 9090

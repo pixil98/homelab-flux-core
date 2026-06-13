@@ -16,9 +16,6 @@ spec:
       labels:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: kube-state-metrics
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8081"
     spec:
       automountServiceAccountToken: true
       securityContext:

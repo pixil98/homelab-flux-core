@@ -1,0 +1,14 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: kube-state-metrics
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  podMetricsEndpoints:
+    # 8080 = the kube-state-metrics resource metrics (was the dedicated static
+    # job); 8081 = its own runtime telemetry (was the pod annotation).
+    - targetPort: 8080
+    - targetPort: 8081
