@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: gotenberg
-          image: docker.io/gotenberg/gotenberg:8.33.0
+          image: docker.io/gotenberg/gotenberg:8.34.0
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
