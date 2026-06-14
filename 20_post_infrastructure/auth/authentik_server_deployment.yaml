@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: server
-          image: ghcr.io/goauthentik/server:2026.5.2
+          image: ghcr.io/goauthentik/server:2026.5.3
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
