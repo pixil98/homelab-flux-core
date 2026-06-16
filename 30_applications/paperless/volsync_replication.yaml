@@ -25,6 +25,7 @@ spec:
     repository: volsync-restic
     volumeSnapshotClassName: truenas-iscsi
     copyMethod: Snapshot
+    storageClassName: truenas-iscsi-ephemeral
     cacheStorageClassName: truenas-iscsi-ephemeral
     retain:
       daily: 7
