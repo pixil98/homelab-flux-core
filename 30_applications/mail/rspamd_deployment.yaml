@@ -32,7 +32,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: rspamd
-          image: docker.io/rspamd/rspamd:4.1.0
+          image: docker.io/rspamd/rspamd:4.1.1
           imagePullPolicy: IfNotPresent
           securityContext:
             capabilities:
