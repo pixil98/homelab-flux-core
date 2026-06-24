@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-post-infrastructure
+  name: flux-core-platform
   namespace: flux-system
 spec:
   dependsOn:
@@ -12,7 +12,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-core
-  path: ./20_post_infrastructure
+  path: ./20_platform
   postBuild:
     substituteFrom:
       - kind: ConfigMap
