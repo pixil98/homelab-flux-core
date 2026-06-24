@@ -2,11 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-infrastructure-controllers
+  name: flux-core-10-infrastructure-controllers
   namespace: flux-system
 spec:
   dependsOn:
-    - name: flux-core-pre-infrastructure-configs
+    - name: flux-core-00-foundation-configs
   interval: 5m
   retryInterval: 1m
   sourceRef:
@@ -25,11 +25,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-infrastructure-configs
+  name: flux-core-10-infrastructure-configs
   namespace: flux-system
 spec:
   dependsOn:
-    - name: flux-core-infrastructure-controllers
+    - name: flux-core-10-infrastructure-controllers
   interval: 5m
   retryInterval: 1m
   timeout: 30m

@@ -2,14 +2,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-applications
+  name: flux-core-30-applications
   namespace: flux-system
 spec:
   interval: 5m
   retryInterval: 1m
   timeout: 1h
   dependsOn:
-    - name: flux-core-platform
+    - name: flux-core-20-platform
   sourceRef:
     kind: GitRepository
     name: flux-core

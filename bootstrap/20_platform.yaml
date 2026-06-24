@@ -2,11 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-core-platform
+  name: flux-core-20-platform
   namespace: flux-system
 spec:
   dependsOn:
-    - name: flux-core-infrastructure-configs
+    - name: flux-core-10-infrastructure-configs
   interval: 5m
   retryInterval: 1m
   sourceRef:
