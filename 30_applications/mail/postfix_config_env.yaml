@@ -9,6 +9,9 @@ stringData:
   POSTFIX_mydestination: "localhost"
 
   # Postfix Outbound
+  RELAYHOST: "${vals_apps_mail_postfix_relayHost}:${vals_apps_mail_postfix_relayPort:=25}"
+  RELAYHOST_USERNAME: "${secrets_apps_mail_postfix_relayUser}"
+  RELAYHOST_PASSWORD: "${secrets_apps_mail_postfix_relayPassword}"
   POSTFIX_smtp_tls_security_level: "dane"
   POSTFIX_smtp_dns_support_level: "dnssec"
   POSTFIX_smtp_tls_protocols: "!SSLv2, !SSLv3"
@@ -18,12 +21,9 @@ stringData:
   POSTFIX_smtpd_tls_security_level: "may"
   POSTFIX_smtpd_tls_auth_only: "yes"
   POSTFIX_smtpd_tls_protocols: "!SSLv2, !SSLv3"
-  POSTFIX_smtpd_tls_cipher: "high"
+  POSTFIX_smtpd_tls_ciphers: "high"
   POSTFIX_smtpd_tls_cert_file: "/etc/postfix/tls/tls.crt"
   POSTFIX_smtpd_tls_key_file: "/etc/postfix/tls/tls.key"
-  RELAYHOST: "${vals_apps_mail_postfix_relayHost}"
-  RELAYHOST_USERNAME: "${secrets_apps_mail_postfix_relayUser}"
-  RELAYHOST_PASSWORD: "${secrets_apps_mail_postfix_relayPassword}"
   POSTFIX_smtpd_helo_required: "yes"
   POSTFIX_smtpd_helo_restrictions: "permit_mynetworks reject_non_fqdn_helo_hostname reject_invalid_helo_hostname reject_unknown_helo_hostname"
   POSTFIX_smtpd_relay_restrictions: "reject_non_fqdn_recipient reject_unknown_recipient_domain permit_sasl_authenticated reject_unauth_destination"
