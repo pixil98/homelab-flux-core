@@ -14,7 +14,7 @@ stringData:
         "targetVideoCodec": "vp9",
         "acceptedVideoCodecs": ["h264", "vp9"],
         "targetAudioCodec": "aac",
-        "acceptedAudioCodecs": ["aac", "mp3", "libopus", "pcm_s16le"],
+        "acceptedAudioCodecs": ["aac", "mp3", "opus", "pcm_s16le"],
         "acceptedContainers": ["mov", "ogg", "webm"],
         "targetResolution": "original",
         "maxBitrate": "0",
