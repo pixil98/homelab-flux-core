@@ -1,0 +1,69 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: public
+  namespace: ingress
+  annotations:
+    external-dns.kubernetes.io/target: ${vals_info_cluster_publicHost}
+spec:
+  gatewayClassName: envoy
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: public
+  addresses:
+    - type: IPAddress
+      value: "${vals_infra_ingress_ipAddress}"
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"
+    - name: https-mapper
+      hostname: "mapper.${secrets_apps_mapper_mapper_domain}"
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: envoy-gateway-mapper-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"
+    - name: https-root
+      hostname: "${vals_info_cluster_domain}"
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: envoy-gateway-public-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"
+    - name: https-wildcard
+      hostname: "*.${vals_info_cluster_domain}"
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: envoy-gateway-public-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"

@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mapper
+  namespace: mapper
+  labels:
+    app.kubernetes.io/instance: mapper
+spec:
+  parentRefs:
+    - name: public
+      namespace: ingress
+      sectionName: https-mapper
+  hostnames:
+    - "mapper.${secrets_apps_mapper_mapper_domain}"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapper-server
+          port: 3000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapper-client
+          port: 80

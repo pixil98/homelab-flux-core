@@ -27,11 +27,10 @@ spec:
           secretKeyRef:
             name: cloudflare-api-token
             key: token
-    # Records come from Ingress hostnames, plus DNSEndpoint CRDs for records with
-    # no workload behind them (MX, SPF/DKIM/DMARC, apex). Add "gateway-httproute"
-    # once Envoy Gateway is in place.
+    # Records come from HTTPRoute hostnames, plus DNSEndpoint CRDs for records
+    # with no workload behind them (MX, SPF/DKIM/DMARC, apex).
     sources:
-      - ingress
+      - gateway-httproute
       - crd
     crd:
       create: true

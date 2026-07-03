@@ -1,0 +1,75 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mapmaker
+  namespace: http
+  labels:
+    app.kubernetes.io/instance: mapmaker
+spec:
+  parentRefs:
+    - name: public
+      namespace: ingress
+      sectionName: https-root
+  hostnames:
+    - "${vals_info_cluster_domain}"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mapmaker/create
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /create
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-server
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mapmaker/icons
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /icons
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-server
+          port: 8080
+    - matches:
+        - path:
+            type: Exact
+            value: /mapmaker
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-client
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mapmaker/
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-client
+          port: 8080

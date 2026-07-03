@@ -77,17 +77,7 @@ spec:
             basicAuth: false
             editable: false
     ingress:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
-        external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
-      hosts:
-        - grafana.${vals_info_cluster_domain}
-      tls:
-        - hosts:
-            - "grafana.${vals_info_cluster_domain}"
-          secretName: grafana-tls
-      ingressClassName: nginx
+      enabled: false
     sidecar:
       dashboards:
         enabled: true

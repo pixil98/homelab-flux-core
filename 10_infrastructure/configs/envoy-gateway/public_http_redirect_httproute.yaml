@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: public-http-redirect
+  namespace: ingress
+spec:
+  parentRefs:
+    - name: public
+      sectionName: http
+  hostnames:
+    - "${vals_info_cluster_domain}"
+    - "*.${vals_info_cluster_domain}"
+    - "mapper.${secrets_apps_mapper_mapper_domain}"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            port: 443
+            statusCode: 301

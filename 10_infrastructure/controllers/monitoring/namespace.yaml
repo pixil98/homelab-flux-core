@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   name: monitoring
   labels:
+    gateway.networking.k8s.io/public-routes: "true"
     pod-security.kubernetes.io/enforce: privileged

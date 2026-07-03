@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: envoy-gateway
+  namespace: envoy-gateway-system
+spec:
+  releaseName: envoy-gateway
+  chart:
+    spec:
+      chart: gateway-helm
+      sourceRef:
+        kind: HelmRepository
+        name: envoy-gateway
+        namespace: envoy-gateway-system
+      version: "v1.8.1"
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3

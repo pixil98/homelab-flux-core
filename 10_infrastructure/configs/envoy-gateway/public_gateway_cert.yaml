@@ -1,14 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: nginx-default-cert
+  name: envoy-gateway-public-tls
   namespace: ingress
 spec:
-  secretName: nginx-default-cert
+  secretName: envoy-gateway-public-tls
   dnsNames:
     - "${vals_info_cluster_domain}"
-    #- "*.${vals_info_cluster_domain}"
+    - "*.${vals_info_cluster_domain}"
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
-    name: ${vals_infra_certManager_issuer}
+    name: letsencrypt-staging-cloudflare
