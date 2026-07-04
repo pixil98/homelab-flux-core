@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/instance: mapper
   annotations:
     #TODO: This shouldn't be hard coded, it will be used in dev clusters unnecessarily
-    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
   ingressClassName: nginx
