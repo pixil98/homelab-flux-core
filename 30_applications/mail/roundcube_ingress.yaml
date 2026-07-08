@@ -4,6 +4,7 @@ metadata:
   name: roundcube
   namespace: mail
   annotations:
+    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
     nginx.ingress.kubernetes.io/proxy-body-size: "28m"
   labels:
     app.kubernetes.io/name: "roundcube"

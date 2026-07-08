@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/instance: "rssreader"
     app.kubernetes.io/component: "server"
   annotations:
+    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
     nginx.ingress.kubernetes.io/use-regex: "true"
     #nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/x-forwarded-prefix: "/jmehler/rss"

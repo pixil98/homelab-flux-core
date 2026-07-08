@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: mapmaker
   annotations:
+    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
     # The SPA is built with base /mapmaker/, so every request the browser makes
     # already carries the prefix. Strip it here ($2 is the path after /mapmaker/)
     # before forwarding: web sees /, /assets/...; the server sees /create, /icons.

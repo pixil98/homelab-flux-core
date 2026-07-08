@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  chart:
+    spec:
+      chart: external-dns
+      # Renovate manages this; confirm against the latest chart on first reconcile.
+      version: "1.15.2"
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: external-dns
+      interval: 6h
+  interval: 30m
+  install:
+    remediation:
+      retries: 3
+  values:
+    provider:
+      name: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-token
+            key: token
+    # Records come from Ingress hostnames, plus DNSEndpoint CRDs for records with
+    # no workload behind them (MX, SPF/DKIM/DMARC, apex). Add "gateway-httproute"
+    # once Envoy Gateway is in place.
+    sources:
+      - ingress
+      - crd
+    crd:
+      create: true
+    domainFilters:
+      - ${vals_info_cluster_domain}
+      - ${secrets_apps_mapper_mapper_domain}
+    # Unique per cluster so multiple clusters never fight over the same ownership TXTs.
+    txtOwnerId: ${vals_info_cluster_name}
+    # Keep the ownership TXTs from colliding with real apex TXT (SPF/DMARC) records.
+    txtPrefix: "extdns-"
+    # A/AAAA/CNAME are managed by default; add the types used by DNSEndpoint manifests.
+    managedRecordTypes:
+      - A
+      - AAAA
+      - CNAME
+      - TXT
+      - MX
+    # Full lifecycle: create, update, and delete records external-dns owns. It only
+    # prunes records it created itself (tracked via the ownership TXT above), so
+    # manually-created Cloudflare records are never touched.
+    policy: sync
+    serviceMonitor:
+      enabled: true

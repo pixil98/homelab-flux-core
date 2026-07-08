@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/component: "server"
   annotations:
     cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
 spec:
   ingressClassName: nginx
