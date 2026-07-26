@@ -13,11 +13,6 @@ stringData:
     metadata:
       name: Custom - Immich
     entries:
-      - model: authentik_blueprints.metaapplyblueprint
-        attrs:
-          identifiers: { name: Custom - Common Functionality }
-          required: true
-
       - model: authentik_providers_oauth2.oauth2provider
         id: immich_provider
         identifiers: { name: immich }
