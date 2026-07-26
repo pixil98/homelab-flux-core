@@ -149,5 +149,7 @@ spec:
                 path: auth.${vals_info_cluster_domain}.crt
               - key: tls.key
                 path: auth.${vals_info_cluster_domain}.key
+        # Starts empty on restart; the sidecar repopulates it from the labelled Secrets.
+        # If that brief empty window ever matters, add a LIST-mode k8s-sidecar initContainer to pre-populate.
         - name: blueprints
           emptyDir: {}
