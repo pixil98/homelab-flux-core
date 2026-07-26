@@ -46,7 +46,7 @@ stringData:
           bind_mode: "direct"
           mfa_support: false
         permissions:
-          - permission: search_full_directory
+          - permission: authentik_providers_ldap.search_full_directory
             user: !KeyOf ldap_user
 
       - model: authentik_core.application
