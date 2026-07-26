@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   name: authentik-blueprint-grafana
   namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
 type: Opaque
 stringData:
   grafana.yaml: |

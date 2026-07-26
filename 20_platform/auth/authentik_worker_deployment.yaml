@@ -104,6 +104,42 @@ spec:
               mountPath: /blueprints/custom
             - name: certificate
               mountPath: /certs/auth.${vals_info_cluster_domain}
+        # Syncs Secrets labelled goauthentik.io/blueprint into /blueprints/custom
+        - name: blueprint-sidecar
+          image: quay.io/kiwigrid/k8s-sidecar:1.28.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 65534
+          env:
+            - name: LABEL
+              value: goauthentik.io/blueprint
+            - name: LABEL_VALUE
+              value: "true"
+            - name: FOLDER
+              value: /blueprints/custom
+            - name: RESOURCE
+              value: secret
+            - name: METHOD
+              value: WATCH
+            - name: NAMESPACE
+              value: auth
+            - name: UNIQUE_FILENAMES
+              value: "true"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: blueprints
+              mountPath: /blueprints/custom
       volumes:
         - name: certificate
           secret:
@@ -114,17 +150,4 @@ spec:
               - key: tls.key
                 path: auth.${vals_info_cluster_domain}.key
         - name: blueprints
-          projected:
-            sources:
-              - secret:
-                  name: authentik-blueprint-audiobookshelf
-              - secret:
-                  name: authentik-blueprint-grafana
-              - secret:
-                  name: authentik-blueprint-immich
-              - secret:
-                  name: authentik-blueprint-ldap
-              - secret:
-                  name: authentik-blueprint-mail
-              - secret:
-                  name: authentik-blueprint-paperless
+          emptyDir: {}

@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   name: authentik-blueprint-immich
   namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
 type: Opaque
 stringData:
   immich.yaml: |

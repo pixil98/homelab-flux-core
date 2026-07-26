@@ -59,6 +59,7 @@ rules:
       - delete
       - list
       - patch
+      - watch
   - apiGroups:
       - extensions
       - apps

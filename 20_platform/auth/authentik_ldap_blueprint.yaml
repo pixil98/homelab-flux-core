@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   name: authentik-blueprint-ldap
   namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
 type: Opaque
 stringData:
   ldap.yaml: |
