@@ -133,10 +133,10 @@ spec:
           resources:
             requests:
               cpu: 10m
-              memory: 32Mi
+              memory: 128Mi
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: 100m
+              memory: 256Mi
           volumeMounts:
             - name: blueprints
               mountPath: /blueprints/custom
