@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: monitoring
-      version: "30.0.1"
+      version: "31.0.0"
       interval: 6h
   interval: 30m
   install:
