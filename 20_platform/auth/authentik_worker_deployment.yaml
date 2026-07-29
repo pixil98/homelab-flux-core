@@ -108,6 +108,10 @@ spec:
         - name: blueprint-sidecar
           image: quay.io/kiwigrid/k8s-sidecar:2.10.0
           imagePullPolicy: IfNotPresent
+          ports:
+            - name: health
+              containerPort: 8080
+              protocol: TCP
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -137,6 +141,30 @@ spec:
             limits:
               cpu: 100m
               memory: 256Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: blueprints
               mountPath: /blueprints/custom
