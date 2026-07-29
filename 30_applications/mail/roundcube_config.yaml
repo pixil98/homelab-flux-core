@@ -51,6 +51,10 @@ stringData:
       $config['redis_debug'] = false;
       $config['oauth_debug'] = true;
     ?>
+  session.php: |
+    <?php
+      $config['session_lifetime'] = 1440;
+    ?>
   oauth.php: |
     <?php
       $config['oauth_provider'] = 'generic';
