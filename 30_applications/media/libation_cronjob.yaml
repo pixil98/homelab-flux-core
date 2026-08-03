@@ -21,8 +21,16 @@ spec:
           restartPolicy: Never
           containers:
           - name: libation
-            image: docker.io/rmcrackan/libation:13.7.0
+            image: docker.io/rmcrackan/libation:13.7.4
             imagePullPolicy: Always
+            args:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                /libation/LibationCli scan
+                /libation/LibationCli set-status -d
+                /libation/LibationCli liberate
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -48,10 +56,6 @@ spec:
               mountPath: /db
             - name: tmp
               mountPath: /tmp
-            # Mount over the script the image actually executes:
-            - name: liberate-script
-              mountPath: /libation/liberate.sh
-              subPath: liberate.sh
           volumes:
           - name: settings
             configMap:
@@ -66,7 +70,3 @@ spec:
             emptyDir: {}
           - name: tmp
             emptyDir: {}
-          - name: liberate-script
-            configMap:
-              name: libation-liberate-script
-              defaultMode: 0755
