@@ -106,7 +106,7 @@ spec:
               mountPath: /certs/auth.${vals_info_cluster_domain}
         # Syncs Secrets labelled goauthentik.io/blueprint into /blueprints/custom
         - name: blueprint-sidecar
-          image: quay.io/kiwigrid/k8s-sidecar:2.10.0
+          image: quay.io/kiwigrid/k8s-sidecar:2.10.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: health
