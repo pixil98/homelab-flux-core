@@ -65,13 +65,6 @@ stringData:
         attrs:
           order: 10
 
-      - model: authentik_policies.policybinding
-        identifiers:
-          target: !KeyOf ldap_app
-          group:  !Find [authentik_core.group, [name, mail-users]]
-        attrs:
-          order: 20
-
       - model: authentik_outposts.outpost
         identifiers: { name: LDAP Outpost }
         state: present

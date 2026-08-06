@@ -94,3 +94,11 @@ stringData:
           target: !KeyOf mail_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
         attrs: { order: 20 }
+
+      # Mail users authenticate against the LDAP outpost, so bind them to the
+      # LDAP app. Here (not the LDAP blueprint) so it only exists where mail does.
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !Find [authentik_core.application, [slug, ldap]]
+          group:  !KeyOf mail-users
+        attrs: { order: 20 }
