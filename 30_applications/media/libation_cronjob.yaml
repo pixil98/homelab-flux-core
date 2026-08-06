@@ -10,6 +10,8 @@ spec:
   successfulJobsHistoryLimit: 3
   jobTemplate:
     spec:
+      # Retries re-enter Libation's deregister path, which is destructive.
+      backoffLimit: 0
       template:
         spec:
           securityContext:
