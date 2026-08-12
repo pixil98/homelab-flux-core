@@ -13,6 +13,13 @@ stringData:
     metadata:
       name: Custom - Recovery flow
     entries:
+      # Cross-blueprint !Find fails if the target does not exist yet
+      - model: authentik_blueprints.metaapplyblueprint
+        attrs:
+          identifiers:
+            name: Custom - Password policies
+          required: true
+
       - model: authentik_flows.flow
         id: recovery_flow
         identifiers: { slug: recovery-flow }
@@ -75,6 +82,9 @@ stringData:
           fields:
             - !KeyOf recovery_field_password
             - !KeyOf recovery_field_password_repeat
+          validation_policies:
+            - !Find [authentik_policies_password.passwordpolicy, [name, password-complexity]]
+            - !Find [authentik_policies_password.passwordpolicy, [name, password-breached]]
 
       - model: authentik_stages_user_write.userwritestage
         id: recovery_user_write

@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-enrollment
+  namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
+type: Opaque
+stringData:
+  enrollment.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Invitation enrollment
+    entries:
+      # Cross-blueprint !Find fails if the target does not exist yet
+      - model: authentik_blueprints.metaapplyblueprint
+        attrs:
+          identifiers:
+            name: Custom - Password policies
+          required: true
+
+      - model: authentik_flows.flow
+        id: enrollment_flow
+        identifiers: { slug: invitation-enrollment }
+        state: present
+        attrs:
+          name: Invitation enrollment
+          title: Create your account
+          designation: enrollment
+          authentication: require_unauthenticated
+
+      - model: authentik_stages_prompt.prompt
+        id: enrollment_field_username
+        identifiers: { name: enrollment-field-username }
+        state: present
+        attrs:
+          field_key: username
+          label: Username
+          type: username
+          required: true
+          placeholder: Username
+          order: 0
+
+      - model: authentik_stages_prompt.prompt
+        id: enrollment_field_name
+        identifiers: { name: enrollment-field-name }
+        state: present
+        attrs:
+          field_key: name
+          label: Display name
+          type: text
+          required: true
+          placeholder: Display name
+          order: 1
+
+      - model: authentik_stages_prompt.prompt
+        id: enrollment_field_password
+        identifiers: { name: enrollment-field-password }
+        state: present
+        attrs:
+          field_key: password
+          label: Password
+          type: password
+          required: true
+          placeholder: Password
+          order: 2
+
+      - model: authentik_stages_prompt.prompt
+        id: enrollment_field_password_repeat
+        identifiers: { name: enrollment-field-password-repeat }
+        state: present
+        attrs:
+          field_key: password_repeat
+          label: Password (repeat)
+          type: password
+          required: true
+          placeholder: Password (repeat)
+          order: 3
+
+      # No email field: the address comes from the invitation's fixed_data, so it always
+      # matches the mailbox the invite was delivered to. Never add a "groups" field here.
+      - model: authentik_stages_prompt.promptstage
+        id: enrollment_prompt
+        identifiers: { name: enrollment-prompt }
+        state: present
+        attrs:
+          fields:
+            - !KeyOf enrollment_field_username
+            - !KeyOf enrollment_field_name
+            - !KeyOf enrollment_field_password
+            - !KeyOf enrollment_field_password_repeat
+          validation_policies:
+            - !Find [authentik_policies_password.passwordpolicy, [name, password-complexity]]
+            - !Find [authentik_policies_password.passwordpolicy, [name, password-breached]]
+
+      - model: authentik_stages_invitation.invitationstage
+        id: enrollment_invitation
+        identifiers: { name: enrollment-invitation }
+        state: present
+        attrs:
+          continue_flow_without_invitation: false
+
+      # fixed_data lands in prompt_data, but user_write reads group objects off the
+      # top-level plan context. Writes go through flow_plan because the policy engine
+      # is handed a copy of the context, not the plan's own dict.
+      - model: authentik_policies_expression.expressionpolicy
+        id: enrollment_map_groups
+        identifiers: { name: enrollment-map-invitation-groups }
+        state: present
+        attrs:
+          expression: |
+            from authentik.core.models import Group
+
+            flow_plan = request.context.get("flow_plan")
+            names = request.context.get("prompt_data", {}).get("groups", [])
+            if isinstance(names, str):
+                names = [names]
+            if not flow_plan or not names:
+                return True
+
+            groups = list(Group.objects.filter(name__in=names))
+            missing = set(names) - {group.name for group in groups}
+            if missing:
+                ak_message("Invitation referenced unknown group(s): " + ", ".join(sorted(missing)))
+
+            flow_plan.context["groups"] = groups
+            return True
+
+      - model: authentik_stages_user_write.userwritestage
+        id: enrollment_user_write
+        identifiers: { name: enrollment-user-write }
+        state: present
+        attrs:
+          user_creation_mode: always_create
+          user_type: internal
+          user_path_template: users/invited
+
+      - model: authentik_stages_user_login.userloginstage
+        id: enrollment_user_login
+        identifiers: { name: enrollment-user-login }
+        state: present
+
+      # Prompt runs before the invitation so that abandoning the form does not consume
+      # a single-use invite; the token is read from the session, not from stage order.
+      - model: authentik_flows.flowstagebinding
+        identifiers:
+          target: !KeyOf enrollment_flow
+          stage: !KeyOf enrollment_prompt
+          order: 10
+
+      - model: authentik_flows.flowstagebinding
+        identifiers:
+          target: !KeyOf enrollment_flow
+          stage: !KeyOf enrollment_invitation
+          order: 20
+
+      # At plan time the invitation stage has not run and prompt_data holds no groups,
+      # so the mapping policy only works via the re-evaluation path.
+      - model: authentik_flows.flowstagebinding
+        id: enrollment_user_write_binding
+        identifiers:
+          target: !KeyOf enrollment_flow
+          stage: !KeyOf enrollment_user_write
+          order: 30
+        attrs:
+          evaluate_on_plan: false
+          re_evaluate_policies: true
+
+      - model: authentik_flows.flowstagebinding
+        identifiers:
+          target: !KeyOf enrollment_flow
+          stage: !KeyOf enrollment_user_login
+          order: 40
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf enrollment_user_write_binding
+          policy: !KeyOf enrollment_map_groups
+          order: 0
