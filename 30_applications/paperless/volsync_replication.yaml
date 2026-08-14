@@ -19,7 +19,7 @@ spec:
   paused: ${vals_infra_storage_backup_paused}
   sourcePVC: paperless-server-data
   trigger:
-    schedule: "0 2 * * *"
+    schedule: "20 3 * * *"
   restic:
     pruneIntervalDays: 14
     repository: volsync-restic

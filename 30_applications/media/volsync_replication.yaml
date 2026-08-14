@@ -19,7 +19,7 @@ spec:
   paused: ${vals_infra_storage_backup_paused}
   sourcePVC: audiobookshelf-config-pvc
   trigger:
-    schedule: "0 2 * * *"
+    schedule: "40 2 * * *"
   restic:
     pruneIntervalDays: 14
     repository: volsync-restic

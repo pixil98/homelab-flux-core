@@ -19,7 +19,7 @@ spec:
   paused: ${vals_infra_storage_backup_paused}
   sourcePVC: mapper-server-db
   trigger:
-    schedule: "0 2 * * *"
+    schedule: "20 2 * * *"
   restic:
     pruneIntervalDays: 14
     repository: volsync-restic

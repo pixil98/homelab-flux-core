@@ -60,7 +60,6 @@ spec:
           allowInsecure: true
         zfs:
           datasetParentName: ssd/kubernetes/${vals_info_cluster_name}
-          detachedSnapshotsDatasetParentName: ssd/kubernetes/${vals_info_cluster_name}-snaps
           datasetProperties:
             "org.freenas:description": >-
               {{ parameters.[csi.storage.k8s.io/pvc/namespace] }}/{{ parameters.[csi.storage.k8s.io/pvc/name] }}
