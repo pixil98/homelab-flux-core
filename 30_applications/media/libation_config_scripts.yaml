@@ -32,6 +32,17 @@ data:
     echo "loaded $${loaded} account(s) from $${#accounts[@]} Secret(s)"
     mv /tmp/AccountsSettings.json "$${LIBATION_CONFIG_INTERNAL}/AccountsSettings.json"
 
+    # Libation defaults to encrypting tokens under a machine-bound key. There is no OS
+    # keystore in a container, so it mints a portable key into the ephemeral config dir
+    # that dies with the pod -- tokens written under it would be unrecoverable. Assert
+    # the setting Libation actually resolved, not the one we think we shipped.
+    storage=$(/libation/LibationCli get-setting --bare TokenStorageMethod \
+      | sed -n 's/^TokenStorageMethod=//p' | tail -1)
+    if [ "$${storage}" != "Plaintext" ]; then
+      echo "refusing to run: TokenStorageMethod resolved to '$${storage}', expected Plaintext" >&2
+      exit 1
+    fi
+
     /libation/LibationCli scan
     /libation/LibationCli set-status -d
     /libation/LibationCli liberate
