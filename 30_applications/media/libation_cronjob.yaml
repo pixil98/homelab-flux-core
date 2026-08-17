@@ -14,6 +14,10 @@ spec:
       backoffLimit: 0
       template:
         spec:
+          serviceAccountName: libation
+          # Scoped to the initContainer via the kube-api-access volume below, so the
+          # Libation container itself has no API access.
+          automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
@@ -21,18 +25,52 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           restartPolicy: Never
+          initContainers:
+          # Writes every Secret labelled libation.homelab/account=true into /accounts as
+          # namespace_media.secret_<secret-name>.<key>, one file per key.
+          - name: load-accounts
+            image: quay.io/kiwigrid/k8s-sidecar:2.10.1
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: LABEL
+              value: libation.homelab/account
+            - name: LABEL_VALUE
+              value: "true"
+            - name: FOLDER
+              value: /accounts
+            - name: RESOURCE
+              value: secret
+            - name: METHOD
+              value: LIST
+            - name: NAMESPACE
+              value: media
+            - name: UNIQUE_FILENAMES
+              value: "true"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                cpu: 100m
+                memory: 256Mi
+            volumeMounts:
+            - name: accounts
+              mountPath: /accounts
+            - name: kube-api-access
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
           containers:
           - name: libation
             image: docker.io/rmcrackan/libation:13.7.7
             imagePullPolicy: Always
             args:
               - /bin/bash
-              - -c
-              - |
-                set -euo pipefail
-                /libation/LibationCli scan
-                /libation/LibationCli set-status -d
-                /libation/LibationCli liberate
+              - /scripts/run.sh
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -51,9 +89,12 @@ spec:
             - name: settings
               mountPath: /config/Settings.json
               subPath: "Settings.json"
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
             - name: accounts
-              mountPath: /config/AccountsSettings.json
-              subPath: "AccountsSettings.json"
+              mountPath: /accounts
+              readOnly: true
             - name: db-local
               mountPath: /db
             - name: tmp
@@ -62,9 +103,28 @@ spec:
           - name: settings
             configMap:
               name: libation-settings
+          - name: scripts
+            configMap:
+              name: libation-config-scripts
+              defaultMode: 0755
           - name: accounts
-            secret:
-              secretName: libation-accounts
+            emptyDir: {}
+          - name: kube-api-access
+            projected:
+              sources:
+              - serviceAccountToken:
+                  path: token
+                  expirationSeconds: 3607
+              - configMap:
+                  name: kube-root-ca.crt
+                  items:
+                  - key: ca.crt
+                    path: ca.crt
+              - downwardAPI:
+                  items:
+                  - path: namespace
+                    fieldRef:
+                      fieldPath: metadata.namespace
           - name: data
             persistentVolumeClaim:
               claimName: audible-pvc

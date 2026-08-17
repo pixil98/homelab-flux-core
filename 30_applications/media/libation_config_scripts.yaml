@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: libation-config-scripts
+  namespace: media
+data:
+  run.sh: |
+    #!/bin/bash
+
+    set -euo pipefail
+    shopt -s nullglob
+
+    accounts=(/accounts/*.json)
+    if [ $${#accounts[@]} -eq 0 ]; then
+      echo "no Secrets labelled libation.homelab/account=true in namespace media" >&2
+      exit 1
+    fi
+
+    # The entrypoint has already seeded an empty AccountsSettings.json in the
+    # internal config dir; replace it with the merge of every account Secret.
+    jq -s '{
+        Accounts: (map(.Accounts // [.]) | add | map(select(has("AccountId")))),
+        Cdm: (map(.Cdm // empty) | first)
+      } | with_entries(select(.value != null))' \
+      "$${accounts[@]}" > /tmp/AccountsSettings.json
+
+    loaded=$(jq '.Accounts | length' /tmp/AccountsSettings.json)
+    if [ "$${loaded}" -eq 0 ]; then
+      echo "merged $${#accounts[@]} Secret(s) but found no accounts" >&2
+      exit 1
+    fi
+    echo "loaded $${loaded} account(s) from $${#accounts[@]} Secret(s)"
+    mv /tmp/AccountsSettings.json "$${LIBATION_CONFIG_INTERNAL}/AccountsSettings.json"
+
+    /libation/LibationCli scan
+    /libation/LibationCli set-status -d
+    /libation/LibationCli liberate
