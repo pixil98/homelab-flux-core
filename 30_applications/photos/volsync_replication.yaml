@@ -27,6 +27,7 @@ spec:
     cacheStorageClassName: truenas-iscsi-ephemeral
     cacheAccessModes:
       - ReadWriteOnce
+    unlock: "2026-08-20-prune-lock"
     retain:
       daily: 7
       weekly: 4
