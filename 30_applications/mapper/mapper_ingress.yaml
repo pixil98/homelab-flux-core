@@ -10,6 +10,9 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-production-cloudflare
     external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    # A person import holds the connection open while the server ingests the
+    # payload, which runs past the 60s default and returns 504 to the client.
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   ingressClassName: nginx
   tls:
