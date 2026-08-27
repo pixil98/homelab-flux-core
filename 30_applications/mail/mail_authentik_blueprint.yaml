@@ -54,7 +54,8 @@ stringData:
         state: present
         attrs:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
-          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-explicit-consent]]
+          # Implicit consent: mail is our own app, so don't prompt to authorize it.
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
           invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
           client_type: confidential
           client_id: ${secrets_apps_auth_applications_dovecot_clientId}
