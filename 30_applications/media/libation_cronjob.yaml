@@ -66,7 +66,7 @@ spec:
               readOnly: true
           containers:
           - name: libation
-            image: docker.io/rmcrackan/libation:13.7.11
+            image: docker.io/rmcrackan/libation:14.0.0
             imagePullPolicy: Always
             args:
               - /bin/bash
