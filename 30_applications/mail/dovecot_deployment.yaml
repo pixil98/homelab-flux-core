@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: dovecot
-          image: docker.io/dovecot/dovecot:2.4.4
+          image: docker.io/dovecot/dovecot:2.4.5
           imagePullPolicy: IfNotPresent
           env:
             - name: DOVECOT_TLS_CERT_FILE
