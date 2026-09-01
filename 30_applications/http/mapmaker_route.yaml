@@ -1,0 +1,83 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mapmaker
+  namespace: http
+  labels:
+    app.kubernetes.io/instance: mapmaker
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: ingress
+      namespace: ingress
+      sectionName: https
+  hostnames:
+    - "${vals_info_cluster_domain}"
+  rules:
+    # The renderer owns API paths. Both rules use the Envoy extension below to
+    # strip /mapmaker before forwarding, matching the previous nginx rewrite.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mapmaker/create
+        - path:
+            type: PathPrefix
+            value: /mapmaker/icons
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: strip-mapmaker-prefix
+      timeouts:
+        request: 10m
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-server
+          port: 8080
+    # Everything else under /mapmaker is the static SPA.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mapmaker
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: strip-mapmaker-prefix
+      timeouts:
+        request: 2m
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: mapmaker-client
+          port: 8080
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: strip-mapmaker-prefix
+  namespace: http
+spec:
+  urlRewrite:
+    path:
+      type: ReplaceRegexMatch
+      replaceRegexMatch:
+        pattern: ^/mapmaker/?(.*)$
+        substitution: '/\1'
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: mapmaker-request-buffer
+  namespace: http
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: mapmaker
+  requestBuffer:
+    limit: 25Mi

@@ -1,12 +1,13 @@
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMPodScrape
 metadata:
-  name: ingress-nginx
+  name: envoy-proxy
   namespace: ingress
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: ingress-nginx
-      app.kubernetes.io/component: controller
+      app.kubernetes.io/name: envoy
+      app.kubernetes.io/component: proxy
   podMetricsEndpoints:
-    - targetPort: 10254
+    - port: metrics
+      path: /stats/prometheus

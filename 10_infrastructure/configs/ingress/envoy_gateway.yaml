@@ -1,0 +1,143 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: ingress
+  namespace: ingress
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+      envoyService:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: ${vals_infra_ingress_ipAddress}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: ingress
+    namespace: ingress
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: envoy-gateway-tls
+  namespace: ingress
+spec:
+  secretName: envoy-gateway-tls
+  dnsNames:
+    - "${vals_info_cluster_domain}"
+    - "*.${vals_info_cluster_domain}"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: ${vals_infra_certManager_issuer}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: envoy-gateway-mapper-tls
+  namespace: ingress
+spec:
+  secretName: envoy-gateway-mapper-tls
+  dnsNames:
+    - "mapper.${secrets_apps_mapper_mapper_domain}"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-production-cloudflare
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: ingress
+  namespace: ingress
+  annotations:
+    external-dns.kubernetes.io/target: ${vals_info_cluster_publicHost}
+spec:
+  gatewayClassName: envoy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ""
+            kind: Secret
+            name: envoy-gateway-tls
+          - group: ""
+            kind: Secret
+            name: envoy-gateway-mapper-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.networking.k8s.io/public-routes: "true"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: https-redirect
+  namespace: ingress
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: ingress
+      sectionName: http
+  hostnames:
+    - "${vals_info_cluster_domain}"
+    - "auth.${vals_info_cluster_domain}"
+    - "books.${vals_info_cluster_domain}"
+    - "grafana.${vals_info_cluster_domain}"
+    - "mail.${vals_info_cluster_domain}"
+    - "webmail.${vals_info_cluster_domain}"
+    - "paperless.${vals_info_cluster_domain}"
+    - "photos.${vals_info_cluster_domain}"
+    - "mapper.${secrets_apps_mapper_mapper_domain}"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 308
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: ingress
+  namespace: ingress
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: ingress
+      sectionName: https
+  timeout:
+    http:
+      # Keep long-lived streams while reclaiming connections with no traffic.
+      streamIdleTimeout: 5m
+  headers:
+    lateResponseHeaders:
+      set:
+        - name: Strict-Transport-Security
+          value: max-age=31536000; includeSubDomains
