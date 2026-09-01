@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: romm-server
+  namespace: games
+  labels:
+    app.kubernetes.io/name: romm
+    app.kubernetes.io/instance: romm
+    app.kubernetes.io/component: server
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "romm.${vals_info_cluster_domain}"
+      secretName: romm-server-tls
+  rules:
+    - host: "romm.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: romm-server
+                port:
+                  name: http

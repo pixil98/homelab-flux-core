@@ -21,6 +21,9 @@ spec:
         app.kubernetes.io/instance: "authentik"
         app.kubernetes.io/component: "server"
     spec:
+      serviceAccountName: authentik-icons
+      # Only the icon sidecar receives the projected Kubernetes API token.
+      automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       securityContext:
         seccompProfile:
@@ -94,7 +97,91 @@ spec:
           volumeMounts:
             - name: icons
               mountPath: /media/public/icons
+              readOnly: true
+        # Syncs labelled ConfigMaps into the exact paths used by application icons.
+        - name: icon-sidecar
+          image: quay.io/kiwigrid/k8s-sidecar:2.10.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: icon-health
+              containerPort: 8080
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 65534
+          env:
+            - name: LABEL
+              value: goauthentik.io/icon
+            - name: LABEL_VALUE
+              value: "true"
+            - name: FOLDER
+              value: /media/public/icons
+            - name: RESOURCE
+              value: configmap
+            - name: METHOD
+              value: WATCH
+            - name: NAMESPACE
+              value: auth
+            # Blueprint icon paths use the ConfigMap data keys verbatim.
+            - name: UNIQUE_FILENAMES
+              value: "false"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: icon-health
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: icon-health
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /healthz
+              port: icon-health
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          volumeMounts:
+            - name: icons
+              mountPath: /media/public/icons
+            - name: kube-api-access
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
       volumes:
         - name: icons
-          configMap:
-            name: authentik-config-icons
+          emptyDir: {}
+        - name: kube-api-access
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: token
+                  expirationSeconds: 3607
+              - configMap:
+                  name: kube-root-ca.crt
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+              - downwardAPI:
+                  items:
+                    - path: namespace
+                      fieldRef:
+                        fieldPath: metadata.namespace

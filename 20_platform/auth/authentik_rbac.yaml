@@ -38,6 +38,51 @@ subjects:
     name: authentik
     namespace: auth
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: authentik-icons
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: "serviceAccount"
+    app.kubernetes.io/instance: "authentik-icons"
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: authentik-icons
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: "serviceAccount"
+    app.kubernetes.io/instance: "authentik-icons"
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: authentik-icons
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: "serviceAccount"
+    app.kubernetes.io/instance: "authentik-icons"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: authentik-icons
+subjects:
+  - kind: ServiceAccount
+    name: authentik-icons
+    namespace: auth
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:

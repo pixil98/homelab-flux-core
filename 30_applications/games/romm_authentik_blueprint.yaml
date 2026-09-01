@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-romm
+  namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
+type: Opaque
+stringData:
+  romm.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - ROMM
+    entries:
+      # Authentik reports email_verified=false by default. ROMM rejects those claims.
+      - model: authentik_providers_oauth2.scopemapping
+        id: romm_email_scope
+        identifiers: { name: ROMM verified email }
+        state: present
+        attrs:
+          name: ROMM verified email
+          scope_name: email
+          description: Email address verified by Authentik for ROMM
+          expression: |
+            return {
+              "email": request.user.email,
+              "email_verified": True,
+            }
+
+      - model: authentik_providers_oauth2.oauth2provider
+        id: romm_provider
+        identifiers: { name: romm }
+        state: present
+        attrs:
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          # Implicit consent: ROMM is our own app, so don't prompt to authorize it.
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
+          client_type: confidential
+          client_id: ${secrets_apps_auth_applications_romm_clientId}
+          client_secret: ${secrets_apps_auth_applications_romm_clientSecret}
+          redirect_uris:
+            - { matching_mode: strict, url: "https://romm.${vals_info_cluster_domain}/api/oauth/openid" }
+          access_code_validity: minutes=1
+          access_token_validity: minutes=30
+          refresh_token_validity: days=30
+          signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
+          property_mappings:
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
+            - !KeyOf romm_email_scope
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, profile]]
+            - !Find [authentik_providers_oauth2.scopemapping, [scope_name, offline_access]]
+
+      - model: authentik_core.application
+        id: romm_app
+        identifiers: { slug: romm }
+        state: present
+        attrs:
+          name: ROMM
+          slug: romm
+          provider: !KeyOf romm_provider
+          meta_launch_url: https://romm.${vals_info_cluster_domain}/
+          icon: icons/romm.svg
+          policy_engine_mode: any
+
+      - model: authentik_core.group
+        id: romm_group
+        identifiers: { name: romm }
+        state: present
+        attrs: { name: romm }
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf romm_app
+          group: !KeyOf romm_group
+        attrs: { order: 10 }
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf romm_app
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+        attrs: { order: 20 }

@@ -31,3 +31,79 @@ spec:
       daily: 7
       weekly: 4
       monthly: 3
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic-romm-library
+  namespace: games
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_info_cluster_name}/games-romm-library"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: romm-library-backup
+  namespace: games
+spec:
+  paused: ${vals_infra_storage_backup_paused}
+  sourcePVC: romm-library
+  trigger:
+    schedule: "20 2 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic-romm-library
+    copyMethod: Direct
+    cacheStorageClassName: truenas-iscsi-ephemeral
+    cacheAccessModes:
+      - ReadWriteOnce
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic-romm-assets
+  namespace: games
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_info_cluster_name}/games-romm-assets"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: romm-assets-backup
+  namespace: games
+spec:
+  paused: ${vals_infra_storage_backup_paused}
+  sourcePVC: romm-assets
+  trigger:
+    schedule: "40 2 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic-romm-assets
+    copyMethod: Direct
+    cacheStorageClassName: truenas-iscsi-ephemeral
+    cacheAccessModes:
+      - ReadWriteOnce
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
