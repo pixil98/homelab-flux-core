@@ -79,6 +79,16 @@ spec:
               value: "https://romm.${vals_info_cluster_domain}"
             - name: ROMM_SESSION_SECURE_COOKIE
               value: "true"
+            - name: SCREENSCRAPER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: romm-secrets
+                  key: screenscraper-user
+            - name: SCREENSCRAPER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: romm-secrets
+                  key: screenscraper-password
             - name: OIDC_ENABLED
               value: "true"
             - name: OIDC_PROVIDER
