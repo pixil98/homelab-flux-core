@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: romm-config
+  namespace: games
+  labels:
+    app.kubernetes.io/name: romm
+    app.kubernetes.io/instance: romm
+    app.kubernetes.io/component: server
+data:
+  config.yml: |
+    scan:
+      priority:
+        metadata:
+          - ss
+          - moby
+          - igdb
+          - hasheous
+          - playmatch
+          - tgdb
+          - gamelist
+        artwork:
+          - ss
+          - libretro
+          - moby
+          - igdb
+          - tgdb
+          - gamelist

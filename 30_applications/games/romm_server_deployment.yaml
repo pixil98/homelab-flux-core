@@ -79,6 +79,16 @@ spec:
               value: "https://romm.${vals_info_cluster_domain}"
             - name: ROMM_SESSION_SECURE_COOKIE
               value: "true"
+            - name: IGDB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: romm-secrets
+                  key: igdb-client-id
+            - name: IGDB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: romm-secrets
+                  key: igdb-client-secret
             - name: SCREENSCRAPER_USER
               valueFrom:
                 secretKeyRef:
@@ -89,6 +99,17 @@ spec:
                 secretKeyRef:
                   name: romm-secrets
                   key: screenscraper-password
+            - name: MOBYGAMES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: romm-secrets
+                  key: mobygames-api-key
+            - name: HASHEOUS_API_ENABLED
+              value: "true"
+            - name: PLAYMATCH_API_ENABLED
+              value: "true"
+            - name: TGDB_API_ENABLED
+              value: "true"
             - name: OIDC_ENABLED
               value: "true"
             - name: OIDC_PROVIDER
@@ -150,6 +171,9 @@ spec:
               cpu: "2"
               memory: 2Gi
           volumeMounts:
+            - name: config
+              mountPath: /romm/config
+              readOnly: true
             - name: library
               mountPath: /romm/library
             - name: assets
@@ -157,6 +181,9 @@ spec:
             - name: resources
               mountPath: /romm/resources
       volumes:
+        - name: config
+          configMap:
+            name: romm-config
         - name: library
           persistentVolumeClaim:
             claimName: romm-library
