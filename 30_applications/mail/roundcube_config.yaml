@@ -49,7 +49,7 @@ stringData:
       $config['memcache_debug'] = false;
       $config['apc_debug'] = false;
       $config['redis_debug'] = false;
-      $config['oauth_debug'] = true;
+      $config['oauth_debug'] = false;
     ?>
   session.php: |
     <?php
