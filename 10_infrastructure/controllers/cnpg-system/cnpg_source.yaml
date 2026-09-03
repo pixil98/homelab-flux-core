@@ -4,5 +4,6 @@ metadata:
   name: cnpg
   namespace: cnpg-system
 spec:
+  type: oci
   interval: 1h0m0s
-  url: https://cloudnative-pg.github.io/charts
+  url: oci://ghcr.io/cloudnative-pg/charts
