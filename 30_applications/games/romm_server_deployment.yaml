@@ -105,11 +105,15 @@ spec:
                   name: romm-secrets
                   key: mobygames-api-key
             - name: HASHEOUS_API_ENABLED
-              value: "true"
+              value: "${vals_apps_games_romm_hasheousEnabled:=true}"
             - name: PLAYMATCH_API_ENABLED
-              value: "true"
+              value: "${vals_apps_games_romm_playmatchEnabled:=true}"
             - name: TGDB_API_ENABLED
-              value: "true"
+              value: "${vals_apps_games_romm_tgdbEnabled:=true}"
+            - name: LAUNCHBOX_API_ENABLED
+              value: "${vals_apps_games_romm_launchboxEnabled:=true}"
+            - name: ENABLE_SCHEDULED_UPDATE_LAUNCHBOX_METADATA
+              value: "${vals_apps_games_romm_launchboxScheduledUpdateEnabled:=true}"
             - name: OIDC_ENABLED
               value: "true"
             - name: OIDC_PROVIDER
