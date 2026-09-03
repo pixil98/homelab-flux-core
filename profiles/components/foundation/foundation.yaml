@@ -12,6 +12,8 @@ spec:
     name: flux-core
   path: ./00_foundation/controllers
   postBuild:
+    substitute:
+      quote: '"'
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
@@ -34,6 +36,8 @@ spec:
     kind: GitRepository
     name: flux-core
   postBuild:
+    substitute:
+      quote: '"'
     substituteFrom:
       - kind: ConfigMap
         name: flux-values

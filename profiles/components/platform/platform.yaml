@@ -14,6 +14,8 @@ spec:
     name: flux-core
   path: ./20_platform
   postBuild:
+    substitute:
+      quote: '"'
     substituteFrom:
       - kind: ConfigMap
         name: flux-values

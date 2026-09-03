@@ -13,6 +13,8 @@ spec:
     name: flux-core
   path: ./10_infrastructure/controllers/cert-manager
   postBuild:
+    substitute:
+      quote: '"'
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
@@ -37,6 +39,8 @@ spec:
     name: flux-core
   path: ./10_infrastructure/configs/cert-manager
   postBuild:
+    substitute:
+      quote: '"'
     substituteFrom:
       - kind: ConfigMap
         name: flux-values
