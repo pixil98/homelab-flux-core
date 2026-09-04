@@ -13,10 +13,9 @@ stringData:
     skip_local = false;
     skip_authenticated = true;
   phishing.conf: |
-    phishing {
-      openphish_enabled = true;
-      openphish_map = "https://www.openphish.com/feed.txt";
-    }
+    # local.d files merge into the module's own section, so a phishing { }
+    # wrapper here nests it as phishing.phishing and rspamd silently ignores it.
+    openphish_enabled = true;
   redis.conf: |
     servers = "rspamd-dragonfly";
     password = "${secrets_apps_mail_rspamd_redisPassword}";
