@@ -100,7 +100,7 @@ spec:
               readOnly: true
         # Syncs labelled ConfigMaps into the exact paths used by application icons.
         - name: icon-sidecar
-          image: quay.io/kiwigrid/k8s-sidecar:2.10.3
+          image: quay.io/kiwigrid/k8s-sidecar:2.11.2
           imagePullPolicy: IfNotPresent
           ports:
             - name: icon-health
