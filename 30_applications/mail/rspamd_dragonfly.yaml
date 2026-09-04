@@ -9,6 +9,11 @@ spec:
         name: rspamd-redis-password
         key: password
     replicas: 1
+    # rspamd's bayes scripts touch keys they haven't declared, which dragonfly
+    # rejects by default -- the classifier can't read or write its stats without
+    # this and scores nothing.
+    args:
+      - "--default_lua_flags=allow-undeclared-keys"
 ---
 apiVersion: v1
 kind: Secret
