@@ -93,7 +93,7 @@ spec:
               cpu: "300m"
             limits:
               memory: "1536Mi"
-              cpu: "500m"
+              cpu: "2"
           volumeMounts:
             - name: icons
               mountPath: /media/public/icons
