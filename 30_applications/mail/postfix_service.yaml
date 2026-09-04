@@ -7,11 +7,10 @@ metadata:
     app.kubernetes.io/name: "postfix"
     app.kubernetes.io/instance: "postfix"
     app.kubernetes.io/component: "server"
-  annotations:
-    metallb.universe.tf/allow-shared-ip: mail
 spec:
   type: LoadBalancer
-  loadBalancerIP: ${vals_apps_mail_ipAddress}
+  loadBalancerIP: ${vals_apps_mail_postfix_ipAddress}
+  externalTrafficPolicy: Local
   ports:
     - name: smtp
       protocol: TCP
