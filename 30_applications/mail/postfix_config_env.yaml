@@ -24,11 +24,13 @@ stringData:
   POSTFIX_smtpd_tls_ciphers: "high"
   POSTFIX_smtpd_tls_cert_file: "/etc/postfix/tls/tls.crt"
   POSTFIX_smtpd_tls_key_file: "/etc/postfix/tls/tls.key"
-  # Must not end in "reject": port 25 has to accept connections from any
-  # sending MTA. Relay abuse is prevented by smtpd_relay_restrictions below.
-  # The image default ends in reject, which only ever worked because every
+  # Neither of these may end in "reject": port 25 has to accept connections
+  # and envelope senders from any sending MTA.
+  # Relay abuse is prevented by smtpd_relay_restrictions below.
+  # The image defaults end in reject, which only ever worked because every
   # client used to be SNATed into mynetworks.
   POSTFIX_smtpd_client_restrictions: "permit_mynetworks permit_sasl_authenticated"
+  POSTFIX_smtpd_sender_restrictions: "permit_mynetworks permit_sasl_authenticated"
   POSTFIX_smtpd_helo_required: "yes"
   POSTFIX_smtpd_helo_restrictions: "permit_mynetworks reject_non_fqdn_helo_hostname reject_invalid_helo_hostname reject_unknown_helo_hostname"
   POSTFIX_smtpd_relay_restrictions: "reject_non_fqdn_recipient reject_unknown_recipient_domain permit_sasl_authenticated reject_unauth_destination"
