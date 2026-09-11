@@ -8,7 +8,7 @@ metadata:
   annotations:
     #TODO: This shouldn't be hard coded, it will be used in dev clusters unnecessarily
     cert-manager.io/cluster-issuer: letsencrypt-production-cloudflare
-    external-dns.alpha.kubernetes.io/target: ${vals_info_cluster_publicHost}
+    external-dns.kubernetes.io/target: ${vals_info_cluster_publicHost}
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     # A person import holds the connection open while the server ingests the
     # payload, which runs past the 60s default and returns 504 to the client.
