@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: reloader-reloader
-          image: "ghcr.io/stakater/reloader:v1.4.21"
+          image: "ghcr.io/stakater/reloader:v1.4.22"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
