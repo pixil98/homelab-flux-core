@@ -61,11 +61,26 @@ stringData:
         state: present
         attrs: { name: opencloud }
 
+      # Members get the OpenCloud "admin" role via PROXY_ROLE_ASSIGNMENT_DRIVER=oidc
+      # (see opencloud_proxy_role_mapping_configmap.yaml), separate from Authentik's
+      # own "authentik Admins" superuser group.
+      - model: authentik_core.group
+        id: opencloud_admins_group
+        identifiers: { name: opencloud-admins }
+        state: present
+        attrs: { name: opencloud-admins }
+
       - model: authentik_policies.policybinding
         identifiers:
           target: !KeyOf opencloud_app
           group:  !KeyOf opencloud_group
         attrs: { order: 10 }
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf opencloud_app
+          group: !KeyOf opencloud_admins_group
+        attrs: { order: 15 }
 
       - model: authentik_policies.policybinding
         identifiers:

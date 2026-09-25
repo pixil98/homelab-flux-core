@@ -85,10 +85,14 @@ spec:
               value: "openid profile email"
             - name: PROXY_AUTOPROVISION_ACCOUNTS
               value: "true"
+            # Role (admin vs user) comes from Authentik group membership via the
+            # "groups" claim (already present in the profile scope mapping above).
+            # The actual group-name-to-role table has no env var equivalent, so it
+            # lives in the mounted proxy.yaml (see volumeMounts/volumes below).
             - name: PROXY_ROLE_ASSIGNMENT_DRIVER
-              value: "default"
-            - name: GRAPH_ASSIGN_DEFAULT_USER_ROLE
-              value: "true"
+              value: "oidc"
+            - name: PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM
+              value: "groups"
           resources:
             requests:
               memory: "512Mi"
@@ -130,6 +134,10 @@ spec:
             - name: csp
               mountPath: /etc/opencloud-csp
               readOnly: true
+            - name: proxy-role-mapping
+              mountPath: /etc/opencloud/proxy.yaml
+              subPath: proxy.yaml
+              readOnly: true
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -140,3 +148,6 @@ spec:
         - name: csp
           configMap:
             name: opencloud-csp
+        - name: proxy-role-mapping
+          configMap:
+            name: opencloud-proxy-role-mapping

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opencloud-proxy-role-mapping
+  namespace: storage
+data:
+  # role_mapping has no env var equivalent, so it has to live in proxy.yaml
+  # inside the persisted config PVC. Mounted at /etc/opencloud/proxy.yaml via
+  # subPath rather than redirecting OC_CONFIG_DIR, since that would also move
+  # opencloud.yaml (the init-generated secrets) out from under the PVC.
+  # role_assignment.driver / oidc_role_mapper.role_claim are set via the
+  # PROXY_ROLE_ASSIGNMENT_DRIVER / PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM env vars
+  # on the deployment instead, and merge with this file.
+  #
+  # Order matters: first matching entry wins if a user is in multiple mapped
+  # groups, so opencloud-admins is listed before opencloud.
+  proxy.yaml: |
+    role_assignment:
+      oidc_role_mapper:
+        role_mapping:
+          - role_name: admin
+            claim_value: opencloud-admins
+          - role_name: user
+            claim_value: opencloud
