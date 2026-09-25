@@ -34,6 +34,10 @@ stringData:
           access_code_validity: minutes=1
           access_token_validity: minutes=30
           signing_key: !Find [authentik_crypto.certificatekeypair, [name, auth.${vals_info_cluster_domain}]]
+          # OpenCloud's proxy service exposes a backchannel logout endpoint natively;
+          # no extra config needed on the OpenCloud side.
+          logout_uri: "https://drive.${vals_info_cluster_domain}/backchannel_logout"
+          logout_method: backchannel
           property_mappings:
             - !Find [authentik_providers_oauth2.scopemapping, [scope_name, openid]]
             - !Find [authentik_providers_oauth2.scopemapping, [scope_name, email]]
