@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic-data
+  namespace: storage
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_info_cluster_name}/opencloud-data"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: opencloud-data-backup
+  namespace: storage
+spec:
+  # Prototype: backups wired up but left off until we're happy with the setup.
+  paused: true
+  sourcePVC: opencloud-data
+  trigger:
+    schedule: "10 3 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic-data
+    volumeSnapshotClassName: truenas-iscsi
+    copyMethod: Snapshot
+    storageClassName: truenas-iscsi-ephemeral
+    cacheStorageClassName: truenas-iscsi-ephemeral
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: volsync-restic-config
+  namespace: storage
+type: Opaque
+stringData:
+  RESTIC_REPOSITORY: "s3:${vals_infra_storage_backup_s3Endpoint}/${vals_info_cluster_name}/opencloud-config"
+  RESTIC_PASSWORD: "${secrets_infra_storage_backup_resticPassword}"
+  AWS_ACCESS_KEY_ID: "${secrets_infra_storage_backup_awsAccessKeyId}"
+  AWS_SECRET_ACCESS_KEY: "${secrets_infra_storage_backup_awsSecretAccessKey}"
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: opencloud-config-backup
+  namespace: storage
+spec:
+  paused: true
+  sourcePVC: opencloud-config
+  trigger:
+    schedule: "15 3 * * *"
+  restic:
+    pruneIntervalDays: 14
+    repository: volsync-restic-config
+    volumeSnapshotClassName: truenas-iscsi
+    copyMethod: Snapshot
+    storageClassName: truenas-iscsi-ephemeral
+    cacheStorageClassName: truenas-iscsi-ephemeral
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 3

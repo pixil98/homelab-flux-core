@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authentik-icon-opencloud
+  namespace: auth
+  labels:
+    goauthentik.io/icon: "true"
+data:
+  opencloud.svg: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+      <path fill="#e2baff" d="m256 373.2 21.5-12.4V271l77.3-44.6v-24.8l-21.5-12.4-77.8 44.9-76.7-44.3-21.5 12.4V227l77.3 44.6v89.2zm197.2-259.3L256 0 58.8 113.9v49.6L256 49.6l197.2 113.9zm0 234.7L256 462.4 58.8 348.6v49.6L256 512l197.2-113.9z"/>
+    </svg>

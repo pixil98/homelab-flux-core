@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: opencloud-server
+  namespace: storage
+  labels:
+    app.kubernetes.io/name: "opencloud"
+    app.kubernetes.io/instance: "opencloud"
+    app.kubernetes.io/component: "server"
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    external-dns.kubernetes.io/target: ${vals_info_cluster_publicHost}
+    # File sync/large uploads: no body-size cap, no request buffering, long timeouts.
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "drive.${vals_info_cluster_domain}"
+      secretName: opencloud-server-tls
+  rules:
+    - host: "drive.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: opencloud-server
+                port:
+                  name: http
