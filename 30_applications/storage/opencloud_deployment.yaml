@@ -66,6 +66,12 @@ spec:
               value: "true"
             - name: OC_EXCLUDE_RUN_SERVICES
               value: "idp"
+            # Default CSP's connect-src has no entry for the IdP, so the web
+            # SPA's fetch of Authentik's OIDC discovery doc is silently blocked
+            # and login hangs on a spinner. csp.yaml below is the stock policy
+            # plus the Authentik origin.
+            - name: PROXY_CSP_CONFIG_FILE_LOCATION
+              value: "/etc/opencloud-csp/csp.yaml"
             # Configures the web SPA's own OIDC client so it knows to redirect
             # to the IdP; WEBFINGER_* below only serves the discovery endpoint
             # used by desktop/mobile clients, not the web frontend itself.
@@ -121,6 +127,9 @@ spec:
               mountPath: /var/lib/opencloud
             - name: config
               mountPath: /etc/opencloud
+            - name: csp
+              mountPath: /etc/opencloud-csp
+              readOnly: true
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -128,3 +137,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: opencloud-config
+        - name: csp
+          configMap:
+            name: opencloud-csp
