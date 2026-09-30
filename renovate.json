@@ -20,5 +20,12 @@
   },
   "kubernetes": {
     "managerFilePatterns": ["/^.+\\.ya?ml$/"]
-  }
+  },
+  "packageRules": [
+    {
+      "description": "ISC ships development releases on odd minor versions",
+      "matchPackageNames": ["docker.io/internetsystemsconsortium/bind9"],
+      "allowedVersions": "/^\\d+\\.\\d*[02468](\\.|$)/"
+    }
+  ]
 }
