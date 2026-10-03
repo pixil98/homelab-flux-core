@@ -10,7 +10,7 @@ stringData:
       "ffmpeg": {
         "crf": 23,
         "threads": 0,
-        "preset": "veryslow",
+        "preset": "medium",
         "targetVideoCodec": "vp9",
         "acceptedVideoCodecs": ["h264", "vp9"],
         "targetAudioCodec": "aac",
@@ -115,7 +115,7 @@ stringData:
         "signingAlgorithm": "RS256",
         "storageLabelClaim": "preferred_username",
         "storageQuotaClaim": "immich_quota",
-        "defaultStorageQuota": 0,
+        "defaultStorageQuota": null,
         "buttonText": "Login",
         "autoRegister": true,
         "autoLaunch": true,
