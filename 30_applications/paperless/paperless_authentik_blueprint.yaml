@@ -21,7 +21,8 @@ stringData:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           # Implicit consent: paperless is our own app, so don't prompt to authorize it.
           authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
-          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
+          # Ends the Authentik session too; otherwise auto-login immediately signs back in.
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-invalidation-flow]]
           client_type: confidential
           grant_types:
             - authorization_code

@@ -136,6 +136,8 @@ spec:
               value: "true"
             - name: OIDC_AUTOLOGIN
               value: "true"
+            - name: OIDC_RP_INITIATED_LOGOUT
+              value: "true"
             - name: OIDC_CLAIM_ROLES
               value: groups
             - name: OIDC_ROLE_VIEWER
