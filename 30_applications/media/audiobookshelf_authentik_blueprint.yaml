@@ -45,7 +45,8 @@ stringData:
           authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
           # Implicit consent: audiobookshelf is our own app, so don't prompt to authorize it.
           authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
-          invalidation_flow: !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
+          # Ends the Authentik session too; otherwise auto-login immediately signs back in.
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-invalidation-flow]]
           client_type: confidential
           grant_types:
             - authorization_code
@@ -55,6 +56,7 @@ stringData:
           redirect_uris:
             - { matching_mode: strict, url: https://books.${vals_info_cluster_domain}/auth/openid/callback }
             - { matching_mode: strict, url: https://books.${vals_info_cluster_domain}/auth/openid/mobile-redirect }
+            - { matching_mode: regex, url: "https://books\\.${vals_info_cluster_domain}/.*", redirect_uri_type: logout }
           access_code_validity: minutes=1
           access_token_validity: minutes=30
           refresh_token_validity: days=30
