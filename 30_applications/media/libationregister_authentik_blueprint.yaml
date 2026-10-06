@@ -59,12 +59,10 @@ stringData:
         attrs: { order: 20 }
 
       # The outpost built into authentik-server proxies the app. This replaces its whole
-      # provider list, so any later provider it should serve must be added here too.
-      # Without authentik_host it sends browsers to its own localhost address to sign in.
+      # provider list, so any later provider it should serve must be added here too. Its
+      # config (including authentik_host) is left alone: setting it would replace all of it.
       - model: authentik_outposts.outpost
         identifiers: { managed: goauthentik.io/outposts/embedded }
         state: present
         attrs:
           providers: [ !KeyOf libation_register_provider ]
-          config:
-            authentik_host: https://auth.${vals_info_cluster_domain}/
