@@ -29,7 +29,7 @@ spec:
         - name: libation-register
           # Built FROM docker.io/rmcrackan/libation; keep its Libation version in step with
           # the libation CronJob's image tag.
-          image: ghcr.io/pixil98/libation-signup:0.0.1
+          image: ghcr.io/pixil98/libation-signup:0.0.2
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -40,6 +40,9 @@ spec:
           env:
             - name: SECRET_NAME
               value: libation-accounts
+            # Each request's user comes from asking Authentik about the outpost's access token.
+            - name: AUTHENTIK_USERINFO_URL
+              value: http://authentik-server.auth.svc.cluster.local/application/o/userinfo/
           ports:
             - name: http
               containerPort: 8080

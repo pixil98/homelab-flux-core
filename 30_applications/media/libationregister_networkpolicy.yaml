@@ -1,6 +1,6 @@
-# The app trusts the X-authentik-username header, which the Authentik outpost sets (overwriting
-# any client-sent value) after signing the friend in. Anything else that could reach the pod
-# could claim to be any user, so only authentik-server, where the outpost runs, is let in.
+# Only authentik-server, where the outpost proxying the app runs, needs to reach the pod. The app
+# checks every request's access token with Authentik itself, so this is defence in depth: the
+# cluster's CNI (Talos's default Flannel) doesn't enforce NetworkPolicy.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
