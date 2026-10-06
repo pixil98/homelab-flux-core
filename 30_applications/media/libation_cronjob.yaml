@@ -15,6 +15,7 @@ spec:
       template:
         spec:
           # Accounts arrive as a mounted Secret, so the job needs no Kubernetes API access.
+          serviceAccountName: libation
           automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true

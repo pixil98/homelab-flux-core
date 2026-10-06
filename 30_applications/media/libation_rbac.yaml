@@ -1,0 +1,7 @@
+# The libation job gets its accounts from a mounted Secret and never talks to the API, so this
+# ServiceAccount has no Role, and the CronJob doesn't mount its token.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: libation
+  namespace: media
