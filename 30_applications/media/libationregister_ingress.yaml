@@ -1,0 +1,30 @@
+# The outpost embedded in authentik-server is the reverse proxy for the app: it signs friends
+# in, then forwards to the Service with X-authentik-username set. The Ingress therefore points
+# at authentik-server, and has to live in its namespace.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: libation-register
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: libation-register
+  annotations:
+    cert-manager.io/cluster-issuer: ${vals_infra_certManager_issuer}
+    external-dns.kubernetes.io/target: ${vals_info_cluster_publicHost}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "libation.${vals_info_cluster_domain}"
+      secretName: libation-register-tls
+  rules:
+    - host: "libation.${vals_info_cluster_domain}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: authentik-server
+                port:
+                  name: http

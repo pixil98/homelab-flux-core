@@ -14,9 +14,7 @@ spec:
       backoffLimit: 0
       template:
         spec:
-          serviceAccountName: libation
-          # Scoped to the initContainer via the kube-api-access volume below, so the
-          # Libation container itself has no API access.
+          # Accounts arrive as a mounted Secret, so the job needs no Kubernetes API access.
           automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
@@ -25,45 +23,6 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           restartPolicy: Never
-          initContainers:
-          # Writes every Secret labelled libation.homelab/account=true into /accounts as
-          # namespace_media.secret_<secret-name>.<key>, one file per key.
-          - name: load-accounts
-            image: quay.io/kiwigrid/k8s-sidecar:2.11.2
-            imagePullPolicy: IfNotPresent
-            env:
-            - name: LABEL
-              value: libation.homelab/account
-            - name: LABEL_VALUE
-              value: "true"
-            - name: FOLDER
-              value: /accounts
-            - name: RESOURCE
-              value: secret
-            - name: METHOD
-              value: LIST
-            - name: NAMESPACE
-              value: media
-            - name: UNIQUE_FILENAMES
-              value: "true"
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              requests:
-                cpu: 10m
-                memory: 64Mi
-              limits:
-                cpu: 100m
-                memory: 256Mi
-            volumeMounts:
-            - name: accounts
-              mountPath: /accounts
-            - name: kube-api-access
-              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-              readOnly: true
           containers:
           - name: libation
             image: docker.io/rmcrackan/libation:14.2.2
@@ -107,24 +66,10 @@ spec:
             configMap:
               name: libation-config-scripts
               defaultMode: 0755
+          # One <user>.json file per friend, written by libation-register.
           - name: accounts
-            emptyDir: {}
-          - name: kube-api-access
-            projected:
-              sources:
-              - serviceAccountToken:
-                  path: token
-                  expirationSeconds: 3607
-              - configMap:
-                  name: kube-root-ca.crt
-                  items:
-                  - key: ca.crt
-                    path: ca.crt
-              - downwardAPI:
-                  items:
-                  - path: namespace
-                    fieldRef:
-                      fieldPath: metadata.namespace
+            secret:
+              secretName: libation-accounts
           - name: data
             persistentVolumeClaim:
               claimName: audible-pvc

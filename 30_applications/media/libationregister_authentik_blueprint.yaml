@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-blueprint-libation-register
+  namespace: auth
+  labels:
+    goauthentik.io/blueprint: "true"
+type: Opaque
+stringData:
+  libation-register.yaml: |
+    # yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+    version: 1
+    metadata:
+      name: Custom - Libation sign-up
+    entries:
+      # Cross-blueprint !Find fails if the target does not exist yet
+      - model: authentik_blueprints.metaapplyblueprint
+        attrs:
+          identifiers:
+            name: Custom - Audiobookshelf
+          required: true
+
+      - model: authentik_providers_proxy.proxyprovider
+        id: libation_register_provider
+        identifiers: { name: libation-register }
+        state: present
+        attrs:
+          authentication_flow: !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+          authorization_flow: !Find [authentik_flows.flow, [slug, default-provider-authorization-implicit-consent]]
+          invalidation_flow: !Find [authentik_flows.flow, [slug, default-invalidation-flow]]
+          mode: proxy
+          external_host: https://libation.${vals_info_cluster_domain}
+          internal_host: http://libation-register.media.svc.cluster.local:8080
+
+      - model: authentik_core.application
+        id: libation_register_app
+        identifiers: { slug: libation-register }
+        state: present
+        attrs:
+          name: Libation sign-in
+          slug: libation-register
+          provider: !KeyOf libation_register_provider
+          meta_launch_url: https://libation.${vals_info_cluster_domain}/
+          icon: icons/libation.svg
+          policy_engine_mode: any
+
+      # Same audience as Audiobookshelf: anyone who can listen there can keep their own
+      # Audible login current here (members of its -users/-managers subgroups included).
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf libation_register_app
+          group: !Find [authentik_core.group, [name, audiobookshelf]]
+        attrs: { order: 10 }
+
+      - model: authentik_policies.policybinding
+        identifiers:
+          target: !KeyOf libation_register_app
+          group: !Find [authentik_core.group, [name, authentik Admins]]
+        attrs: { order: 20 }
+
+      # The outpost built into authentik-server proxies the app. This replaces its whole
+      # provider list, so any later provider it should serve must be added here too.
+      # Without authentik_host it sends browsers to its own localhost address to sign in.
+      - model: authentik_outposts.outpost
+        identifiers: { managed: goauthentik.io/outposts/embedded }
+        state: present
+        attrs:
+          providers: [ !KeyOf libation_register_provider ]
+          config:
+            authentik_host: https://auth.${vals_info_cluster_domain}/

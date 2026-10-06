@@ -1,0 +1,26 @@
+# The app trusts the X-authentik-username header, which the Authentik outpost sets (overwriting
+# any client-sent value) after signing the friend in. Anything else that could reach the pod
+# could claim to be any user, so only authentik-server, where the outpost runs, is let in.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: libation-register
+  namespace: media
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: libation-register
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: auth
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: authentik
+              app.kubernetes.io/component: server
+      ports:
+        - protocol: TCP
+          port: 8080

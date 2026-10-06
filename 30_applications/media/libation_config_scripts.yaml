@@ -12,12 +12,12 @@ data:
 
     accounts=(/accounts/*.json)
     if [ $${#accounts[@]} -eq 0 ]; then
-      echo "no Secrets labelled libation.homelab/account=true in namespace media" >&2
+      echo "no accounts in Secret libation-accounts; friends sign in through libation-register" >&2
       exit 1
     fi
 
     # The entrypoint has already seeded an empty AccountsSettings.json in the
-    # internal config dir; replace it with the merge of every account Secret.
+    # internal config dir; replace it with the merge of every friend's account file.
     jq -s '{
         Accounts: (map(.Accounts // [.]) | add | map(select(has("AccountId")))),
         Cdm: (map(.Cdm // empty) | first)
@@ -26,10 +26,10 @@ data:
 
     loaded=$(jq '.Accounts | length' /tmp/AccountsSettings.json)
     if [ "$${loaded}" -eq 0 ]; then
-      echo "merged $${#accounts[@]} Secret(s) but found no accounts" >&2
+      echo "merged $${#accounts[@]} file(s) but found no accounts" >&2
       exit 1
     fi
-    echo "loaded $${loaded} account(s) from $${#accounts[@]} Secret(s)"
+    echo "loaded $${loaded} account(s) from $${#accounts[@]} file(s)"
     mv /tmp/AccountsSettings.json "$${LIBATION_CONFIG_INTERNAL}/AccountsSettings.json"
 
     # Libation defaults to encrypting tokens under a machine-bound key. There is no OS

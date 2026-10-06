@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: libation-register
+  namespace: media
+  labels:
+    app.kubernetes.io/name: libation-register
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: libation-register
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http
