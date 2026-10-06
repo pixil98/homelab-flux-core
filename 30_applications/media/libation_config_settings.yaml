@@ -9,6 +9,7 @@ data:
       "Books": "/data",
       "InProgress": "/tmp",
       "TokenStorageMethod": "Plaintext",
+      "OverwriteExisting": true,
       "ShowImportedStats": false,
       "ImportEpisodes": false,
       "DownloadEpisodes": false,
