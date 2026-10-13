@@ -11,6 +11,8 @@ metadata:
     reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
+  # Long migrations on upgrade keep the pod unready past the 600s default.
+  progressDeadlineSeconds: 1800
   strategy:
     type: Recreate
   selector:
@@ -152,22 +154,15 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          startupProbe:
-            tcpSocket:
-              port: http
-            periodSeconds: 5
-            failureThreshold: 60
+          # Readiness only: a single replica gains little from liveness restarts, and
+          # migrations run before the port opens, so a startup/liveness probe can
+          # kill them mid-run. The init script already restarts its own crashed processes.
           readinessProbe:
-            tcpSocket:
+            httpGet:
+              path: /api/heartbeat
               port: http
             periodSeconds: 10
-            timeoutSeconds: 1
-            failureThreshold: 3
-          livenessProbe:
-            tcpSocket:
-              port: http
-            periodSeconds: 30
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
           resources:
             requests:
