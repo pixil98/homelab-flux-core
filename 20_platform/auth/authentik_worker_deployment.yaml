@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: wait-for-server
-          image: docker.io/library/alpine:3.24.3
+          image: docker.io/library/alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -50,7 +50,7 @@ spec:
               memory: 64Mi
       containers:
         - name: worker
-          image: ghcr.io/goauthentik/server:2026.8.5
+          image: ghcr.io/goauthentik/server:2026.8.5@sha256:602227a86455d6772e3d16b7d852713c4f864f40df5df894abd1285bb53979a5
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -106,7 +106,7 @@ spec:
               mountPath: /certs/auth.${vals_info_cluster_domain}
         # Syncs Secrets labelled goauthentik.io/blueprint into /blueprints/custom
         - name: blueprint-sidecar
-          image: quay.io/kiwigrid/k8s-sidecar:2.14.1
+          image: quay.io/kiwigrid/k8s-sidecar:2.14.1@sha256:092dbe0c335fba9af414a27630ca68f34df6185784fa847d9954187e69dbfdd7
           imagePullPolicy: IfNotPresent
           ports:
             - name: health

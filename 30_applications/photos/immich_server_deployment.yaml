@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v3.3.5
+          image: ghcr.io/immich-app/immich-server:v3.3.5@sha256:485d546a2e31d6a8b4db8423fcba5c109de8c218d93410af115fd1ccfc4352a6
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

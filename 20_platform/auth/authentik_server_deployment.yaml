@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: server
-          image: ghcr.io/goauthentik/server:2026.8.5
+          image: ghcr.io/goauthentik/server:2026.8.5@sha256:602227a86455d6772e3d16b7d852713c4f864f40df5df894abd1285bb53979a5
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -100,7 +100,7 @@ spec:
               readOnly: true
         # Syncs labelled ConfigMaps into the exact paths used by application icons.
         - name: icon-sidecar
-          image: quay.io/kiwigrid/k8s-sidecar:2.14.1
+          image: quay.io/kiwigrid/k8s-sidecar:2.14.1@sha256:092dbe0c335fba9af414a27630ca68f34df6185784fa847d9954187e69dbfdd7
           imagePullPolicy: IfNotPresent
           ports:
             - name: icon-health

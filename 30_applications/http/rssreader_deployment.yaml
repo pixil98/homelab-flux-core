@@ -26,7 +26,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: rssreader
-          image: docker.io/jmehler/rss-reader:0.0.3
+          image: docker.io/jmehler/rss-reader:0.0.3@sha256:cc5d23e7acb9eaac3b5c2b6221ad3ff7a0d7cb95c9a20754a68a40534ed4f2e7
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
