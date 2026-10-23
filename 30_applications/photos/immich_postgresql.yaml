@@ -5,7 +5,7 @@ metadata:
   namespace: photos
 spec:
   instances: 1
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.3.0
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.5.3@sha256:dc58c537cb208c1b0786b562fa1f9e7084501340ae84756c4d8e587b80201b59
 
   # Tuned for vector workloads + bursty writes
   postgresql:
