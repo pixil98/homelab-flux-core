@@ -26,7 +26,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: libation
-            image: docker.io/rmcrackan/libation:14.2.2
+            image: docker.io/rmcrackan/libation:14.2.2@sha256:fe188ac3c4ce63cc305971c76e648748341427e16bcf884011da8a384fd3908c
             imagePullPolicy: Always
             args:
               - /bin/bash

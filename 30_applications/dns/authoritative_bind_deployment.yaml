@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: init-zones
-          image: docker.io/library/alpine:3.24.3
+          image: docker.io/library/alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
           command: ["/bin/sh", "-c"]
           args: ["cp /configtmp/* /config"]
           imagePullPolicy: Always
@@ -46,7 +46,7 @@ spec:
               mountPath: /config
       containers:
         - name: bind9
-          image: "docker.io/internetsystemsconsortium/bind9:9.20"
+          image: "docker.io/internetsystemsconsortium/bind9:9.20@sha256:66092edb53c081fa11b1fa8219e99065b0f497cb38f568ba789702a4c10e2590"
           imagePullPolicy: Always
           command: ["/usr/sbin/named"]
           args: ["-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
@@ -87,7 +87,7 @@ spec:
             - name: logs
               mountPath: /var/log
         - name: metrics-exporter
-          image: docker.io/prometheuscommunity/bind-exporter:v0.8.0
+          image: docker.io/prometheuscommunity/bind-exporter:v0.8.0@sha256:f3d3d3c85e95e752a2af50c46cebeaeee22d94493d7d7c898e2ab9d232b366d7
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
