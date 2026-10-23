@@ -5,8 +5,9 @@
   ],
   "automerge": false,
   "enabledManagers": [
-    "flux", 
-    "kubernetes"
+    "flux",
+    "kubernetes",
+    "custom.regex"
   ],
   "registryAliases": {
     "registry.lab.reisman.org/proxy.ghcr.io": "ghcr.io",
@@ -21,11 +22,33 @@
   "kubernetes": {
     "managerFilePatterns": ["/^.+\\.ya?ml$/"]
   },
+  "customManagers": [
+    {
+      "description": "CNPG Cluster imageName, which the kubernetes manager doesn't read. Tags are <pg major>-<extension version>; compatibility keeps the Postgres major fixed",
+      "customType": "regex",
+      "managerFilePatterns": ["/^.+\\.ya?ml$/"],
+      "matchStrings": ["imageName: (?<depName>[^:\\s\"]+):(?<currentValue>[^@\\s\"]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?"],
+      "autoReplaceStringTemplate": "imageName: {{{depName}}}:{{#if newValue}}{{{newValue}}}{{else}}{{{currentValue}}}{{/if}}{{#if newDigest}}@{{{newDigest}}}{{/if}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "regex:^(?<compatibility>\\d+)-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    }
+  ],
   "packageRules": [
     {
       "description": "ISC ships development releases on odd minor versions",
       "matchPackageNames": ["docker.io/internetsystemsconsortium/bind9"],
       "allowedVersions": "/^\\d+\\.\\d*[02468](\\.|$)/"
+    },
+    {
+      "description": "Pin images as tag@digest so nodes can't run a stale cached copy and same-tag rebuilds surface as PRs",
+      "matchManagers": ["kubernetes", "custom.regex"],
+      "pinDigests": true
+    },
+    {
+      "description": "Collect same-tag rebuilds (e.g. base image security patches) into one PR",
+      "matchManagers": ["kubernetes", "custom.regex"],
+      "matchUpdateTypes": ["digest"],
+      "groupName": "image digests"
     }
   ]
 }
