@@ -1,8 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: dockerio
-  namespace: flux-system
-spec:
-  type: "oci"
-  url: oci://registry.lab.reisman.org/proxy.docker.io
