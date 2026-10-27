@@ -29,7 +29,7 @@ spec:
         - name: libation-register
           # Built FROM docker.io/rmcrackan/libation; keep its Libation version in step with
           # the libation CronJob's image tag.
-          image: ghcr.io/pixil98/libation-signup:0.0.2
+          image: ghcr.io/pixil98/libation-signup:0.0.2@sha256:8ac570b3852f07b2c552a859f7f0722ad42acc33b22ffeb7e6038703b6d7fdf9
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
