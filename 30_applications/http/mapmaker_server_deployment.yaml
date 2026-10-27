@@ -28,7 +28,7 @@ spec:
         - name: mapmaker-server
           # The Go renderer ships from the root Dockerfile, which CI publishes as
           # the bare repo image (subdir Dockerfiles get a "-<dir>" suffix).
-          image: ghcr.io/pixil98/mapmaker:0.0.4
+          image: ghcr.io/pixil98/mapmaker:0.0.4@sha256:66966191fbd3798a5d8d6d6105d8be544a8aba05c4adc5d3b0fe90eb897d985e
           imagePullPolicy: IfNotPresent
           # Rootfs stays read-only; /tmp is the one writable path (the tmp
           # emptyDir below). The canvas renderer sporadically dumps a debug .gob
