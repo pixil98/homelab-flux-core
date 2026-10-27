@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postfix-config-init
+  namespace: mail
+data:
+  # The image runs /docker-init.d/*.sh just before starting Postfix. POSTFIX_*
+  # settings only reach main.cf, so per-port overrides have to live here.
+  submission.sh: |
+    #!/bin/sh
+
+    # Port 587: authenticated clients only, TLS required.
+    postconf -P \
+      "submission/inet/syslog_name=postfix/submission" \
+      "submission/inet/smtpd_tls_security_level=encrypt" \
+      "submission/inet/smtpd_sasl_auth_enable=yes" \
+      "submission/inet/smtpd_client_restrictions=permit_sasl_authenticated,reject"

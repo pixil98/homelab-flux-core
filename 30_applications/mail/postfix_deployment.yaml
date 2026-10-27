@@ -96,6 +96,8 @@ spec:
               mountPath: /var/spool/postfix
             - name: config-conf
               mountPath: /etc/postfix/conf
+            - name: init-scripts
+              mountPath: /docker-init.d
       volumes:
         - name: spool
           persistentVolumeClaim:
@@ -106,3 +108,7 @@ spec:
         - name: config-conf
           secret:
             secretName: postfix-config-conf
+        - name: init-scripts
+          configMap:
+            name: postfix-config-init
+            defaultMode: 0755
