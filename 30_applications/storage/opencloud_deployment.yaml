@@ -102,8 +102,10 @@ spec:
             # guest gets a one-time link (and a PIN on renewal) by mail, so the
             # notifications service needs SMTP. The auth-guest service also needs
             # auth_guest.service_account in opencloud.yaml (see init note above).
+            # Without it auth-guest fails at startup and takes the whole server
+            # down, so this stays off until that config patch is applied.
             - name: OC_ENABLE_GUEST_LINKS
-              value: "true"
+              value: "false"
             - name: NOTIFICATIONS_SMTP_HOST
               value: "postfix-server.mail.svc.cluster.local"
             - name: NOTIFICATIONS_SMTP_PORT
