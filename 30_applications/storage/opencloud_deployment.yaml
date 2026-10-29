@@ -40,6 +40,10 @@ spec:
           # The image has no init container step of its own: config/certs/admin
           # user are bootstrapped on first boot into the persisted config volume.
           # Re-running init on every start is a documented no-op once bootstrapped.
+          # That also means upgrades never add config for new services (9.0.0's
+          # auth-guest service account, for one). After a major upgrade, run
+          # `opencloud init --diff` in the pod with IDM_ADMIN_PASSWORD unset, and
+          # apply the resulting /etc/opencloud/opencloud.config.patch with `patch`.
           command: ["/bin/sh"]
           args: ["-c", "opencloud init || true; opencloud server"]
           env:
@@ -93,6 +97,32 @@ spec:
               value: "oidc"
             - name: PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM
               value: "groups"
+
+            # Guest links: share with an email address that has no account. The
+            # guest gets a one-time link (and a PIN on renewal) by mail, so the
+            # notifications service needs SMTP. The auth-guest service also needs
+            # auth_guest.service_account in opencloud.yaml (see init note above).
+            - name: OC_ENABLE_GUEST_LINKS
+              value: "true"
+            - name: NOTIFICATIONS_SMTP_HOST
+              value: "postfix-server.mail.svc.cluster.local"
+            - name: NOTIFICATIONS_SMTP_PORT
+              value: "587"
+            # Submission requires STARTTLS. The certificate is for mail.<domain>,
+            # not the service name, so skip verification (as Immich and Grafana do).
+            - name: NOTIFICATIONS_SMTP_ENCRYPTION
+              value: "starttls"
+            - name: NOTIFICATIONS_SMTP_INSECURE
+              value: "true"
+            - name: NOTIFICATIONS_SMTP_SENDER
+              value: "OpenCloud <noreply@${vals_info_cluster_domain}>"
+            - name: NOTIFICATIONS_SMTP_USERNAME
+              value: "service-noreply"
+            - name: NOTIFICATIONS_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: opencloud-secrets
+                  key: smtp-password
           resources:
             requests:
               memory: "512Mi"
