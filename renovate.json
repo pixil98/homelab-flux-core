@@ -4,6 +4,15 @@
     "github>pixil98/renovate-config",
     "github>pixil98/renovate-config:kubernetes"
   ],
+  "customManagers": [
+    {
+      "description": "democratic-csi chart values split the driver image into registry and tag, which the kubernetes manager doesn't read",
+      "customType": "regex",
+      "managerFilePatterns": ["/^10_infrastructure/controllers/storage/democratic-csi_.+_helm\\.yaml$/"],
+      "matchStrings": ["registry: (?<depName>ghcr\\.io/democratic-csi/democratic-csi)\\n\\s+tag: (?<currentValue>[^@\\s\"]+)@(?<currentDigest>sha256:[a-f0-9]+)"],
+      "datasourceTemplate": "docker"
+    }
+  ],
   "packageRules": [
     {
       "description": "ISC ships development releases on odd minor versions",

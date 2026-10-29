@@ -23,6 +23,20 @@ spec:
       name: org.democratic-csi.nfs
       fsGroupPolicy: File
 
+    # The chart defaults the driver to :latest, which is built from the main
+    # branch. Pinned here instead; renovate.json has a custom manager for it.
+    controller:
+      driver:
+        image:
+          registry: ghcr.io/democratic-csi/democratic-csi
+          tag: v1.9.5@sha256:fc3b7d7ed3a616714139525075312758e23a5d425ffb539ad12c9bd20fb6001f
+
+    node:
+      driver:
+        image:
+          registry: ghcr.io/democratic-csi/democratic-csi
+          tag: v1.9.5@sha256:fc3b7d7ed3a616714139525075312758e23a5d425ffb539ad12c9bd20fb6001f
+
     storageClasses:
       - name: truenas-nfs
         defaultClass: false
