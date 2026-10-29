@@ -36,6 +36,13 @@ spec:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         insecure_skip_verify: true
 
+    # Kubelet and cadvisor are scraped directly on each node's kubelet port
+    # (role: node defaults __address__ to <InternalIP>:10250) rather than via
+    # the apiserver's /api/v1/nodes/<node>/proxy. The proxy path needs
+    # nodes/proxy, which the operator-managed ClusterRole doesn't grant (and
+    # which exposes the whole kubelet API, exec included); direct scrapes only
+    # need nodes/metrics. Kubelet serving certs are self-signed, hence
+    # insecure_skip_verify.
     - job_name: kubernetes-nodes
       bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes_sd_configs:
@@ -43,36 +50,21 @@ spec:
       relabel_configs:
         - action: labelmap
           regex: __meta_kubernetes_node_label_(.+)
-        - replacement: 'kubernetes.default.svc:443'
-          target_label: __address__
-        - regex: (.+)
-          replacement: /api/v1/nodes/$1/proxy/metrics
-          source_labels:
-            - __meta_kubernetes_node_name
-          target_label: __metrics_path__
       scheme: https
       tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         insecure_skip_verify: true
 
     - job_name: kubernetes-nodes-cadvisor
       bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       honor_timestamps: false
+      metrics_path: /metrics/cadvisor
       kubernetes_sd_configs:
         - role: node
       relabel_configs:
         - action: labelmap
           regex: __meta_kubernetes_node_label_(.+)
-        - replacement: 'kubernetes.default.svc:443'
-          target_label: __address__
-        - regex: (.+)
-          replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
-          source_labels:
-            - __meta_kubernetes_node_name
-          target_label: __metrics_path__
       scheme: https
       tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         insecure_skip_verify: true
 
     - job_name: kubernetes-pods-metallb
