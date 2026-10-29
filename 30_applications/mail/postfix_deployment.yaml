@@ -87,8 +87,7 @@ spec:
                 - -c
                 - >-
                   ps axf | fgrep -v grep | egrep -q '\{supervisord\}|/usr/bin/supervisord' &&
-                  ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master' &&
-                  ps axf | fgrep -v grep | fgrep -q 'opendkim'
+                  ps axf | fgrep -v grep | egrep -q '(/usr/lib/postfix/sbin/|/usr/libexec/postfix/)master'
           volumeMounts:
             - name: certificate
               mountPath: /etc/postfix/tls
