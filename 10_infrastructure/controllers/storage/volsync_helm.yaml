@@ -19,3 +19,7 @@ spec:
       retries: 3
   values:
     manageCRDs: true
+    # The chart's ServiceMonitor sends no bearer token, so with RBAC-protected
+    # metrics every scrape is a 401. The endpoint is in-cluster only.
+    metrics:
+      disableAuth: true
