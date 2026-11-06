@@ -18,6 +18,13 @@
       "description": "ISC ships development releases on odd minor versions",
       "matchPackageNames": ["docker.io/internetsystemsconsortium/bind9"],
       "allowedVersions": "/^\\d+\\.\\d*[02468](\\.|$)/"
+    },
+    {
+      "description": "paperless-ngx's gotenberg-client 1.x only speaks the Gotenberg 8 API, so flag the major in the PR title until paperless supports Gotenberg 9",
+      "matchPackageNames": ["docker.io/gotenberg/gotenberg"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "DO NOT MERGE (breaks paperless):",
+      "prBodyNotes": ["⚠️ **Do not merge until paperless-ngx supports Gotenberg 9.** paperless-ngx 3.4.2 ships gotenberg-client 1.x, which targets the Gotenberg 8 API: Gotenberg 9 removed `/forms/pdfengines/merge` (email ingestion returns 404) and renamed the LibreOffice `pdfa` field (office document conversion returns 400)."]
     }
   ]
 }
