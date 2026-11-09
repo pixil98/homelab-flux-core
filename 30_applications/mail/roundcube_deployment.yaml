@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: roundcube
-          image: docker.io/roundcube/roundcubemail:1.7.5-apache@sha256:e440257796672b039072bfb09c678984141559f8ff0ddff804bf21e7261d2b65
+          image: docker.io/roundcube/roundcubemail:1.7.6-apache@sha256:d23169b8bbb99b5e75adcd502b627d6f29e60833a7053a12e4ff133468c2e5b4
           imagePullPolicy: IfNotPresent
           env:
             - name: ROUNDCUBEMAIL_DB_TYPE
