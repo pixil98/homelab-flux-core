@@ -11,6 +11,12 @@
       "managerFilePatterns": ["/^10_infrastructure/controllers/storage/democratic-csi_.+_helm\\.yaml$/"],
       "matchStrings": ["registry: (?<depName>ghcr\\.io/democratic-csi/democratic-csi)\\n\\s+tag: (?<currentValue>[^@\\s\"]+)@(?<currentDigest>sha256:[a-f0-9]+)"],
       "datasourceTemplate": "docker"
+    },
+    {
+      "description": "Tool versions in workflows, marked with a preceding # renovate: comment",
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": ["# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s+\\w+: (?<currentValue>\\S+)"]
     }
   ],
   "packageRules": [
