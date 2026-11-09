@@ -43,11 +43,12 @@ jobs:
       - name: Build
         run: scripts/build-manifests.py "$RUNNER_TEMP/manifests"
       # CRD schemas come from the community catalog. A kind with no schema
-      # fails rather than being skipped. Failures are also posted as one
+      # fails rather than being skipped, except CustomResourceDefinition, which
+      # neither source publishes one for. Failures are also posted as one
       # annotation, so they show on the run page without opening the log.
       - name: Validate
         run: |
-          if kubeconform -strict -summary \
+          if kubeconform -strict -summary -skip CustomResourceDefinition \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
             "$RUNNER_TEMP/manifests" > "$RUNNER_TEMP/kubeconform.txt"; then

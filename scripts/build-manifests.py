@@ -46,6 +46,8 @@ UNESCAPED_GRAFANA_VARS = {"DS_PROMETHEUS": "", "datasource": ""}
 # ${name} or ${name:=default}, but not the escaped $${name}.
 VARIABLE = re.compile(r"(?<!\$)\$\{((?:vals|secrets)_[A-Za-z0-9_]+)(?::?[-=][^}]*)?\}")
 
+STR_TAG = "tag:yaml.org,2002:str"
+
 
 def flatten(value, prefix):
     """Flatten a values file the way the Terraform module's jq does.
@@ -158,8 +160,30 @@ def build(name, path, kustomization, out_dir):
         )
     if result.returncode != 0:
         return result.stderr.strip() or f"flux exited {result.returncode}"
-    (out_dir / f"{name}.yaml").write_text(result.stdout)
+    (out_dir / f"{name}.yaml").write_text(quote_secret_string_data(result.stdout))
     return None
+
+
+def quote_secret_string_data(rendered):
+    """Put back the quotes flux build drops from Secret stringData.
+
+    The CLI rebuilds every Secret's stringData to mask SOPS values
+    (maskSopsData in fluxcd/flux2 internal/build), losing each value's quoting,
+    so "587" comes out as 587. kustomize-controller applies the original
+    strings. A side effect is that an unquoted number in stringData itself is
+    not caught.
+    """
+    docs = [d for d in yaml.compose_all(rendered) if isinstance(d, yaml.MappingNode)]
+    for doc in docs:
+        fields = {k.value: v for k, v in doc.value}
+        if getattr(fields.get("kind"), "value", None) != "Secret":
+            continue
+        string_data = fields.get("stringData")
+        if isinstance(string_data, yaml.MappingNode):
+            for _, value in string_data.value:
+                if isinstance(value, yaml.ScalarNode) and value.tag != STR_TAG:
+                    value.tag, value.style = STR_TAG, '"'
+    return yaml.serialize_all(docs, explicit_start=True)
 
 
 def report(title, message):
