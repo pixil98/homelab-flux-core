@@ -43,10 +43,19 @@ jobs:
       - name: Build
         run: scripts/build-manifests.py "$RUNNER_TEMP/manifests"
       # CRD schemas come from the community catalog. A kind with no schema
-      # fails rather than being skipped.
+      # fails rather than being skipped. Failures are also posted as one
+      # annotation, so they show on the run page without opening the log.
       - name: Validate
-        run: >-
-          kubeconform -strict -summary
-          -schema-location default
-          -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
-          "$RUNNER_TEMP/manifests"
+        run: |
+          if kubeconform -strict -summary \
+            -schema-location default \
+            -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            "$RUNNER_TEMP/manifests" > "$RUNNER_TEMP/kubeconform.txt"; then
+            cat "$RUNNER_TEMP/kubeconform.txt"
+            exit 0
+          fi
+          cat "$RUNNER_TEMP/kubeconform.txt"
+          message=$(grep -v '^Summary:' "$RUNNER_TEMP/kubeconform.txt" \
+            | sed "s|$RUNNER_TEMP/manifests/||; s/%/%25/g" | awk '{printf "%s%%0A", $0}')
+          echo "::error title=kubeconform::${message}"
+          exit 1
