@@ -1,0 +1,110 @@
+{
+  "info": {
+    "cluster": {
+      "name": "ci",
+      "domain": "example.com",
+      "email": "admin@example.com",
+      "publicHost": "ingress.example.com"
+    }
+  },
+  "apps": {
+    "dns": {
+      "authoritative": {
+        "ipAddress": "192.0.2.11",
+        "replicas": 1
+      }
+    },
+    "games": {
+      "shared": {
+        "ipAddress": "192.0.2.12"
+      },
+      "romm": {
+        "hasheousEnabled": true,
+        "launchboxEnabled": true,
+        "launchboxScheduledUpdateEnabled": true,
+        "playmatchEnabled": true,
+        "tgdbEnabled": true
+      }
+    },
+    "mail": {
+      "dovecot": {
+        "ipAddress": "192.0.2.13"
+      },
+      "postfix": {
+        "ipAddress": "192.0.2.14",
+        "relayHost": "relay.example.com",
+        "relayPort": 25,
+        "virtualDomains": "example.net"
+      }
+    },
+    "photos": {
+      "immich": {
+        "logLevel": "log",
+        "jobs": {
+          "backgroundTask": {
+            "concurrency": 5
+          },
+          "faceDetection": {
+            "concurrency": 1
+          },
+          "library": {
+            "concurrency": 1
+          },
+          "metadataExtraction": {
+            "concurrency": 1
+          },
+          "migration": {
+            "concurrency": 1
+          },
+          "notifications": {
+            "concurrency": 1
+          },
+          "search": {
+            "concurrency": 1
+          },
+          "sidecar": {
+            "concurrency": 1
+          },
+          "smartSearch": {
+            "concurrency": 1
+          },
+          "thumbnailGeneration": {
+            "concurrency": 1
+          },
+          "videoConversion": {
+            "concurrency": 1
+          }
+        }
+      }
+    },
+    "auth": {
+      "authentik": {
+        "logLevel": "info"
+      }
+    }
+  },
+  "infra": {
+    "certManager": {
+      "issuer": "placeholder-issuer"
+    },
+    "ingress": {
+      "ipAddress": "192.0.2.10"
+    },
+    "metallb": {
+      "ipAddressPool": "192.0.2.0/24"
+    },
+    "storage": {
+      "backup": {
+        "paused": false,
+        "s3Endpoint": "s3.example.com"
+      },
+      "truenas": {
+        "host": "nas.example.com",
+        "iscsiPortal": "192.0.2.20:3260",
+        "iscsiPortalGroupId": 1,
+        "iscsiInitiatorGroupId": 1,
+        "nfsServer": "192.0.2.21"
+      }
+    }
+  }
+}
