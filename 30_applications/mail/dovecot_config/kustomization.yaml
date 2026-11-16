@@ -26,3 +26,7 @@ configMapGenerator:
       - confd/90-acl.conf
       - confd/90-quota.conf
       - confd/90-sieve.conf
+  - name: dovecot-sieve
+    namespace: mail
+    files:
+      - sieve/spam-filing.sieve
