@@ -77,7 +77,7 @@ spec:
               cpu: "100m"
             limits:
               memory: "2700Mi"
-              cpu: "200m"
+              cpu: "2000m"
           volumeMounts:
             - name: scripts
               mountPath: /scripts
