@@ -19,7 +19,15 @@ stringData:
   redis.conf: |
     servers = "rspamd-dragonfly";
     password = "${secrets_apps_mail_rspamd_redisPassword}";
+  # File/Path/Shm inputs let a client make rspamd read and disclose any file it
+  # can read (e.g. redis.conf). Every worker listens on TCP and the service is
+  # reachable cluster-wide, and nothing here passes messages by file.
+  worker-controller.inc: |
+    allow_file_and_shm_inputs = false;
+  worker-normal.inc: |
+    allow_file_and_shm_inputs = false;
   worker-proxy.inc: |
+    allow_file_and_shm_inputs = false;
     milter = yes;
     upstream "local" {
       default = yes;
