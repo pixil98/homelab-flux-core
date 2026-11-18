@@ -18,6 +18,12 @@
       "description": "ISC ships development releases on odd minor versions",
       "matchPackageNames": ["docker.io/internetsystemsconsortium/bind9"],
       "allowedVersions": "/^\\d+\\.\\d*[02468](\\.|$)/"
+    },
+    {
+      "description": "CNPG image catalog entries are keyed by Postgres major, and a major upgrade is a pg_upgrade, not a tag bump",
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
