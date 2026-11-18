@@ -11,66 +11,50 @@ So the entire cost is the reload, and the only lever is doing fewer mutations.
 Work is ordered join -> target -> extent so target count -- what drives reload
 duration -- falls as fast as possible and later operations get cheaper.
 
-  ./reclaim-iscsi.py                    # report only (default, read-only)
-  ./reclaim-iscsi.py --purge --limit 10 # trial batch, measure, then commit
-  ./reclaim-iscsi.py --purge            # the rest; resumes if interrupted
+  ./reclaim-iscsi.py --keep keep.txt                    # report only (default, read-only)
+  ./reclaim-iscsi.py --keep keep.txt --purge --limit 10 # trial batch, measure, then commit
+  ./reclaim-iscsi.py --keep keep.txt --purge            # the rest; resumes if interrupted
+
+--keep lists every democratic-csi iSCSI PV the cluster has right now, one per
+line. Generate it on the day of the run, against the cluster --parent belongs
+to, and copy it over with the script:
+
+  kubectl get pv -o jsonpath='{range .items[?(@.spec.csi.driver=="org.democratic-csi.iscsi")]}{.metadata.name}{"\\n"}{end}' > keep.txt
+
+The script refuses to purge if any KEEP entry has no extent, which catches a
+list from the wrong cluster or one that has drifted -- but it cannot detect a
+live volume missing from KEEP, and that one would be deleted. Never reuse an
+old list.
 
 State is written to STATE_FILE after every volume, so an interrupted run picks
 up where it left off rather than restarting a multi-hour job.
 
-The ugre cluster shares this NAS. Everything is scoped to PARENT by extent path
-and by target alias, so ugre's objects are never enumerated.
+Several clusters share this NAS. Everything is scoped to --parent by extent path
+and by target alias, so other clusters' objects are never enumerated.
 """
 
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
 
-PARENT = "ssd/kubernetes/production"
-PREFIX = f"zvol/{PARENT}/"
-ALIAS_PREFIX = f"CSI volume {PARENT}/"
-STATE_FILE = "/root/.reclaim-iscsi-state.json"
+# Set from --parent and --keep in main().
+PARENT = PREFIX = ALIAS_PREFIX = STATE_FILE = None
+KEEP = set()
 
-# Live PVs from the cluster on 2026-08-12: 18 truenas-iscsi + 7 volsync caches.
-# This list goes stale -- the volsync cache PVCs in particular are recreated
-# from time to time. Regenerate before any run that is not same-day:
-#
-#   kubectl get pv -o jsonpath='{range .items[?(@.spec.csi.driver=="org.democratic-csi.iscsi")]}{.metadata.name}{"\n"}{end}'
-#
-# The script refuses to purge if any KEEP entry has no extent, which catches a
-# list that has drifted -- but it cannot detect a live volume missing from KEEP,
-# and that one would be deleted. Regenerate rather than trusting the date above.
-KEEP = {
-    "pvc-0c1749ee-9b7a-4686-bb5c-b4f23991f880",
-    "pvc-0e142878-f599-4e0f-bcbe-c405b6a0ef4c",
-    "pvc-0e837ae0-0c25-402c-a8a1-bdeaa94fdff3",
-    "pvc-1278aa11-61f7-42ef-8139-9dde8c16942f",
-    "pvc-4b2e7075-eccf-42b2-858f-8617e1686069",
-    "pvc-55f1c69f-bf04-4599-bf80-69ffb7ea6a2f",
-    "pvc-640133a7-9796-4139-b547-290169362c39",
-    "pvc-91e9df23-f130-4c78-83e2-65bd3f1c3d4b",
-    "pvc-93b47557-0ce9-41a3-b8f5-2ca07f42bf90",
-    "pvc-9f78a5f7-0dea-4054-91c3-e7879ba9ef71",
-    "pvc-a3a24a33-69b1-4a9b-90d1-2070a977ecf1",
-    "pvc-a7298c2b-3223-4c91-8156-4a156343d30c",
-    "pvc-adcfb338-0cf9-4c84-8e3f-1ff542e002bd",
-    "pvc-b57a1ae7-32de-4fd8-9b0f-ec2af7f5991c",
-    "pvc-b6f700c1-dccc-4037-a95b-f47c71d84b0d",
-    "pvc-c627b83d-5319-4c9b-b3fe-2ee0c94a0fd3",
-    "pvc-dbb7070c-8264-42be-8610-beb78611a45a",
-    "pvc-e27c9385-8a47-4135-9e34-f2feef2adff8",
-    "pvc-09b15a09-1e56-4ccd-8b55-0af665ef19b9",
-    "pvc-2150869f-e910-4c4b-af67-8430259b5fb6",
-    "pvc-407bde1a-4411-4709-a745-078ea33bc722",
-    "pvc-438957a9-ded8-449b-b7b3-814fcfc428f2",
-    "pvc-4c4b4f5e-0b80-472a-a9ba-9fc321ac9d09",
-    "pvc-639da326-1b4b-4808-99bc-852a7b20103c",
-    "pvc-bdb14220-1db3-4324-91db-3bb1a749b430",
-}
-assert len(KEEP) == 25, f"KEEP must hold 25 entries, has {len(KEEP)}"
+
+def load_keep(path):
+    with open(path) as f:
+        names = {line.strip() for line in f if line.strip() and not line.startswith("#")}
+    bad = sorted(n for n in names if not re.fullmatch(r"pvc-[0-9a-f-]{36}", n))
+    if bad:
+        sys.exit(f"--keep: not PV names: {', '.join(bad[:5])}")
+    if not names:
+        sys.exit("--keep is empty; refusing to treat every volume as leaked")
+    return names
 
 
 def midclt(*args):
@@ -204,11 +188,21 @@ def hms(sec):
 
 
 def main():
+    global PARENT, PREFIX, ALIAS_PREFIX, STATE_FILE, KEEP
     ap = argparse.ArgumentParser()
+    ap.add_argument("--parent", default="ssd/kubernetes/production",
+                    help="the cluster's datasetParentName")
+    ap.add_argument("--keep", required=True, help="file of live PV names, one per line")
     ap.add_argument("--purge", action="store_true", help="actually delete")
     ap.add_argument("--limit", type=int, help="stop after N volumes (trial batch)")
     ap.add_argument("--yes", action="store_true", help="skip confirmation")
     args = ap.parse_args()
+
+    PARENT = args.parent.strip("/")
+    PREFIX = f"zvol/{PARENT}/"
+    ALIAS_PREFIX = f"CSI volume {PARENT}/"
+    STATE_FILE = f"/root/.reclaim-iscsi-state-{PARENT.replace('/', '-')}.json"
+    KEEP = load_keep(args.keep)
 
     doomed, kept, foreign, refs, stranded, strays = survey()
     sizes = zvol_sizes()
