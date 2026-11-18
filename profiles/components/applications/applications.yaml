@@ -24,4 +24,3 @@ spec:
   path: ./30_applications
   prune: true
   wait: true
-  force: true
