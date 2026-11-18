@@ -29,32 +29,18 @@ spec:
   superuserSecret:
     name: roundcube-postgresql-superuser
 
-  # Restored on 2026-11-18 from the archive of the cluster Flux deleted and
-  # recreated (bootstrap only runs when the cluster is created). That archive
-  # isn't empty, so CNPG won't archive into it again: WAL and backups now go
-  # under a new serverName.
   bootstrap:
-    recovery:
-      source: roundcube-postgresql-20261118
+    initdb:
       database: roundcube
       owner: roundcube
       secret:
         name: roundcube-postgresql-appuser
-
-  externalClusters:
-    - name: roundcube-postgresql-20261118
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backup
-          serverName: roundcube-postgresql
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
       parameters:
         barmanObjectName: cnpg-backup
-        serverName: roundcube-postgresql-2
 
   storage:
     storageClass: truenas-iscsi
