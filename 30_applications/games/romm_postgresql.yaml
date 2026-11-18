@@ -6,6 +6,13 @@ metadata:
 spec:
   instances: 1
 
+  # Image comes from 10_infrastructure/configs/cnpg-system, where Renovate bumps it.
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql-system-trixie
+    major: 18
+
   superuserSecret:
     name: romm-postgresql-superuser
 
