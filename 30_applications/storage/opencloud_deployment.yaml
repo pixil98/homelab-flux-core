@@ -35,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: opencloud
-          image: docker.io/opencloudeu/opencloud-rolling:9.1.0@sha256:f902f3cb5c247e3780dc133476c4c4f8d3377a638f15734d1d926c5f011c1fa7
+          image: docker.io/opencloudeu/opencloud-rolling:9.2.0@sha256:99698aea6bd88cf28004c773941cf69e2d24da136a3a45f9819b90b60506d14d
           imagePullPolicy: IfNotPresent
           # The image has no init container step of its own: config/certs/admin
           # user are bootstrapped on first boot into the persisted config volume.
