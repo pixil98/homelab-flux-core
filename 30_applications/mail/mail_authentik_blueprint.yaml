@@ -99,9 +99,9 @@ stringData:
           group:  !KeyOf mail-users
         attrs: { order: 10 }
 
-      # Only mail-users may get a mail token. Dovecot's OAUTHBEARER doesn't use a
-      # passdb, so anyone with a token can send mail through postfix. Absent, not
-      # deleted, so clusters that already have this binding drop it.
+      # Only mail-users may get a mail token. Dovecot's OAUTHBEARER ignores the
+      # passdb result, so anyone with a token can send mail through postfix.
+      # Absent, not deleted, so clusters that already have this binding drop it.
       - model: authentik_policies.policybinding
         state: absent
         identifiers:
