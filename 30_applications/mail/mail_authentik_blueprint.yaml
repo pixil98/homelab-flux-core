@@ -99,11 +99,14 @@ stringData:
           group:  !KeyOf mail-users
         attrs: { order: 10 }
 
+      # Only mail-users may get a mail token. Dovecot's OAUTHBEARER doesn't use a
+      # passdb, so anyone with a token can send mail through postfix. Absent, not
+      # deleted, so clusters that already have this binding drop it.
       - model: authentik_policies.policybinding
+        state: absent
         identifiers:
           target: !KeyOf mail_app
           group: !Find [authentik_core.group, [name, authentik Admins]]
-        attrs: { order: 20 }
 
       # Mail users authenticate against the LDAP outpost, so bind them to the
       # LDAP app. Here (not the LDAP blueprint) so it only exists where mail does.
