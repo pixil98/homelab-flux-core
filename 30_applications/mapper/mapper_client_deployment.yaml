@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: mapper-client
-          image: ghcr.io/bcnoexceptions/mapper-client:0.0.10@sha256:922d657b0e522fa44b4dfcb7783d70bdfd2b4ea70b487b541ef6f88e5ad0ef45
+          image: ghcr.io/bcnoexceptions/mapper-client:0.0.11@sha256:8bb8894608ed927bc52c2b7fc4b31cbfe6023658bddcc7ccc0f3b62617931eaf
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
