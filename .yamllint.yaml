@@ -1,0 +1,4 @@
+# Only rules for YAML that parses but means something other than intended.
+# Formatting is left alone. Syntax errors are always reported.
+rules:
+  key-duplicates: enable
