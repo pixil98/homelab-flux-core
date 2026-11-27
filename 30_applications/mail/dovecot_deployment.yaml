@@ -93,6 +93,9 @@ spec:
             - name: confd
               mountPath: /etc/dovecot/conf.d
               readOnly: true
+            - name: sieve
+              mountPath: /etc/dovecot/sieve
+              readOnly: true
             - name: certificate
               mountPath: /var/certificate
               readOnly: true
@@ -110,6 +113,9 @@ spec:
                   name: dovecot-custom-confd
               - secret:
                   name: dovecot-custom-ext
+        - name: sieve
+          configMap:
+            name: dovecot-sieve
         - name: certificate
           secret:
             secretName: mail-server-tls
